@@ -2,19 +2,19 @@
 
 1. install go
 
-   [https://go.dev/doc/install]
+- [https://go.dev/doc/install]
 
 2. install node.js and npm (needed for tailwind)
 
-   [https://docs.npmjs.com/downloading-and-installing-node-js-and-npm]
+- [https://docs.npmjs.com/downloading-and-installing-node-js-and-npm]
 
 3. install tailwindcss
 
-   [https://go.dev/doc/install]
+- [https://go.dev/doc/install]
 
 4. install air
 
-   [https://github.com/air-verse/air]
+- [https://github.com/air-verse/air]
 
 5. Create .env file and add LISTEN_ADDR=":3000" to it, create folder called public in the root directory of the project
 
