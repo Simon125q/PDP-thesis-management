@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"gothstarter/views/layouts"
+	"thesis-management-app/views/layouts"
 )
 
 func Index() templ.Component {

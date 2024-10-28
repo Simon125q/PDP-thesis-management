@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"gothstarter/views/components"
+	"thesis-management-app/views/components"
 )
 
 func Base() templ.Component {
