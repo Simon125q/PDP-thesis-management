@@ -10,7 +10,7 @@
 
 3. install tailwindcss
 
-- [https://go.dev/doc/install]
+[https://tailwindcss.com/docs/installation]
 
 4. install air
 
