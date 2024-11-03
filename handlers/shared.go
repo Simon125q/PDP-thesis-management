@@ -3,6 +3,7 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
+	"thesis-management-app/types"
 
 	"github.com/a-h/templ"
 )
@@ -19,4 +20,12 @@ func Make(h HTTPHandler) http.HandlerFunc {
 
 func Render(w http.ResponseWriter, r *http.Request, c templ.Component) error {
 	return c.Render(r.Context(), w)
+}
+
+func getAutehenticatedUser(r *http.Request) types.AuthenticatedUser {
+	user, ok := r.Context().Value(types.UserContextKey).(types.AuthenticatedUser)
+	if !ok {
+		return types.AuthenticatedUser{}
+	}
+	return user
 }

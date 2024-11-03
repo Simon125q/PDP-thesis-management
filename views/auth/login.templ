@@ -1,5 +1,9 @@
 package auth
 
+import "thesis-management-app/views/layouts"
+
 templ Login() {
-<div>Hello on the login page</div>
+	@layouts.Base(false) {
+		<div>Hello on the login page</div>
+	}
 }
