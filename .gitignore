@@ -1,6 +1,5 @@
 bin
-public/styles.css
-tmp/*
+.idea
 *_templ.go*
 *_templ.txt*
 node_modules/*
