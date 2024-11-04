@@ -1,2 +1,0 @@
-# To run on Linux write "bash runLinux.txt" in Terminal.
-make css & air & templ generate --watch --proxy=http://localhost:3000
