@@ -1,5 +1,9 @@
 bin
 .idea
+tmp/*
+!tmp/.gitignore
+public/*
+!public/.gitignore
 *_templ.go*
 *_templ.txt*
 node_modules/*
