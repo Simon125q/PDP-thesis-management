@@ -16,7 +16,7 @@
 
 - [https://github.com/air-verse/air]
 
-5. Create .env file and add LISTEN_ADDR=":3000" to it, create folder called public in the root directory of the project
+5. Create .env file and add LISTEN_ADDR=":3000" to it.
 
 **Running the app for developement**
 
@@ -34,6 +34,14 @@ air
 ```bash
 templ generate --watch --proxy=http://localhost:3000
 ```
+
+Or run:
+
+```bash
+./runLinux.sh
+```
+
+if you are running it on Linux.
 
 Now the live reloading app should be available on port 7331. To navigate to it just type http://localhost:7331 in your search bar.
 
