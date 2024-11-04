@@ -4,6 +4,28 @@ import "thesis-management-app/views/layouts"
 
 templ Login() {
 	@layouts.Base(false) {
-		<div>Hello on the login page</div>
+		<div class="flex justify-center mt-[calc(100vh-100vh+8rem)]">
+			<div>
+				<h1 class="text-center text-xl font-black">Logowanie</h1>
+				<div class="w-full">
+					<div>
+						<span>Adress Email</span>
+					</div>
+					<input type="email" required placeholder="Pisz tutaj" class="input"/>
+					<div>
+						<span class="text-tul-medium-red">Nieprawidłowy email</span>
+					</div>
+				</div>
+				<div class="w-full">
+					<div>
+						<span>Hasło</span>
+					</div>
+					<input type="password" required placeholder="Pisz tutaj" class="input"/>
+					<div>
+						<span class="text-tul-light-red">Nieprawidłowe hasło</span>
+					</div>
+				</div>
+			</div>
+		</div>
 	}
 }
