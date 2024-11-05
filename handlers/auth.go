@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"thesis-management-app/pkgs/ldap"
 	"thesis-management-app/views/auth"
+	"thesis-management-app/views/home"
 )
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) error {
@@ -16,11 +17,16 @@ func HandleLoginPost(w http.ResponseWriter, r *http.Request) error {
 		Email:    r.FormValue("email"),
 		Password: r.FormValue("password"),
 	}
-	//check credentials in ldap
 
-	loginErrs := auth.LoginErrors{
-		InvalidCredentials: "some error occured",
+	resp, err := ldap.MockLDAPAuthenticate(credentials)
+	if err != nil {
+		loginErrs := auth.LoginErrors{
+			InvalidCredentials: "some error occured",
+		}
+		return Render(w, r, auth.LoginForm(credentials, loginErrs))
 	}
-	fmt.Println(credentials)
-	return Render(w, r, auth.LoginForm(credentials, loginErrs))
+
+	fmt.Printf("%v\n", resp)
+
+	return Render(w, r, home.Index())
 }

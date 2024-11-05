@@ -40,6 +40,11 @@ templ LoginForm(creds ldap.UserCredentials, errors LoginErrors) {
 				<span>Hasło</span>
 			</div>
 			<input type="password" name="password" required placeholder="Pisz tutaj" class="input"/>
+			if len(errors.Password) > 0 {
+				<div>
+					<span class="text-tul-medium-red">Nieprawidłowe Hasło</span>
+				</div>
+			}
 		</div>
 		<button type="submit">Zaloguj się <i class="fa-solid fa-arrow-right"></i></button>
 		if len(errors.InvalidCredentials) > 0 {
