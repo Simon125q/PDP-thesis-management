@@ -24,6 +24,7 @@ func main() {
 	router.Handle("/*", public())
 	router.Get("/", handlers.Make(handlers.HandleHome))
 	router.Get("/login", handlers.Make(handlers.HandleLogin))
+	router.Post("/login", handlers.Make(handlers.HandleLoginPost))
 	router.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 	router.Get("/realized", handlers.Make(handlers.HandleRealized))
 

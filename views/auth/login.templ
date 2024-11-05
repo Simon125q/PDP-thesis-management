@@ -1,31 +1,51 @@
 package auth
 
-import "thesis-management-app/views/layouts"
+import (
+	"thesis-management-app/pkgs/ldap"
+	"thesis-management-app/views/layouts"
+)
 
 templ Login() {
 	@layouts.Base(false) {
 		<div class="flex justify-center mt-[calc(100vh-100vh+8rem)]">
 			<div>
 				<h1 class="text-center text-xl font-black">Logowanie</h1>
-				<div class="w-full">
-					<div>
-						<span>Adress Email</span>
-					</div>
-					<input type="email" required placeholder="Pisz tutaj" class="input"/>
-					<div>
-						<span class="text-tul-medium-red">Nieprawidłowy email</span>
-					</div>
-				</div>
-				<div class="w-full">
-					<div>
-						<span>Hasło</span>
-					</div>
-					<input type="password" required placeholder="Pisz tutaj" class="input"/>
-					<div>
-						<span class="text-tul-medium-red">Nieprawidłowe hasło</span>
-					</div>
-				</div>
+				@LoginForm(ldap.UserCredentials{}, LoginErrors{})
 			</div>
 		</div>
 	}
+}
+
+type LoginErrors struct {
+	Email              string
+	Password           string
+	InvalidCredentials string
+}
+
+templ LoginForm(creds ldap.UserCredentials, errors LoginErrors) {
+	<form hx-post="/login" hx-swap="outerHTML" class="space-y-4">
+		<div class="w-full">
+			<div>
+				<span>Adress Email</span>
+			</div>
+			<input type="email" value={ creds.Email } name="email" required placeholder="Pisz tutaj" class="input"/>
+			if len(errors.Email) > 0 {
+				<div>
+					<span class="text-tul-medium-red">Nieprawidłowy email</span>
+				</div>
+			}
+		</div>
+		<div class="w-full">
+			<div>
+				<span>Hasło</span>
+			</div>
+			<input type="password" name="password" required placeholder="Pisz tutaj" class="input"/>
+		</div>
+		<button type="submit">Zaloguj się <i class="fa-solid fa-arrow-right"></i></button>
+		if len(errors.InvalidCredentials) > 0 {
+			<div>
+				<span class="text-tul-medium-red">Nieprawidłowe dane logowania</span>
+			</div>
+		}
+	</form>
 }
