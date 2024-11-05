@@ -3,36 +3,37 @@ package components
 import "thesis-management-app/views"
 
 templ Navigation() {
-	<div class="bg-red-800 text-white py-4 px-6">
-		<div class="container mx-auto flex justify-between items-center">
-			<!-- Logo Section -->
-			<div class="flex items-center space-x-4">
-				<!-- University Logo -->
-				<img src="https://edu.p.lodz.pl/theme/modernwikamp/pix/logo_pl.png" alt="University Logo" class="mx-auto mb-4 w-12 h-auto" style="border: 1px solid white; border-radius: 1px;"/>
-				<!-- App Title -->
-				<div class="text-lg font-semibold">Thesis Management App</div>
-			</div>
-			
-			<!-- Navigation Links -->
-			<div class="flex space-x-6">
-				<a href="/" class="text-sm font-medium hover:text-gray-300">Home</a>
-				<a href="/realized" class="text-sm font-medium hover:text-gray-300">Zrealizowane Prace</a>
-				<a href="/ongoing" class="text-sm font-medium hover:text-gray-300">Prace do Zrealizowania</a>
-			</div>
-			
-			<!-- User Info and Login Button -->
-			<div class="flex items-center space-x-4">
-				if views.AuthenticatedUser(ctx).LoggedIn {
-					<div class="text-sm font-medium">Logged in as { views.AuthenticatedUser(ctx).Email }</div>
-					<a href="/logout" class="inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-900 rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 focus:outline-none">
-						Logout
-					</a>
-				} else {
-					<a href="/login" class="inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-900 rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 focus:outline-none">
-						Login
-					</a>
-				}
-			</div>
-		</div>
-	</div>
+<div class="bg-red-800 text-white py-4 px-6">
+    <div class="container mx-auto flex justify-between items-center">
+        <!-- Logo Section -->
+        <div class="flex items-center space-x-4">
+            <!-- University Logo -->
+            <img src="https://edu.p.lodz.pl/theme/modernwikamp/pix/logo_pl.png" alt="University Logo"
+                class="mx-auto mb-4 w-12 h-auto" style="border: 1px solid white; border-radius: 1px;" />
+            <!-- App Title -->
+            <div class="text-lg font-semibold">Thesis Management App</div>
+        </div>
+        <!-- Navigation Links -->
+        <div class="flex space-x-6">
+            <a href="/" class="text-sm font-medium hover:text-gray-300">Home</a>
+            <a href="/realized" class="text-sm font-medium hover:text-gray-300">Zrealizowane Prace</a>
+            <a href="/ongoing" class="text-sm font-medium hover:text-gray-300">Prace do Zrealizowania</a>
+        </div>
+        <!-- User Info and Login Button -->
+        <div class="flex items-center space-x-4">
+            if views.AuthenticatedUser(ctx).LoggedIn {
+            <div class="text-sm font-medium">Logged in as { views.AuthenticatedUser(ctx).Email }</div>
+            <a href="/logout"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-900 rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 focus:outline-none">
+                Logout
+            </a>
+            } else {
+            <a href="/login"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-900 rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 focus:outline-none">
+                Login
+            </a>
+            }
+        </div>
+    </div>
+</div>
 }
