@@ -1,74 +1,62 @@
 package ldap
 
 import (
-	"fmt"
+	"context"
 	"os"
+	"thesis-management-app/pkgs/server"
+	"time"
 
-	"github.com/go-ldap/ldap/v3"
+	"github.com/shaj13/go-guardian/auth"
+	"github.com/shaj13/go-guardian/auth/strategies/ldap"
+	"github.com/shaj13/go-guardian/store"
 )
 
 type UserCredentials struct {
-	Email    string
+	Login    string
 	Password string
 }
 
-type LDAPResponse struct {
-	Email  string
-	Name   string
-	LDAPid string
-}
-
-type LDAPConfig struct {
-	ServerURL    string
-	BaseDN       string
-	BindDN       string
-	BindPassword string
-}
-
-func LoadLDAPConfig() LDAPConfig {
-	return LDAPConfig{
-		ServerURL:    os.Getenv("LDAP_SERVER_URL"),
+func LoadLDAPConfig() *ldap.Config {
+	return &ldap.Config{
 		BaseDN:       os.Getenv("LDAP_BASE_DN"),
 		BindDN:       os.Getenv("LDAP_BIND_DN"),
+		Port:         os.Getenv("LDAP_PORT"),
+		Host:         os.Getenv("LDAP_HOST"),
 		BindPassword: os.Getenv("LDAP_BIND_PASSWORD"),
+		Filter:       os.Getenv("LDAP_FILTER"),
 	}
 }
 
-func ConnectLDAP(cfg LDAPConfig) (*ldap.Conn, error) {
-	l, err := ldap.DialURL(cfg.ServerURL)
-	if err != nil {
-		return nil, fmt.Errorf("failed to connect to LDAP server: %v", err)
-	}
-	err = l.Bind(cfg.BindDN, cfg.BindPassword)
-	if err != nil {
-		l.Close()
-		return nil, fmt.Errorf("LDAP bind failed: %v", err)
-	}
-	return l, nil
+func SetupLDAP() {
+	cfg := LoadLDAPConfig()
+	server.MyS.Authenticator = auth.New()
+	server.MyS.Cache = store.NewFIFO(context.Background(), time.Minute*10)
+	strategy := ldap.NewCached(cfg, server.MyS.Cache)
+	server.MyS.Authenticator.EnableStrategy(ldap.StrategyKey, strategy)
 }
 
-func MockLDAPAuthenticate(cred UserCredentials) (LDAPResponse, error) {
-	user1 := UserCredentials{
-		Email:    "admin@gmail.com",
-		Password: "admin123",
-	}
-	user2 := UserCredentials{
-		Email:    "user@gmail.com",
-		Password: "user123",
-	}
-	if cred.Email == user1.Email && cred.Password == user1.Password {
-		return LDAPResponse{
-			Email:  user1.Email,
-			Name:   "admin1",
-			LDAPid: "ldap1",
-		}, nil
-	}
-	if cred.Email == user2.Email && cred.Password == user2.Password {
-		return LDAPResponse{
-			Email:  user2.Email,
-			Name:   "user1",
-			LDAPid: "ldap2",
-		}, nil
-	}
-	return LDAPResponse{}, fmt.Errorf("Wrong credentials")
-}
+// func MockLDAPAuthenticate(cred UserCredentials) (LDAPResponse, error) {
+// 	user1 := UserCredentials{
+// 		Email:    "admin@gmail.com",
+// 		Password: "admin123",
+// 	}
+// 	user2 := UserCredentials{
+// 		Email:    "user@gmail.com",
+// 		Password: "user123",
+// 	}
+// 	if cred.Email == user1.Email && cred.Password == user1.Password {
+// 		return LDAPResponse{
+// 			Email:       user1.Email,
+// 			Name:        "admin1",
+// 			AccessToken: "ldap1",
+// 		}, nil
+// 	}
+// 	if cred.Email == user2.Email && cred.Password == user2.Password {
+// 		return LDAPResponse{
+// 			Email:       user2.Email,
+// 			Name:        "user1",
+// 			AccessToken: "ldap2",
+// 		}, nil
+// 	}
+// 	return LDAPResponse{}, fmt.Errorf("Wrong credentials")
+// }

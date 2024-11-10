@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 	"thesis-management-app/handlers"
+	"thesis-management-app/pkgs/ldap"
+	"thesis-management-app/pkgs/server"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -17,19 +19,26 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
-	router := chi.NewMux()
-	router.Use(middleware.Logger)
-	router.Use(handlers.WithUser)
+	server.MyS.Router = chi.NewRouter()
+	ldap.SetupLDAP()
 
-	router.Handle("/*", public())
-	router.Get("/", handlers.Make(handlers.HandleHome))
-	router.Get("/login", handlers.Make(handlers.HandleLogin))
-	router.Post("/login", handlers.Make(handlers.HandleLoginPost))
-	router.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
-	router.Get("/realized", handlers.Make(handlers.HandleRealized))
+	server.MyS.Router.Use(middleware.Logger)
+
+	server.MyS.Router.Group(func(r chi.Router) {
+		r.Handle("/*", public())
+		r.Get("/", handlers.Make(handlers.HandleHome))
+		r.Get("/login", handlers.Make(handlers.HandleLogin))
+		r.Post("/login", handlers.Make(handlers.HandleLoginPost))
+	})
+
+	server.MyS.Router.Group(func(r chi.Router) {
+		r.Use(handlers.WithUser)
+		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
+		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+	})
 
 	listenAddr := os.Getenv("LISTEN_ADDR")
 
 	slog.Info("HTTP server", "ListenAddr", listenAddr)
-	http.ListenAndServe(listenAddr, router)
+	http.ListenAndServe(listenAddr, server.MyS.Router)
 }
