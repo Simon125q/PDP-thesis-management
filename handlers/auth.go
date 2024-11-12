@@ -43,17 +43,19 @@ func HandleLoginPost(w http.ResponseWriter, r *http.Request) error {
 	}
 	sessions.Sessions.Add(sessionToken, newSession)
 	setAuthCookie(w, sessionToken)
-	slog.Info("Cookie set", "sessionToken", sessionToken)
-	cookie, err := r.Cookie("session_token")
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return nil
+}
+
+func HandleLogoutPost(w http.ResponseWriter, r *http.Request) error {
+	currCookie, err := r.Cookie("session_token")
 	if err != nil {
 		return nil
 	}
-	slog.Info("Cookie set", "cookie", cookie)
-	slog.Info("Cookie set", "cookie val", cookie.Value)
-	n, _ := sessions.Sessions.Get(cookie.Value)
-	slog.Info("sessions", "store", n)
-
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	sessions.Sessions.Remove(currCookie.Value)
+	setAuthCookie(w, "")
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 	return nil
 }
 
@@ -86,14 +88,3 @@ func isAdmin(username string) bool {
 // 	}
 // 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
 // }
-
-// fmt.Printf("%v\n", resp)
-
-// cookie := &http.Cookie{
-// 	Value:    resp.AccessToken,
-// 	Name:     "at",
-// 	Path:     "/",
-// 	HttpOnly: true,
-// 	Secure:   true,
-// }
-// http.SetCookie(w, cookie)

@@ -27,12 +27,7 @@ templ Navigation() {
 			<div class="flex items-center space-x-4">
 				if views.AuthenticatedUser(ctx).LoggedIn {
 					<div class="text-sm font-medium">Logged in as { views.AuthenticatedUser(ctx).Login }</div>
-					<a
-						href="/logout"
-						class="inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-900 rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 focus:outline-none"
-					>
-						Logout
-					</a>
+					@LogoutForm()
 				} else {
 					<a
 						href="/login"
@@ -44,4 +39,14 @@ templ Navigation() {
 			</div>
 		</div>
 	</div>
+}
+
+templ LogoutForm() {
+	<form method="POST" action="/logout">
+		<button
+			class="inline-flex items-center px-4 py-2 text-sm font-medium bg-gray-900 rounded-md hover:bg-gray-700 focus:ring-2 focus:ring-offset-2 focus:ring-gray-700 focus:outline-none"
+		>
+			Logout
+		</button>
+	</form>
 }

@@ -30,6 +30,7 @@ func main() {
 		r.Get("/", handlers.Make(handlers.HandleHome))
 		r.Get("/login", handlers.Make(handlers.HandleLogin))
 		r.Post("/login", handlers.Make(handlers.HandleLoginPost))
+		r.Post("/logout", handlers.Make(handlers.HandleLogoutPost))
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {
