@@ -44,8 +44,7 @@ func HandleLoginPost(w http.ResponseWriter, r *http.Request) error {
 	sessions.Sessions.Add(sessionToken, newSession)
 	setAuthCookie(w, sessionToken)
 
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-	return nil
+	return hxRedirect(w, r, "/")
 }
 
 func HandleLogoutPost(w http.ResponseWriter, r *http.Request) error {
