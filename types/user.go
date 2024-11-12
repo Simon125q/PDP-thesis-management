@@ -3,6 +3,7 @@ package types
 const UserContextKey = "user"
 
 type AuthenticatedUser struct {
-	Email    string
+	Login    string
+	IsAdmin  bool
 	LoggedIn bool
 }

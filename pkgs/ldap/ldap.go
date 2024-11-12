@@ -34,29 +34,3 @@ func SetupLDAP() {
 	strategy := ldap.NewCached(cfg, server.MyS.Cache)
 	server.MyS.Authenticator.EnableStrategy(ldap.StrategyKey, strategy)
 }
-
-// func MockLDAPAuthenticate(cred UserCredentials) (LDAPResponse, error) {
-// 	user1 := UserCredentials{
-// 		Email:    "admin@gmail.com",
-// 		Password: "admin123",
-// 	}
-// 	user2 := UserCredentials{
-// 		Email:    "user@gmail.com",
-// 		Password: "user123",
-// 	}
-// 	if cred.Email == user1.Email && cred.Password == user1.Password {
-// 		return LDAPResponse{
-// 			Email:       user1.Email,
-// 			Name:        "admin1",
-// 			AccessToken: "ldap1",
-// 		}, nil
-// 	}
-// 	if cred.Email == user2.Email && cred.Password == user2.Password {
-// 		return LDAPResponse{
-// 			Email:       user2.Email,
-// 			Name:        "user1",
-// 			AccessToken: "ldap2",
-// 		}, nil
-// 	}
-// 	return LDAPResponse{}, fmt.Errorf("Wrong credentials")
-// }

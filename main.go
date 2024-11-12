@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	
+
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
 	}
@@ -23,6 +23,7 @@ func main() {
 	ldap.SetupLDAP()
 
 	server.MyS.Router.Use(middleware.Logger)
+	server.MyS.Router.Use(handlers.WithUser)
 
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Handle("/*", public())
@@ -32,7 +33,6 @@ func main() {
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {
-		r.Use(handlers.WithUser)
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
 	})
