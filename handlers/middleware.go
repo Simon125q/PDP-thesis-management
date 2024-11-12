@@ -6,6 +6,7 @@ import (
 	"strings"
 	"thesis-management-app/pkgs/sessions"
 	"thesis-management-app/types"
+	"time"
 )
 
 func WithUser(next http.Handler) http.Handler {
@@ -31,6 +32,33 @@ func WithUser(next http.Handler) http.Handler {
 		}
 		ctx := context.WithValue(r.Context(), types.UserContextKey, user)
 		next.ServeHTTP(w, r.WithContext(ctx))
+	}
+	return http.HandlerFunc(fn)
+}
+
+func RefreshSession(next http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		cookie, err := r.Cookie("session_token")
+		if err != nil {
+			next.ServeHTTP(w, r)
+			return
+		}
+		currSession, ok := sessions.Sessions.Get(cookie.Value)
+		if !ok {
+			next.ServeHTTP(w, r)
+			return
+		}
+		if currSession.IsExpired() {
+			newToken, _ := sessions.Sessions.Refresh(cookie.Value)
+			http.SetCookie(w, &http.Cookie{
+				Name:    "session_token",
+				Value:   newToken,
+				Expires: time.Now().Add(120 * time.Minute),
+				Secure:  true,
+			})
+		}
+		next.ServeHTTP(w, r)
+		return
 	}
 	return http.HandlerFunc(fn)
 }

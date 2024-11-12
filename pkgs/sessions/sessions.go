@@ -45,7 +45,7 @@ func (s *SessionsStore) Refresh(sessionToken string) (string, Session) {
 	newSession := Session{
 		Username: oldSession.Username,
 		IsAdmin:  oldSession.IsAdmin,
-		Expiry:   time.Now().Add(480 * time.Second),
+		Expiry:   time.Now().Add(240 * time.Second),
 	}
 	newToken := uuid.NewString()
 	s.store[newToken] = newSession
