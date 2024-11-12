@@ -1,12 +1,22 @@
 package home
 
-import "thesis-management-app/views/layouts"
+import (
+	"thesis-management-app/views"
+	"thesis-management-app/views/layouts"
+)
 
 templ Index() {
 	@layouts.Base(true) {
 		<div class="flex flex-col items-center min-h-[70vh] justify-center">
 			<div class="text-xl text-tul-dark-red font-bold mb-8 p-8">
-				Hello world
+				Witaj w applikacji do zarządzania pracami na Politechnice Łódzkiej
+				<br/>
+				if views.AuthenticatedUser(ctx).LoggedIn {
+					Jesteś zalogowany jako { views.AuthenticatedUser(ctx).Login }
+				} else {
+					Nie jesteś jeszcze zalogowany.
+					<a href="/login">Zaloguj się teraz</a>
+				}
 			</div>
 		</div>
 	}

@@ -1,12 +1,21 @@
 package realized
 
-import "thesis-management-app/views/layouts"
+import (
+	"thesis-management-app/views"
+	"thesis-management-app/views/layouts"
+)
 
 templ Index() {
 	@layouts.Base(true) {
 		<div class="flex flex-col items-center">
 			<div class="text-xl text-tul-dark-red font-bold">
-				Realized thesises site
+				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie z zrealizowanymi pracami.
+				<br/>
+				if views.AuthenticatedUser(ctx).IsAdmin {
+					Jesteś zalogowany jako administrator
+				} else {
+					Jesteś zalogowany jako urzytkownik
+				}
 			</div>
 		</div>
 	}
