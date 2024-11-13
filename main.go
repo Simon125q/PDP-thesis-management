@@ -38,6 +38,10 @@ func main() {
 		r.Use(handlers.WithAuth)
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+	})
+
+	server.MyS.Router.Group(func(r chi.Router) {
+		r.Use(handlers.WithAdminRights)
 		r.Get("/settings", handlers.Make(handlers.HandleSettings))
 	})
 
