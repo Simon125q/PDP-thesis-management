@@ -22,6 +22,9 @@ templ Navigation() {
 				<a href="/" class="text-sm font-medium hover:text-gray-300">Home</a>
 				<a href="/realized" class="text-sm font-medium hover:text-gray-300">Zrealizowane Prace</a>
 				<a href="/ongoing" class="text-sm font-medium hover:text-gray-300">Prace do Zrealizowania</a>
+				if views.AuthenticatedUser(ctx).IsAdmin {
+					<a href="/settings" class="text-sm font-medium hover:text-gray-300">Zarzadzaj urzytkownikami</a>
+				}
 			</div>
 			<!-- User Info and Login Button -->
 			<div class="flex items-center space-x-4">
