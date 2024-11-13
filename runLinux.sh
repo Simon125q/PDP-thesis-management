@@ -31,7 +31,7 @@ templ generate &
 /usr/bin/go/go/bin/go build -tags=dev -o ./tmp/main .
 
 # Start the Go application in the background with nohup
-./tmp/main &
+nohup ./tmp/main &
 
 # Ensure Jenkins job doesn't wait for the background processes
 echo "App is running independently."
