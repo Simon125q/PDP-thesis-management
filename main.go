@@ -38,6 +38,7 @@ func main() {
 		r.Use(handlers.WithAuth)
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+		r.Get("/settings", handlers.Make(handlers.HandleSettings))
 	})
 
 	listenAddr := os.Getenv("LISTEN_ADDR")
