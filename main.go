@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"log/slog"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 	"thesis-management-app/handlers"
 	"thesis-management-app/pkgs/ldap"
 	"thesis-management-app/pkgs/server"
+	"thesis-management-app/types/sqlite"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -23,11 +25,11 @@ func main() {
 	server.MyS.Router = chi.NewRouter()
 	ldap.SetupLDAP()
 
-	// db, err := sql.Open("sqlite3", "./diploma_database.db")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//	server.MyS.DB = &sqlite.Model{DB: db}
+	db, err := sql.Open("sqlite3", "./diploma_database.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	server.MyS.DB = &sqlite.Model{DB: db}
 
 	server.MyS.Router.Use(middleware.Logger)
 	server.MyS.Router.Use(handlers.WithUser)

@@ -1,11 +1,12 @@
 package realized
 
 import (
+	"thesis-management-app/types"
 	"thesis-management-app/views"
 	"thesis-management-app/views/layouts"
 )
 
-templ Index() {
+templ Index(emp_data []types.UniversityEmployee) {
 	@layouts.Base(true) {
 		<div class="flex flex-col items-center">
 			<div class="text-xl text-tul-dark-red font-bold">
@@ -15,6 +16,11 @@ templ Index() {
 					Jesteś zalogowany jako administrator
 				} else {
 					Jesteś zalogowany jako urzytkownik
+				}
+				<br/>
+				for _, emp := range emp_data {
+					<span>{ emp.FirstName } { emp.LastName } </span>
+					<br/>
 				}
 			</div>
 		</div>
