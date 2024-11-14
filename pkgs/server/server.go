@@ -9,7 +9,8 @@ import (
 const ServerContextKey = "server"
 
 type Server struct {
-	Router        *chi.Mux
+	Router *chi.Mux
+	//DB            *sqlite.Model
 	Authenticator auth.Authenticator
 	Cache         store.Cache
 }

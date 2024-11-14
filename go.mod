@@ -11,6 +11,7 @@ require (
 )
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.24 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	gopkg.in/asn1-ber.v1 v1.0.0-20181015200546-f715ec2f112d // indirect
 	gopkg.in/ldap.v3 v3.1.0 // indirect

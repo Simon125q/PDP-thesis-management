@@ -9,13 +9,17 @@ templ Index() {
 	@layouts.Base(true) {
 		<div class="flex flex-col items-center min-h-[70vh] justify-center">
 			<div class="text-xl text-tul-dark-red font-bold mb-8 p-8">
-				Test nr 1 - Jenkins, Witaj w applikacji do zarządzania pracami na Politechnice Łódzkiej
+				Witaj w applikacji do zarządzania pracami na Politechnice Łódzkiej
 				<br/>
 				if views.AuthenticatedUser(ctx).LoggedIn {
-					Jesteś zalogowany jako { views.AuthenticatedUser(ctx).Login }
+					<span>
+						Jesteś zalogowany jako { views.AuthenticatedUser(ctx).Login }
+					</span>
 				} else {
-					Nie jesteś jeszcze zalogowany.
-					<a href="/login">Zaloguj się teraz</a>
+					<span>
+						Nie jesteś jeszcze zalogowany.
+						<a href="/login">Zaloguj się teraz</a>
+					</span>
 				}
 			</div>
 		</div>

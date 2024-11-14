@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -21,6 +22,12 @@ func main() {
 	}
 	server.MyS.Router = chi.NewRouter()
 	ldap.SetupLDAP()
+
+	// db, err := sql.Open("sqlite3", "./diploma_database.db")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	//	server.MyS.DB = &sqlite.Model{DB: db}
 
 	server.MyS.Router.Use(middleware.Logger)
 	server.MyS.Router.Use(handlers.WithUser)
