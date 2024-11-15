@@ -26,6 +26,7 @@ func main() {
 	ldap.SetupLDAP()
 
 	db, err := sql.Open("sqlite3", "./diploma_database.db")
+	defer db.Close()
 	if err != nil {
 		log.Fatal(err)
 	}

@@ -6,7 +6,7 @@ import (
 	"thesis-management-app/views/layouts"
 )
 
-templ Index(emp_data []types.UniversityEmployee) {
+templ Index(thes_data []types.RealizedThesis) {
 	@layouts.Base(true) {
 		<div class="flex flex-col items-center">
 			<div class="text-xl text-tul-dark-red font-bold">
@@ -18,8 +18,8 @@ templ Index(emp_data []types.UniversityEmployee) {
 					Jesteś zalogowany jako urzytkownik
 				}
 				<br/>
-				for _, emp := range emp_data {
-					<span>{ emp.FirstName } { emp.LastName } </span>
+				for _, thes := range thes_data {
+					<span>{ thes.ThesisTitlePolish } { thes.ThesisNumber } </span>
 					<br/>
 				}
 			</div>
