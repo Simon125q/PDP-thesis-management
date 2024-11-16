@@ -17,12 +17,8 @@ kill_running_process() {
     fi
 }
 
-kill_running_process
-
 # Run 'make css' in the background
 make css &
-
-# Stop any existing templ generate process
 
 # Run 'templ generate' (the main process)
 templ generate &
@@ -30,8 +26,12 @@ templ generate &
 # Build Go application
 /usr/bin/go/go/bin/go build -tags=dev -o ./tmp/main .
 
-# Start the Go application in the background with nohup
-nohup ./tmp/main &
+# Stop any existing Go app process
+kill_running_process
 
-# Ensure Jenkins job doesn't wait for the background processes
-echo "App is running independently."
+# Run the Go app in a detached tmux session
+tmux new-session -d -s go_app './tmp/main'
+
+# Log that the app is running in the background inside tmux
+echo "App is running in the background inside tmux session 'go_app'."
+
