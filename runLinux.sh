@@ -17,6 +17,8 @@ kill_running_process() {
     fi
 }
 
+kill_running_process
+
 # Run 'make css' in the background
 make css &
 
@@ -25,9 +27,6 @@ templ generate &
 
 # Build Go application
 /usr/bin/go/go/bin/go build -tags=dev -o ./tmp/main .
-
-# Stop any existing Go app process
-kill_running_process
 
 # Run the Go app in a detached tmux session
 tmux new-session -d -s go_app './tmp/main'
