@@ -15,6 +15,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
 	_ "github.com/ncruces/go-sqlite3/driver"
+	_ "github.com/ncruces/go-sqlite3/embed"
 )
 
 func main() {
@@ -26,10 +27,11 @@ func main() {
 	ldap.SetupLDAP()
 
 	db, err := sql.Open("sqlite3", "./diploma_database.db")
-	defer db.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
+
 	server.MyS.DB = &sqlite.Model{DB: db}
 
 	server.MyS.Router.Use(middleware.Logger)

@@ -2,7 +2,9 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 	"thesis-management-app/pkgs/sessions"
 	"thesis-management-app/types"
@@ -46,6 +48,10 @@ func WithAuth(next http.Handler) http.Handler {
 		if !user.LoggedIn {
 			http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
+		}
+		if !user.IsAdmin {
+			t := "?/user_id=" + strconv.Itoa(user.Id)
+			fmt.Print(t)
 		}
 		next.ServeHTTP(w, r)
 	}
