@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"context"
-	"fmt"
+	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
@@ -28,6 +28,7 @@ func WithUser(next http.Handler) http.Handler {
 			return
 		}
 		user := types.AuthenticatedUser{
+			Id:       2, //TODO: add id from db
 			Login:    currentSession.Username,
 			IsAdmin:  currentSession.IsAdmin,
 			LoggedIn: true,
@@ -50,8 +51,10 @@ func WithAuth(next http.Handler) http.Handler {
 			return
 		}
 		if !user.IsAdmin {
-			t := "?/user_id=" + strconv.Itoa(user.Id)
-			fmt.Print(t)
+			q := r.URL.Query()
+			q.Add("user_id", strconv.Itoa(user.Id))
+			r.URL.RawQuery = q.Encode()
+			slog.Info("withAuth", "RawQuery", r.URL.RawQuery)
 		}
 		next.ServeHTTP(w, r)
 	}

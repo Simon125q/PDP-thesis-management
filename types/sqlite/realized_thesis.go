@@ -3,23 +3,21 @@ package sqlite
 import (
 	"fmt"
 	"log/slog"
+	"net/url"
 	"thesis-management-app/types"
 )
 
-func (m *Model) AllRealizedThesis(sort_by string, desc_order bool) ([]types.RealizedThesis, error) {
-	order := "DESC"
-	if !desc_order {
-		order = "ASC"
-	}
-	if sort_by == "" {
-		sort_by = "id"
-	}
-	q := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
+func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams url.Values) ([]types.RealizedThesis, error) {
+	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),
     COALESCE(thesis_title_polish, ''), COALESCE(thesis_title_english, ''), COALESCE(thesis_language, ''), COALESCE(library, ''),
     student_id, chair_id, supervisor_id, COALESCE(assistant_supervisor_id, 0), reviewer_id, COALESCE(hourly_settlement_id, 0)
-    FROM Completed_Thesis ORDER BY %v %v`, sort_by, order)
-	rows, err := m.DB.Query(q)
+    FROM Completed_Thesis`)
+	query, params := AddSQLQueryParameters(query, queryParams)
+	query = AddSQLOrder(query, sort_by, desc_order)
+	slog.Info("Query", "query", query)
+	slog.Info("Query", "params", params)
+	rows, err := m.DB.Query(query, params...)
 	if err != nil {
 		return nil, err
 	}
@@ -38,6 +36,5 @@ func (m *Model) AllRealizedThesis(sort_by string, desc_order bool) ([]types.Real
 	if err != nil {
 		return nil, err
 	}
-	slog.Info("RealizedThesis", "thesises", thesis)
 	return thesis, nil
 }
