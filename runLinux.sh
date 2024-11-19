@@ -8,11 +8,18 @@ kill_running_process() {
         echo "Killing existing Go application with PID: $pid"
         kill -9 $pid
     fi
-    
+
     # Killing any running templ generate if exists
     pid=$(ps aux | grep 'templ generate' | grep -v 'grep' | awk '{print $2}')
     if [ -n "$pid" ]; then
         echo "Killing existing templ generate process with PID: $pid"
+        kill -9 $pid
+    fi
+
+    # Killing any running 'air' process if it exists
+    pid=$(ps aux | grep 'air' | grep -v 'grep' | awk '{print $2}')
+    if [ -n "$pid" ]; then
+        echo "Killing existing air process with PID: $pid"
         kill -9 $pid
     fi
 }
