@@ -22,6 +22,8 @@ kill_running_process
 # Run 'make css' in the background
 make css &
 
+air
+
 # Run 'templ generate' (the main process)
 templ generate &
 
