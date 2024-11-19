@@ -22,7 +22,7 @@ kill_running_process
 # Run 'make css' in the background
 make css &
 
-sudo air
+sudo air > output.txt 2>&1
 
 # Run 'templ generate' (the main process)
 templ generate &
