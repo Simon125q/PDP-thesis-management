@@ -12,3 +12,7 @@ func HandleOngoing(w http.ResponseWriter, r *http.Request) error {
 func HandleOngoingGetNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, ongoing.NewEntry())
 }
+
+func HandleOngoingClearNew(w http.ResponseWriter, r *http.Request) error {
+	return Render(w, r, ongoing.EmptySpace())
+}

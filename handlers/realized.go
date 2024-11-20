@@ -45,3 +45,7 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.NewEntry())
 }
+
+func HandleRealizedClearNew(w http.ResponseWriter, r *http.Request) error {
+	return Render(w, r, realized.EmptySpace())
+}
