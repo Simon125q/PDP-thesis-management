@@ -20,8 +20,8 @@ templ Index(thes_data []types.RealizedThesis) {
 				}
 				<br/>
 				@components.SearchBar()
-				for _, thes := range thes_data {
-					<span>{ thes.ThesisTitlePolish } { thes.ThesisNumber } </span>
+				for _, t := range thes_data {
+					@Entry(t)
 					<br/>
 				}
 			</div>

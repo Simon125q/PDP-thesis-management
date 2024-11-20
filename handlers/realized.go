@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/views/realized"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func HandleRealized(w http.ResponseWriter, r *http.Request) error {
@@ -14,4 +16,16 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	return Render(w, r, realized.Index(thes_data))
+}
+
+func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
+	id_param := chi.URLParam(r, "id")
+	slog.Info("HRDetails", "id_param", id_param)
+	thes_data, err := server.MyS.DB.RealizedThesisByID(id_param)
+	slog.Info("quere", "q", r.URL.Query())
+	if err != nil {
+		return err
+	}
+	slog.Info("HRealizedDetails", "thes", thes_data)
+	return Render(w, r, realized.Details(thes_data))
 }

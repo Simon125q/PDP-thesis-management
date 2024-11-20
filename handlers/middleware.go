@@ -33,6 +33,7 @@ func WithUser(next http.Handler) http.Handler {
 			IsAdmin:  currentSession.IsAdmin,
 			LoggedIn: true,
 		}
+		slog.Info("WithUser", "User", user)
 		ctx := context.WithValue(r.Context(), types.UserContextKey, user)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
@@ -46,8 +47,12 @@ func WithAuth(next http.Handler) http.Handler {
 			return
 		}
 		user := getAutehenticatedUser(r)
+		slog.Info("WithAuth", "url", r.URL.Path)
+		slog.Info("WithAuth", "User", user)
 		if !user.LoggedIn {
-			http.Redirect(w, r, "/login", http.StatusSeeOther)
+			slog.Info("WithAuth", "login", false)
+			hxRedirect(w, r, "/login")
+			// http.Redirect(w, r, "/login", http.StatusSeeOther)
 			return
 		}
 		if !user.IsAdmin {
@@ -94,6 +99,7 @@ func RefreshSession(next http.Handler) http.Handler {
 			http.SetCookie(w, &http.Cookie{
 				Name:    "session_token",
 				Value:   newToken,
+				Path:    "/",
 				Expires: time.Now().Add(120 * time.Minute),
 				Secure:  true,
 			})

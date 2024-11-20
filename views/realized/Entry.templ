@@ -1,0 +1,19 @@
+package realized
+
+import (
+	"fmt"
+	"thesis-management-app/types"
+)
+
+templ Entry(thesis types.RealizedThesis) {
+	<div
+		class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer"
+		hx-get={ fmt.Sprintf("/realized/details/%v", thesis.Id) }
+		hx-trigger="click"
+		hx-swap="innerHTML"
+	>
+		<h3 class="font-semibold text-lg text-gray-900">
+			{ thesis.ThesisTitlePolish } { thesis.ThesisNumber }
+		</h3>
+	</div>
+}

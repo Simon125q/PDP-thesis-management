@@ -1,0 +1,15 @@
+package realized
+
+import (
+	"strconv"
+	"thesis-management-app/types"
+)
+
+templ Details(thesis types.RealizedThesis) {
+	<div>
+		Details
+		{ strconv.Itoa(thesis.Id) } { thesis.ExamDate }
+		<button>Zamknij</button>
+		<button>Zapisz</button>
+	</div>
+}
