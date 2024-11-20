@@ -9,7 +9,24 @@ import (
 templ Details(thesis types.RealizedThesis) {
 <div id="details">
     Details
-    { strconv.Itoa(thesis.Id) } { thesis.ExamDate }
+    <div>
+        Thesis id
+        <input type="number" id="id" name="id"
+            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ strconv.Itoa(thesis.Id) } />
+    </div>
+    <div>
+        Data Egzaminu
+        <input type="date" id="exam-date" name="exam-date"
+            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ thesis.ExamDate } />
+    </div>
+    <div>
+        Polski Tytuł
+        <input type="text" id="title" name="title"
+            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ thesis.ThesisTitlePolish } />
+    </div>
     <div hx-get={ fmt.Sprintf("/realized/%v", thesis.Id) } hx-target="#details" hx-trigger="click" hx-swap="outerHTML">
         <button>
             Zamknij

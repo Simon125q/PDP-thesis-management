@@ -1,33 +1,34 @@
 package realized
 
 import (
-	"thesis-management-app/types"
-	"thesis-management-app/views"
-	"thesis-management-app/views/components"
-	"thesis-management-app/views/layouts"
+"thesis-management-app/types"
+"thesis-management-app/views"
+"thesis-management-app/views/components"
+"thesis-management-app/views/layouts"
 )
 
 templ Index(thes_data []types.RealizedThesis) {
-	@layouts.Base(true) {
-		<div class="flex justify-center items-start">
-			<div class="text-xl text-tul-dark-red font-bold">
-				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie z zrealizowanymi pracami.
-				<br/>
-				if views.AuthenticatedUser(ctx).IsAdmin {
-					Jesteś zalogowany jako administrator
-				} else {
-					Jesteś zalogowany jako urzytkownik
-				}
-				<br/>
-				@components.SearchBar()
-				for _, t := range thes_data {
-					@Entry(t)
-					<br/>
-				}
-			</div>
-			<div class="w-1/5">
-				@components.Filter(true)
-			</div>
-		</div>
-	}
+@layouts.Base(true) {
+<div class="flex justify-center items-start">
+    <div class="text-xl text-tul-dark-red font-bold">
+        { views.AuthenticatedUser(ctx).Login }, witaj na stronie z zrealizowanymi pracami.
+        <br />
+        if views.AuthenticatedUser(ctx).IsAdmin {
+        Jesteś zalogowany jako administrator
+        } else {
+        Jesteś zalogowany jako urzytkownik
+        }
+        <br />
+        @components.SearchBar()
+        <span id="new_entry"></span>
+        for _, t := range thes_data {
+        @Entry(t)
+        <br />
+        }
+    </div>
+    <div class="w-1/5">
+        @components.Filter(true)
+    </div>
+</div>
+}
 }
