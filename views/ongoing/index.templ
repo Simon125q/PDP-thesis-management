@@ -1,27 +1,27 @@
 package ongoing
 
 import (
-	"thesis-management-app/views"
-	"thesis-management-app/views/components"
-	"thesis-management-app/views/layouts"
+"thesis-management-app/views"
+"thesis-management-app/views/components"
+"thesis-management-app/views/layouts"
 )
 
 templ Index() {
-	@layouts.Base(true) {
-		<div class="flex justify-center items-start">
-			<div class="text-xl text-tul-dark-red font-bold">
-				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie z pracami będącymi w trakcie przygotowania.
-				<br/>
-				if views.AuthenticatedUser(ctx).IsAdmin {
-					Jesteś zalogowany jako administrator
-				} else {
-					Jesteś zalogowany jako urzytkownik
-				}
-			</div>
-			@components.SearchBar()
-			<div class="w-1/5">
-				@components.Filter(false)
-			</div>
-		</div>
-	}
+@layouts.Base(true) {
+<div class="flex justify-center items-start">
+    <div class="text-xl text-tul-dark-red font-bold">
+        { views.AuthenticatedUser(ctx).Login }, witaj na stronie z pracami będącymi w trakcie przygotowania.
+        <br />
+        if views.AuthenticatedUser(ctx).IsAdmin {
+        Jesteś zalogowany jako administrator
+        } else {
+        Jesteś zalogowany jako urzytkownik
+        }
+    </div>
+    @components.SearchBar("/ongoing")
+    <div class="w-1/5">
+        @components.Filter(false)
+    </div>
+</div>
+}
 }

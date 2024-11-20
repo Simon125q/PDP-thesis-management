@@ -41,3 +41,7 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HRealizedEntry", "thes", thes_data)
 	return Render(w, r, realized.Entry(thes_data))
 }
+
+func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
+	return Render(w, r, realized.NewEntry())
+}

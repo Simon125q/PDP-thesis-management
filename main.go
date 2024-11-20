@@ -49,7 +49,9 @@ func main() {
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Use(handlers.WithAuth)
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
+		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/details/{id}", handlers.Make(handlers.HandleRealizedDetails))
 	})
