@@ -1,15 +1,20 @@
 package realized
 
 import (
-	"strconv"
-	"thesis-management-app/types"
+"fmt"
+"strconv"
+"thesis-management-app/types"
 )
 
 templ Details(thesis types.RealizedThesis) {
-	<div>
-		Details
-		{ strconv.Itoa(thesis.Id) } { thesis.ExamDate }
-		<button>Zamknij</button>
-		<button>Zapisz</button>
-	</div>
+<div id="details">
+    Details
+    { strconv.Itoa(thesis.Id) } { thesis.ExamDate }
+    <div hx-get={ fmt.Sprintf("/realized/%v", thesis.Id) } hx-target="#details" hx-trigger="click" hx-swap="outerHTML">
+        <button>
+            Zamknij
+        </button>
+    </div>
+    <button>Zapisz</button>
+</div>
 }

@@ -50,6 +50,7 @@ func main() {
 		r.Use(handlers.WithAuth)
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/details/{id}", handlers.Make(handlers.HandleRealizedDetails))
 	})
 
