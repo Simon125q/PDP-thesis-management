@@ -19,11 +19,7 @@ templ Index(thes_data []types.RealizedThesis) {
         Jesteś zalogowany jako urzytkownik
         }
         <br />
-        @components.SearchBar("/realized")
-        for _, t := range thes_data {
-        @Entry(t)
-        <br />
-        }
+        @Results(thes_data)
     </div>
     <div class="w-1/5">
         @components.Filter(true)

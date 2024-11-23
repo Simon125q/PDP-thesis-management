@@ -53,6 +53,7 @@ func main() {
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
+		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
 		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/details/{id}", handlers.Make(handlers.HandleRealizedDetails))

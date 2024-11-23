@@ -1,103 +1,70 @@
 package components
 
 templ Filter(all bool) {
-	<div class="w-full max-w-xs bg-white border border-gray-200 rounded-lg p-4 shadow">
-		<!-- Input Field: Date Range -->
-		if all {
-			<div class="mb-4">
-				<label for="date-start" class="block text-sm font-medium text-gray-700">Data egzaminu</label>
-				<div class="flex space-x-2">
-					<input
-						type="date"
-						id="date-start"
-						name="date-start"
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					/>
-					<input
-						type="date"
-						id="date-end"
-						name="date-end"
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					/>
-				</div>
-			</div>
-		}
-		<!-- Input Field-->
-		<div class="mb-4">
-			<label for="Supervisor" class="block text-sm font-medium text-gray-700">Promotor</label>
-			<input
-				type="text"
-				id="supervisor"
-				name="supervisor_filter"
-				placeholder="Promotor"
-				class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-			/>
-		</div>
-		<!-- Input Field-->
-		<div class="mb-4">
-			<label for="assistant_supervisor" class="block text-sm font-medium text-gray-700">Promotor Pomocniczy</label>
-			<input
-				type="text"
-				id="assistant_supervisor"
-				name="assistant_supervisor_filter"
-				placeholder="Promotor Pomocniczy"
-				class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-			/>
-		</div>
-		<!-- Input Field-->
-		<div class="mb-4">
-			<label for="course" class="block text-sm font-medium text-gray-700">Kierunek</label>
-			<input
-				type="text"
-				id="course"
-				name="course_filter"
-				placeholder="Kierunek"
-				class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-			/>
-		</div>
-		<!-- Input Field - Range -->
-		if all {
-			<div class="mb-4">
-				<label for="mean-grade-min" class="block text-sm font-medium text-gray-700">Średnia ocen ze studiów</label>
-				<div class="flex space-x-2">
-					<input
-						type="number"
-						id="mean-grade-min"
-						name="mean-grade-min"
-						placeholder="Min"
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					/>
-					<input
-						type="number"
-						id="mean-grade-max"
-						name="mean-grade-max"
-						placeholder="Max"
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					/>
-				</div>
-			</div>
-			<!-- Checkbox Group -->
-			<div class="mb-4">
-				<span class="block text-sm font-medium text-gray-700">Categories</span>
-				<div class="mt-2 space-y-2">
-					<label class="flex items-center">
-						<input
-							type="checkbox"
-							name="finished"
-							value="only_not_finished"
-							class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-						/>
-						<span class="ml-2 text-sm text-gray-700">Tylko do uzupełnienia</span>
-					</label>
-				</div>
-			</div>
-		}
-		<!-- Apply Button -->
-		<button
-			type="button"
-			class="w-full bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
-		>
-			Filtruj
-		</button>
-	</div>
+<form hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" class="space-y-4">
+    <div class="w-full max-w-xs bg-white border border-gray-200 rounded-lg p-4 shadow">
+        <!-- Input Field: Date Range -->
+        if all {
+        <div class="mb-4">
+            <label for="date-start" class="block text-sm font-medium text-gray-700">Data egzaminu</label>
+            <div class="flex space-x-2">
+                <input type="date" id="date-start" name="exam_date[gte]"
+                    class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+                <input type="date" id="date-end" name="exam_date[lte]"
+                    class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+            </div>
+        </div>
+        }
+        <!-- Input Field-->
+        <div class="mb-4">
+            <label for="Supervisor" class="block text-sm font-medium text-gray-700">Promotor</label>
+            <input type="text" id="supervisor" name="supervisor_id" placeholder="Promotor"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+        <!-- Input Field-->
+        <div class="mb-4">
+            <label for="assistant_supervisor" class="block text-sm font-medium text-gray-700">
+                Promotor
+                Pomocniczy
+            </label>
+            <input type="text" id="assistant_supervisor" name="assistant_supervisor_id"
+                placeholder="Promotor Pomocniczy"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+        <!-- Input Field-->
+        <div class="mb-4">
+            <label for="course" class="block text-sm font-medium text-gray-700">Kierunek</label>
+            <input type="text" id="course" name="course" placeholder="Kierunek"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+        <!-- Input Field - Range -->
+        if all {
+        <div class="mb-4">
+            <label for="mean-grade-min" class="block text-sm font-medium text-gray-700">Średnia ocen ze studiów</label>
+            <div class="flex space-x-2">
+                <input type="number" id="mean-grade-min" name="mean-grade-min" placeholder="Min"
+                    class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+                <input type="number" id="mean-grade-max" name="mean-grade-max" placeholder="Max"
+                    class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+            </div>
+        </div>
+        <!-- Checkbox Group -->
+        <div class="mb-4">
+            <span class="block text-sm font-medium text-gray-700">Categories</span>
+            <div class="mt-2 space-y-2">
+                <label class="flex items-center">
+                    <input type="checkbox" name="finished" value="only_not_finished"
+                        class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
+                    <span class="ml-2 text-sm text-gray-700">Tylko do uzupełnienia</span>
+                </label>
+            </div>
+        </div>
+        }
+        <!-- Apply Button -->
+        <button type="submit"
+            class="w-full bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
+            Filtruj
+        </button>
+    </div>
+</form>
 }

@@ -1,0 +1,12 @@
+package realized
+
+import "thesis-management-app/types"
+
+templ Results(thes_data []types.RealizedThesis) {
+<div id="results">
+    for _, t := range thes_data {
+    @Entry(t)
+    <br />
+    }
+</div>
+}

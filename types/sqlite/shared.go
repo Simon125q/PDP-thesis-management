@@ -19,7 +19,7 @@ func AddSQLQueryParameters(baseQuery string, params url.Values) (string, []inter
 			continue
 		}
 		if strings.Contains(key, "[") {
-			field := key[:strings.Index(key, "]")]
+			field := key[:strings.Index(key, "[")]
 			operator := key[strings.Index(key, "[")+1 : strings.Index(key, "]")]
 
 			switch operator {
