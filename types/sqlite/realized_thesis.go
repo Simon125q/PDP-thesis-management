@@ -13,7 +13,7 @@ func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams u
     COALESCE(thesis_title_polish, ''), COALESCE(thesis_title_english, ''), COALESCE(thesis_language, ''), COALESCE(library, ''),
     student_id, chair_id, supervisor_id, COALESCE(assistant_supervisor_id, 0), reviewer_id, COALESCE(hourly_settlement_id, 0)
     FROM Completed_Thesis`)
-	query, params := AddSQLQueryParameters(query, queryParams)
+	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
 	slog.Info("Query", "query", query)
 	slog.Info("Query", "params", params)

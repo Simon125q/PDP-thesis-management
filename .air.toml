@@ -2,8 +2,8 @@ root = "."
 tmp_dir = "tmp"
 
 [build]
-  bin = "./tmp/main"
-  cmd = "go build -tags=dev -o ./tmp/main ."
+  bin = "./tmp/main.exe"
+  cmd = "go build -tags=dev -o ./tmp/main.exe ."
 
   delay = 20
   exclude_dir = ["assets", "tmp", "vendor"]
