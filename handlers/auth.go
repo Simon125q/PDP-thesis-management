@@ -64,7 +64,7 @@ func setAuthCookie(w http.ResponseWriter, sessionToken string) {
 		Value:   sessionToken,
 		Path:    "/",
 		Expires: time.Now().Add(120 * time.Minute),
-		Secure:  true,
+		Secure:  false,
 	})
 }
 
