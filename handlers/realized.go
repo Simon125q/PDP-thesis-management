@@ -27,6 +27,9 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 			slog.Info("Filter", "val", val)
 		}
 	}
+
+	dateStart := r.FormValue("date[gte]")
+	slog.Info("HRFiltered", "date[gte]", dateStart)
 	r.URL.RawQuery = q.Encode()
 	thes_data, err := server.MyS.DB.AllRealizedThesis("id", false, r.URL.Query())
 	if err != nil {
