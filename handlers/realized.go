@@ -18,6 +18,10 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.Index(thes_data))
 }
 
+func HandleGenerateExcel(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
 func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	q := r.URL.Query()
 	for key, val := range q {
@@ -27,7 +31,7 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 			slog.Info("Filter", "val", val)
 		}
 	}
-
+	slog.Info("HRFiltered", "q", q)
 	dateStart := r.FormValue("date[gte]")
 	slog.Info("HRFiltered", "date[gte]", dateStart)
 	r.URL.RawQuery = q.Encode()
@@ -37,6 +41,7 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	}
 	return Render(w, r, realized.Results(thes_data))
 }
+
 func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HRDetails", "id_param", id_param)
