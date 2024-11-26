@@ -2,6 +2,8 @@ package sqlite
 
 import (
 	"database/sql"
+	"fmt"
+	"log/slog"
 	"thesis-management-app/types"
 )
 
@@ -29,4 +31,29 @@ func (m *Model) AllUniversityEmployee() ([]types.UniversityEmployee, error) {
 		return nil, err
 	}
 	return employee, nil
+}
+
+func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
+	if id != "0" {
+		return types.UniversityEmployee{}, nil
+	}
+	query := fmt.Sprintf(`SELECT id, first_name, last_name,
+    COALESCE(current_academic_title, ''), COALESCE(department_unit, '')
+    FROM University_Employee WHERE id = %v`, id)
+	slog.Info("Employee by ID", "query", query)
+	rows, err := m.DB.Query(query)
+	if err != nil {
+		return types.UniversityEmployee{}, err
+	}
+	e := types.UniversityEmployee{}
+	rows.Next()
+	err = rows.Scan(&e.Id, &e.FirstName, &e.LastName, &e.CurrentAcademicTitle, &e.DepartmentUnit)
+	if err != nil {
+		return types.UniversityEmployee{}, err
+	}
+	err = rows.Err()
+	if err != nil {
+		return types.UniversityEmployee{}, err
+	}
+	return e, nil
 }
