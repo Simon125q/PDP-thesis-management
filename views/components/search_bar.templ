@@ -10,21 +10,21 @@ templ SearchBar(url string) {
     <div class="flex items-center space-x-4">
         <input type="text" name="search" placeholder="search..." />
         <div class="relative"><label>Sort by</label></div>
-        <a type="button" hx-get={ fmt.Sprintf("%v/generate_excel", url) } hx-swap="none"
-            class="border-black">Exportuj</a>
         if views.AuthenticatedUser(ctx).IsAdmin {
-        if url == "/realized" {
-        <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
-            fmt.Sprintf("/realized/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
-            <button class="border-white bg-red-300">New</button>
-        </div>
-        } else if url == "/ongoing" {
-        <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
-            fmt.Sprintf("/ongoing/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
-            <button class="border-white bg-red-300">New</button>
-        </div>
-        }
-        }
+            if url == "/realized" {
+                <a type="button" hx-get={ fmt.Sprintf("%v/generate_excel", url) } hx-swap="none"
+                                        class="border-black">Exportuj</a>
+                <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
+                    fmt.Sprintf("/realized/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
+                    <button class="border-white bg-red-300">New</button>
+                </div>
+            } else if url == "/ongoing" || url == "/settings" {
+            <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
+                fmt.Sprintf("%v/new", url)} hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
+                <button class="border-white bg-red-300">New</button>
+            </div>
+            }
+       }
     </div>
 </div>
 <span id="new_entry"></span>

@@ -11,12 +11,12 @@ templ Index(thes_data []types.RealizedThesis) {
 	@layouts.Base(true) {
 		<div class="flex justify-center items-start">
 			<div class="text-xl text-tul-dark-red font-bold">
-				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie z zrealizowanymi pracami.
+				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie ze zrealizowanymi pracami.
 				<br/>
 				if views.AuthenticatedUser(ctx).IsAdmin {
 					Jesteś zalogowany jako administrator
 				} else {
-					Jesteś zalogowany jako urzytkownik
+					Jesteś zalogowany jako użytkownik
 				}
 				<br/>
 				@components.SearchBar("/realized")

@@ -19,11 +19,11 @@ templ Navigation() {
 			</div>
 			<!-- Navigation Links -->
 			<div class="flex space-x-6">
-				<a href="/" class="text-sm font-medium hover:text-gray-300">Home</a>
+				<a href="/" class="text-sm font-medium hover:text-gray-300">Strona Domowa</a>
 				<a href="/realized" class="text-sm font-medium hover:text-gray-300">Zrealizowane Prace</a>
 				<a href="/ongoing" class="text-sm font-medium hover:text-gray-300">Prace do Zrealizowania</a>
 				if views.AuthenticatedUser(ctx).IsAdmin {
-					<a href="/settings" class="text-sm font-medium hover:text-gray-300">Zarzadzaj urzytkownikami</a>
+					<a href="/settings" class="text-sm font-medium hover:text-gray-300">Zarzadzaj Użytkownikami</a>
 				}
 			</div>
 			<!-- User Info and Login Button -->
