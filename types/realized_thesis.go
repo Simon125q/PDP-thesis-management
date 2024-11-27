@@ -49,3 +49,27 @@ type RealizedThesisEntry struct {
 	Reviewer                         UniversityEmployee
 	HourlySettlement                 HourlySettlement
 }
+
+type RealizedThesisEntryErrors struct {
+	ThesisNumber                     string
+	ExamDate                         string
+	AverageStudyGrade                string
+	CompetencyExamGrade              string
+	DiplomaExamGrade                 string
+	FinalStudyResult                 string
+	FinalStudyResultText             string
+	ThesisTitlePolish                string
+	ThesisTitleEnglish               string
+	ThesisLanguage                   string
+	Library                          string
+	Student                          StudentErrors
+	ChairAcademicTitle               string
+	Chair                            UniversityEmployeeErrors
+	SupervisorAcademicTitle          string
+	Supervisor                       UniversityEmployeeErrors
+	AssistantSupervisorAcademicTitle string
+	AssistantSupervisor              UniversityEmployeeErrors
+	ReviewerAcademicTitle            string
+	Reviewer                         UniversityEmployeeErrors
+	HourlySettlement                 HourlySettlementErrors
+}

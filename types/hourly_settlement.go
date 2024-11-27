@@ -6,3 +6,9 @@ type HourlySettlement struct {
 	AssistantSupervisorHours float64
 	ReviewerHours            float64
 }
+
+type HourlySettlementErrors struct {
+	SupervisorHours          string
+	AssistantSupervisorHours string
+	ReviewerHours            string
+}

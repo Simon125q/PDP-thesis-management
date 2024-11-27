@@ -7,3 +7,10 @@ type UniversityEmployee struct {
 	CurrentAcademicTitle string
 	DepartmentUnit       string
 }
+
+type UniversityEmployeeErrors struct {
+	FirstName            string
+	LastName             string
+	CurrentAcademicTitle string
+	DepartmentUnit       string
+}

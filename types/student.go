@@ -9,3 +9,12 @@ type Student struct {
 	Specialization string
 	ModeOfStudies  string
 }
+
+type StudentErrors struct {
+	StudentNumber  string
+	FirstName      string
+	LastName       string
+	FieldOfStudy   string
+	Specialization string
+	ModeOfStudies  string
+}
