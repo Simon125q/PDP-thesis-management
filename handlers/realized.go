@@ -10,7 +10,7 @@ import (
 )
 
 func HandleRealized(w http.ResponseWriter, r *http.Request) error {
-	thes_data, err := server.MyS.DB.AllRealizedThesis("id", false, r.URL.Query())
+	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
 	slog.Info("quere", "q", r.URL.Query())
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	dateStart := r.FormValue("date[gte]")
 	slog.Info("HRFiltered", "date[gte]", dateStart)
 	r.URL.RawQuery = q.Encode()
-	thes_data, err := server.MyS.DB.AllRealizedThesis("id", false, r.URL.Query())
+	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
 	if err != nil {
 		return err
 	}
@@ -52,7 +52,7 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HRDetails", "id_param", id_param)
-	thes_data, err := server.MyS.DB.RealizedThesisByID(id_param)
+	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
 	slog.Info("quere", "q", r.URL.Query())
 	if err != nil {
 		return err
@@ -64,7 +64,7 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HREntry", "id_param", id_param)
-	thes_data, err := server.MyS.DB.RealizedThesisByID(id_param)
+	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
 	slog.Info("quere", "q", r.URL.Query())
 	if err != nil {
 		return err
