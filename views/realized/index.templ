@@ -7,24 +7,24 @@ import (
 	"thesis-management-app/views/layouts"
 )
 
-templ Index(thes_data []types.RealizedThesis) {
-	@layouts.Base(true) {
-		<div class="flex justify-center items-start">
-			<div class="text-xl text-tul-dark-red font-bold">
-				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie ze zrealizowanymi pracami.
-				<br/>
-				if views.AuthenticatedUser(ctx).IsAdmin {
-					Jesteś zalogowany jako administrator
-				} else {
-					Jesteś zalogowany jako użytkownik
-				}
-				<br/>
-				@components.SearchBar("/realized")
-				@Results(thes_data)
-			</div>
-			<div class="w-1/5">
-				@components.Filter(true)
-			</div>
-		</div>
-	}
+templ Index(thes_data []types.RealizedThesisEntry) {
+@layouts.Base(true) {
+<div class="flex justify-center items-start">
+    <div class="text-xl text-tul-dark-red font-bold">
+        { views.AuthenticatedUser(ctx).Login }, witaj na stronie ze zrealizowanymi pracami.
+        <br />
+        if views.AuthenticatedUser(ctx).IsAdmin {
+            Jesteś zalogowany jako administrator
+        } else {
+            Jesteś zalogowany jako użytkownik
+        }
+        <br />
+        @components.SearchBar("/realized")
+        @Results(thes_data)
+    </div>
+    <div class="w-1/5">
+        @components.Filter(true)
+    </div>
+    </div>
+    }
 }

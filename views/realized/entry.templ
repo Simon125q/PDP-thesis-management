@@ -5,11 +5,12 @@ import (
 "thesis-management-app/types"
 )
 
-templ Entry(thesis types.RealizedThesis) {
+templ Entry(thesis types.RealizedThesisEntry) {
 <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
     fmt.Sprintf("/realized/details/%v", thesis.Id) } hx-trigger="click" hx-swap="outerHTML">
     <h3 class="font-semibold text-lg text-gray-900">
-        { thesis.ThesisTitlePolish } { thesis.ThesisNumber }
+        { thesis.ThesisTitlePolish } { thesis.ThesisNumber } { thesis.Supervisor.FirstName } {
+        thesis.Supervisor.LastName }
     </h3>
 </div>
 }
