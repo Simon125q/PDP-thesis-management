@@ -10,7 +10,8 @@ templ SearchBar(url string) {
     <div class="flex items-center space-x-4">
         <input type="text" name="search" placeholder="search..." />
         <div class="relative"><label>Sort by</label></div>
-        <button class="border-black">Export</button>
+        <a type="button" hx-get={ fmt.Sprintf("%v/generate_excel", url) } hx-swap="none"
+            class="border-black">Exportuj</a>
         if views.AuthenticatedUser(ctx).IsAdmin {
         if url == "/realized" {
         <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={

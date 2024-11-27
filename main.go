@@ -52,6 +52,7 @@ func main() {
 		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+		r.Get("/realized/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))

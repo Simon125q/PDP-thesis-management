@@ -18,7 +18,14 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.Index(thes_data))
 }
 
-func HandleGenerateExcel(w http.ResponseWriter, r *http.Request) error {
+func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
+	t_data, err := server.MyS.DB.AllRealizedThesisEntries("id", false, r.URL.Query())
+	if err != nil {
+		return err
+	}
+	for _, t := range t_data {
+		slog.Info("GenExcel", "thesis", t)
+	}
 	return nil
 }
 

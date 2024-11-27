@@ -3,7 +3,6 @@ package sqlite
 import (
 	"database/sql"
 	"fmt"
-	"log/slog"
 	"thesis-management-app/types"
 )
 
@@ -34,13 +33,12 @@ func (m *Model) AllUniversityEmployee() ([]types.UniversityEmployee, error) {
 }
 
 func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
-	if id != "0" {
+	if id == "0" {
 		return types.UniversityEmployee{}, nil
 	}
 	query := fmt.Sprintf(`SELECT id, first_name, last_name,
     COALESCE(current_academic_title, ''), COALESCE(department_unit, '')
     FROM University_Employee WHERE id = %v`, id)
-	slog.Info("Employee by ID", "query", query)
 	rows, err := m.DB.Query(query)
 	if err != nil {
 		return types.UniversityEmployee{}, err
