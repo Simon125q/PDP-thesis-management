@@ -1,30 +1,72 @@
 package realized
 
 templ NewEntry() {
-<div id="new">
-    New Realized Thesis
+<form id="new" hx-post="/realized" hx-disabled-elt="#add-btn" hx-target="#results" hx-swap="afterbegin"
+    class="text-black font-normal">
+    Dodaj Nową Pracę
     <div>
-        Thesis id
-        <input type="number" id="id" name="id"
-            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-            placeholder="Thesis id" />
-    </div>
-    <div>
-        Data Egzaminu
-        <input type="date" id="exam-date" name="exam-date"
-            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
-    </div>
-    <div>
-        Polski Tytuł
-        <input type="text" id="title" name="title"
+        <label for="title_pl">
+            Polski Tytuł Pracy
+        </label>
+        <input type="text" id="title_pl" name="title_pl" required
             class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
             placeholder="Tytuł Pracy" />
+    </div>
+    <div>
+        <label for="title">
+            Angielski Tytuł Pracy
+        </label>
+        <input type="text" id="title_en" name="title_en"
+            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            placeholder="Tytuł Pracy" />
+    </div>
+    <div>
+        <label for="language">
+            Język Pracy
+        </label>
+        <input type="text" id="language" name="language" required
+            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            placeholder="Język Pracy" />
+    </div>
+    <div>
+        Student
+        <div>
+            <label for="student_name">
+                Imię
+            </label>
+            <input type="text" id="student_name" name="student_name" required
+                class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Imię" />
+        </div>
+        <div>
+            <label for="student_surname">
+                Nazwisko
+            </label>
+            <input type="text" id="student_surname" name="student_surname" required
+                class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Nazwisko" />
+        </div>
+        <div>
+            <label for="student_number">
+                Numer indeksu
+            </label>
+            <input type="text" id="student_number" name="student_number" required
+                class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+                placeholder="Numer indeksu" />
+        </div>
+    </div>
+    <div>
+        <label for="date">
+            Data Egzaminu
+        </label>
+        <input type="date" id="exam-date" name="exam-date"
+            class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
     </div>
     <div hx-get="realized/clear-new" hx-target="#new" hx-trigger="click" hx-swap="outerHTML">
         <button>Anuluj</button>
     </div>
-    <button>Dodaj</button>
-</div>
+    <button id="add-btn">Dodaj</button>
+</form>
 }
 
 templ EmptySpace() {

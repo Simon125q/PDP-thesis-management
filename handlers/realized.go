@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"thesis-management-app/pkgs/server"
+	"thesis-management-app/types"
 	"thesis-management-app/views/realized"
 	"time"
 
@@ -166,6 +167,47 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HRealizedEntry", "thes", thes_data)
 	return Render(w, r, realized.Entry(thes_data))
 }
+
+func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
+	t := types.RealizedThesisEntry{
+		ThesisNumber:                     r.FormValue("thesisNumber"),
+		ExamDate:                         r.FormValue("examDate"),
+		AverageStudyGrade:                r.FormValue("averageStudyGrade"),
+		CompetencyExamGrade:              r.FormValue("competencyExamGrade"),
+		DiplomaExamGrade:                 r.FormValue("diplomaExamGrade"),
+		FinalStudyResult:                 r.FormValue("finalStudyResult"),
+		FinalStudyResultText:             r.FormValue("finalStudyResultText"),
+		ThesisTitlePolish:                r.FormValue("thesisTitlePolish"),
+		ThesisTitleEnglish:               r.FormValue("thesisTitleEnglish"),
+		ThesisLanguage:                   r.FormValue("thesisLanguage"),
+		Library:                          r.FormValue("library"),
+		Student:                          types.Student{},
+		ChairAcademicTitle:               r.FormValue("chairAcademicTitle"),
+		Supervisor:                       types.UniversityEmployee{},
+		AssistantSupervisorAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
+		AssistantSupervisor:              types.UniversityEmployee{},
+		ReviewerAcademicTitle:            r.FormValue("reviewerAcademicTitle"),
+		Reviewer:                         types.UniversityEmployee{},
+		HourlySettlement:                 types.HourlySettlement{},
+	}
+
+	return Render(w, r, realized.Entry(t))
+}
+
+// if !validators.IsValidEmail(credentials.Login) {
+// 	loginErrs := auth.LoginErrors{
+// 		Email: "invalid email",
+// 	}
+// 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
+// }
+// resp, err := ldap.MockLDAPAuthenticate(credentials)
+// if err != nil {
+// 	slog.Error("coudnt authenticate", "err", err)
+// 	loginErrs := auth.LoginErrors{
+// 		InvalidCredentials: fmt.Sprintf("coudnt authenticate user, error occurred: %v", err),
+// 	}
+// 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
+// }
 
 func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.NewEntry())

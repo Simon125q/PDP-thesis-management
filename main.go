@@ -53,7 +53,6 @@ func main() {
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
 		r.Get("/realized/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
-		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
 		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
@@ -63,6 +62,8 @@ func main() {
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Use(handlers.WithAdminRights)
 		r.Get("/settings", handlers.Make(handlers.HandleSettings))
+		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
+		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
 	})
 
 	listenAddr := os.Getenv("LISTEN_ADDR")
