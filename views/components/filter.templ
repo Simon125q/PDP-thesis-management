@@ -17,6 +17,24 @@ templ Filter(all bool) {
         }
         <!-- Input Field-->
         <div class="mb-4">
+            <label for="Thesis topic" class="block text-sm font-medium text-gray-700">Temat pracy</label>
+            <input type="text" id="thesis_title" name="thesis_title" placeholder="Temat pracy"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+         <!-- Input Field-->
+        <div class="mb-4">
+            <label for="Student" class="block text-sm font-medium text-gray-700">Student</label>
+            <input type="text" id="student" name="student_name" placeholder="Student"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+        <!-- Input Field-->
+        <div class="mb-4">
+            <label for="StudentID" class="block text-sm font-medium text-gray-700">Numer studenta</label>
+            <input type="text" id="student_id" name="student_number" placeholder="Numer studenta"
+                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        </div>
+        <!-- Input Field-->
+        <div class="mb-4">
             <label for="Supervisor" class="block text-sm font-medium text-gray-700">Promotor</label>
             <input type="text" id="supervisor" name="supervisor_name" placeholder="Promotor"
                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
@@ -42,9 +60,9 @@ templ Filter(all bool) {
         <div class="mb-4">
             <label for="mean-grade-min" class="block text-sm font-medium text-gray-700">Średnia ocen ze studiów</label>
             <div class="flex space-x-2">
-                <input type="number" id="mean-grade-min" name="mean-grade-min" placeholder="Min"
+                <input type="text" id="mean-grade-min" name="mean-grade-min" placeholder="Min"
                     class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
-                <input type="number" id="mean-grade-max" name="mean-grade-max" placeholder="Max"
+                <input type="text" id="mean-grade-max" name="mean-grade-max" placeholder="Max"
                     class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             </div>
         </div>

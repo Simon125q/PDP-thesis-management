@@ -7,32 +7,10 @@ import (
 	"strings"
 )
 
-func (m *Model) GetSupervisorID(name string) ([]string, error) {
-	queryString := "SELECT id FROM 'University_Employee' WHERE "
-	strSplit := strings.Split(name, " ")
-	var parts []string
-	parts = append(parts, strSplit[0])
-	if len(strSplit) > 1 {
-		combined := ""
-		for str := range strSplit {
-			if str == 0 {
-				continue
-			}
-			combined = combined + strSplit[str] + " "
-		}
-		if combined != "" {
-			combined = combined[:len(combined)-1]
-		}
-		parts = append(parts, combined)
-	}
-	switch len(parts) {
-	case 1:
-		queryString = queryString + "first_name = '" + parts[0] + "' OR last_name = '" + parts[0] + "'"
-		break
-	case 2:
-		queryString = queryString + "first_name = '" + parts[0] + "' AND last_name = '" + parts[1] + "'"
-		break
-	}
+func (m *Model) GetStudentID(value string, column string) ([]string, error) {
+	value = value + "%"
+	queryString := fmt.Sprintf("SELECT id FROM 'Student' WHERE %v LIKE '%v'", column, value)
+	slog.Info(queryString)
 	rows, err := m.DB.Query(queryString)
 	if err != nil {
 		return nil, err
@@ -44,6 +22,59 @@ func (m *Model) GetSupervisorID(name string) ([]string, error) {
 		ids = append(ids, str)
 	}
 	return ids, nil
+}
+
+func (m *Model) GetPersonID(name string, personRank string) ([]string, error) {
+	name = name + "%"
+	queryString := fmt.Sprintf("SELECT id FROM '%v' WHERE CONCAT(first_name, ' ', last_name) LIKE '%v'", personRank, name)
+	slog.Info(queryString)
+	rows, err := m.DB.Query(queryString)
+	if err != nil {
+		return nil, err
+	}
+	var ids []string
+	for rows.Next() {
+		var str string
+		rows.Scan(&str)
+		ids = append(ids, str)
+	}
+	return ids, nil
+}
+
+func (m *Model) GetConditionValuesFromName(name string, personRank string, column string, conditions []string, values []interface{}) ([]string, []interface{}) {
+	ids, err := m.GetPersonID(name, personRank)
+	if err != nil {
+		slog.Error(err.Error())
+	}
+	str := "("
+	for _, id := range ids {
+		str = str + " " + column + " = ? OR"
+		values = append(values, id)
+	}
+	if len(str) > 0 {
+		str = str[0 : len(str)-3]
+		str = str + ")"
+	}
+	conditions = append(conditions, str)
+	return conditions, values
+}
+
+func (m *Model) GetConditionValuesFromStudent(value string, valueType string, column string, conditions []string, values []interface{}) ([]string, []interface{}) {
+	ids, err := m.GetStudentID(value, valueType)
+	if err != nil {
+		slog.Error(err.Error())
+	}
+	str := "("
+	for _, id := range ids {
+		str = str + " " + column + " = ? OR"
+		values = append(values, id)
+	}
+	if len(str) > 0 {
+		str = str[0 : len(str)-3]
+		str = str + ")"
+	}
+	conditions = append(conditions, str)
+	return conditions, values
 }
 
 func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (string, []interface{}) {
@@ -60,20 +91,34 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 				values = append(values, value[0])
 			}
 			continue
+		case "mean-grade-min":
+			conditionStr := fmt.Sprintf("average_study_grade >= %v", value[0])
+			conditions = append(conditions, conditionStr)
+			continue
+		case "mean-grade-max":
+			conditionStr := fmt.Sprintf("average_study_grade <= %v", value[0])
+			conditions = append(conditions, conditionStr)
+			continue
+		case "thesis_title":
+			thesisTitle := value[0]
+			thesisTitle = thesisTitle + "%"
+			conditionStr := fmt.Sprintf("(thesis_title_polish LIKE '%v' OR thesis_title_english LIKE '%v')", thesisTitle, thesisTitle)
+			conditions = append(conditions, conditionStr)
+			continue
+		case "student_name":
+			conditions, values = m.GetConditionValuesFromName(value[0], "Student", "student_id", conditions, values)
+			continue
+		case "student_number":
+			conditions, values = m.GetConditionValuesFromStudent(value[0], "student_number", "student_id", conditions, values)
+			continue
 		case "supervisor_name":
-			ids, err := m.GetSupervisorID(value[0])
-			if err != nil {
-				slog.Error(err.Error())
-			}
-			str := ""
-			for _, id := range ids {
-				str = str + "(supervisor_id = ?) OR"
-				values = append(values, id)
-			}
-			if len(str) > 0 {
-				str = str[0 : len(str)-3]
-			}
-			conditions = append(conditions, str)
+			conditions, values = m.GetConditionValuesFromName(value[0], "University_Employee", "supervisor_id", conditions, values)
+			continue
+		case "assistant_supervisor_name":
+			conditions, values = m.GetConditionValuesFromName(value[0], "University_Employee", "assistant_supervisor_id", conditions, values)
+			continue
+		case "course":
+			conditions, values = m.GetConditionValuesFromStudent(value[0], "field_of_study", "student_id", conditions, values)
 			continue
 		}
 		if strings.Contains(key, "[") {
