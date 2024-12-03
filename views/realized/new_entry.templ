@@ -3,140 +3,64 @@ package realized
 import "thesis-management-app/types"
 
 templ NewEntry(vals types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
-	<span id="newEntryForm">
-		<form
-			id="new"
-			hx-post="/realized"
-			hx-disabled-elt="#add-btn"
-			hx-target="#results"
-			hx-swap="afterbegin"
-			class="text-black font-normal"
-		>
-			Dodaj Nową Pracę
-			<div>
-				<label for="thesisTitlePolish">
-					Polski Tytuł Pracy
-				</label>
-				<input
-					type="text"
-					id="thesisTitlePolish"
-					name="thesisTitlePolish"
-					value={ vals.ThesisTitlePolish }
-					required
-					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					placeholder="Tytuł Pracy"
-				/>
-			</div>
-			<div>
-				<label for="thesisTitleEnglish">
-					Angielski Tytuł Pracy
-				</label>
-				<input
-					type="text"
-					id="thesisTitleEnglish"
-					name="thesisTitleEnglish"
-					value={ vals.ThesisTitleEnglish }
-					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					placeholder="Tytuł Pracy"
-				/>
-			</div>
-			<div>
-				<label for="thesisLanguage">
-					Język Pracy
-				</label>
-				<input
-					hx-get="/validate-language"
-					hx-target="#language-error"
-					hx-trigger="keyup changed delay:200ms"
-					hx-swap="outerHTML"
-					type="text"
-					id="thesisLanguage"
-					name="thesisLanguage"
-					value={ vals.ThesisLanguage }
-					required
-					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					placeholder="Język Pracy"
-				/>
-				<span class="error" id="language-error"></span>
-			</div>
-			<div>
-				Student
-				<div>
-					<label for="student_name">
-						Imię
-					</label>
-					<input
-						type="text"
-						id="firstNameStudent"
-						name="firstNameStudent"
-						required
-						value={ vals.Student.FirstName }
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-						placeholder="Imię"
-					/>
-					@ErrorMsg(errs.Student.FirstName)
-				</div>
-				<div>
-					<label for="student_surname">
-						Nazwisko
-					</label>
-					<input
-						type="text"
-						id="lastNameStudent"
-						name="lastNameStudent"
-						required
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-						placeholder="Nazwisko"
-					/>
-					@ErrorMsg(errs.Student.LastName)
-				</div>
-				<div>
-					@InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
-					@ErrorMsg(errs.Student.StudentNumber)
-				</div>
-			</div>
-			<div>
-				<label for="date">
-					Data Egzaminu
-				</label>
-				<input
-					type="date"
-					id="exam-date"
-					name="exam-date"
-					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-				/>
-			</div>
-			<div hx-get="realized/clear-new" hx-target="#new" hx-trigger="click" hx-swap="outerHTML">
-				<button>Anuluj</button>
-			</div>
-			<button id="add-btn">Dodaj</button>
-		</form>
-	</span>
+<span id="newEntryForm">
+    <form id="new" hx-post="/realized" hx-disabled-elt="#add-btn" hx-target="#results" hx-swap="afterbegin"
+        class="text-black font-normal">
+        Dodaj Nową Pracę
+        <div>
+            @InputField("text", "thesisTitlePolish", "Polski Tytuł Pracy", vals.ThesisTitlePolish, true)
+            @ErrorMsg(errs.ThesisTitlePolish)
+        </div>
+        <div>
+            @InputField("text", "thesisTitleEnglish", "Angielski Tytuł Pracy", vals.ThesisTitleEnglish, false)
+            @ErrorMsg(errs.ThesisTitleEnglish)
+        </div>
+        <div>
+            @InputField("text", "thesisLanguage", "Język Pracy", vals.ThesisLanguage, true)
+            @ErrorMsg(errs.ThesisLanguage)
+        </div>
+        <div>
+            Student
+            <div>
+                @InputField("text", "firstNameStudent", "Imię", vals.Student.FirstName, true)
+                @ErrorMsg(errs.Student.FirstName)
+            </div>
+            <div>
+                @InputField("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, true)
+                @ErrorMsg(errs.Student.LastName)
+            </div>
+            <div>
+                @InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
+                @ErrorMsg(errs.Student.StudentNumber)
+            </div>
+        </div>
+        <div>
+            @InputField("date", "exam-date", "Data Egzaminu", vals.ExamDate, false)
+            @ErrorMsg(errs.ExamDate)
+        </div>
+        <div hx-get="realized/clear-new" hx-target="#new" hx-trigger="click" hx-swap="outerHTML">
+            <button>Anuluj</button>
+        </div>
+        <button id="add-btn">Dodaj</button>
+    </form>
+</span>
 }
 
 templ InputField(inputType, id, label, val string, req bool) {
-	<label for={ id }>
-		{ label }
-	</label>
-	<input
-		type={ inputType }
-		id={ id }
-		name={ id }
-		value={ val }
-		if req {
-			required
-		}
-		class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-		placeholder={ label }
-	/>
+<label for={ id }>
+    { label }
+</label>
+<input type={ inputType } id={ id } name={ id } value={ val } if req { required }
+    class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+    placeholder={ label } />
 }
 
 templ ErrorMsg(msg string) {
-	if msg != "" {
-		<span class="text-tul-medium-red">{ msg }</span>
-	}
+if msg != "" {
+<span class="text-tul-medium-red">{ msg }</span>
+}
 }
 
 templ EmptySpace() {
-	<span id="new_entry"></span>
+<span id="new_entry"></span>
 }

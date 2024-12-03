@@ -48,10 +48,12 @@ templ Entry(thesis types.RealizedThesisEntry) {
 }
 
 templ NewEntrySwap(thesis, vals types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
+if errs.Correct {
 <span>
     @Entry(thesis)
     <br />
 </span>
+}
 <span id="newEntryForm" hx-swap-oob="true">
     @NewEntry(vals, errs)
 </span>
