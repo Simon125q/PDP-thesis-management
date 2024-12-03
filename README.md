@@ -59,7 +59,7 @@ go templ
 
 [https://templ.guide/]
 
-htmx
+htmx 
 
 [https://htmx.org/docs/#introduction]
 
