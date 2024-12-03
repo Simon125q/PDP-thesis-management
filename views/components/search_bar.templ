@@ -12,8 +12,9 @@ templ SearchBar(url string) {
         <div class="relative"><label>Sort by</label></div>
         if views.AuthenticatedUser(ctx).IsAdmin {
             if url == "/realized" {
-                <a type="button" hx-get={ fmt.Sprintf("%v/generate_excel", url) } hx-swap="none"
-                                        class="border-black">Exportuj</a>
+                <a type="button" hx-get={ fmt.Sprintf("%v/generate_excel", url) }
+                    hx-swap="none" class="border-black">Exportuj</a>
+
                 <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
                     fmt.Sprintf("/realized/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
                     <button class="border-white bg-red-300">New</button>

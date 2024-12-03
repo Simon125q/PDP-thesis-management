@@ -1,16 +1,51 @@
 package realized
 
 import (
-"fmt"
-"thesis-management-app/types"
+	"fmt"
+	"thesis-management-app/types"
 )
 
 templ Entry(thesis types.RealizedThesisEntry) {
-<div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
-    fmt.Sprintf("/realized/details/%v", thesis.Id) } hx-trigger="click" hx-swap="outerHTML">
-    <h3 class="font-semibold text-lg text-gray-900">
-        { thesis.ThesisTitlePolish } { thesis.ThesisNumber } { thesis.Supervisor.FirstName } {
-        thesis.Supervisor.LastName }
-    </h3>
-</div>
+	<div style="border-width: 3px;" class="p-4 border-red-800 rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer" hx-get={
+		fmt.Sprintf("/realized/details/%v", thesis.Id) } hx-trigger="click" hx-swap="outerHTML">
+
+		<div class="flex justify-between items-center">
+			<span class="text-sm text-gray-600">
+				{ thesis.ThesisNumber }
+			</span>
+			<span class="text-sm text-gray-600">
+				{ thesis.ExamDate }
+			</span>
+		</div>
+
+		<h3 class="font-bold text-2xl text-center text-gray-900 mt-2 mb-4">
+			"{ thesis.ThesisTitlePolish }"
+		</h3>
+
+		<div class="flex flex-row items-center justify-between text-sm text-gray-700">
+            <div class="flex flex-col items-start">
+                <p>
+                    <strong>Kierunek:</strong> { thesis.Student.FieldOfStudy }
+                </p>
+                <p>
+                    <strong>Student:</strong> { thesis.Student.FirstName } { thesis.Student.LastName }
+                </p>
+                <p>
+                    <strong>Numer Indeksu:</strong> ({ thesis.Student.StudentNumber })
+                </p>
+            </div>
+
+            <div class="flex flex-col items-start">
+                <p>
+                    <strong>Promotor:</strong> { thesis.Supervisor.FirstName } { thesis.Supervisor.LastName }
+                </p>
+                <p>
+                    <strong>Promotor pom.:</strong> { thesis.AssistantSupervisor.FirstName } { thesis.AssistantSupervisor.LastName }
+                </p>
+                <p>
+                    <strong>Recenzent:</strong> { thesis.Reviewer.FirstName } { thesis.Reviewer.LastName }
+                </p>
+            </div>
+		</div>
+	</div>
 }
