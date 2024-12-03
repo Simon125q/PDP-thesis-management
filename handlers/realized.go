@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"thesis-management-app/pkgs/server"
+	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
 	"thesis-management-app/views/realized"
 	"time"
@@ -190,8 +191,9 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		Reviewer:                         types.UniversityEmployee{},
 		HourlySettlement:                 types.HourlySettlement{},
 	}
+	errors, _ := validators.ValidateRealizedThesis(t)
 
-	return Render(w, r, realized.Entry(t))
+	return Render(w, r, realized.NewEntrySwap(t, errors))
 }
 
 // if !validators.IsValidEmail(credentials.Login) {
@@ -210,7 +212,7 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 // }
 
 func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, realized.NewEntry())
+	return Render(w, r, realized.NewEntry(types.RealizedThesisEntryErrors{}))
 }
 
 func HandleRealizedClearNew(w http.ResponseWriter, r *http.Request) error {

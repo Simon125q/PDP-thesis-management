@@ -37,6 +37,7 @@ func main() {
 	server.MyS.Router.Use(middleware.Logger)
 	server.MyS.Router.Use(handlers.WithUser)
 	server.MyS.Router.Use(handlers.RefreshSession)
+	server.MyS.Router.Get("/validate-language", handlers.Make(handlers.HandleLanguageValidation))
 
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Handle("/*", public())
