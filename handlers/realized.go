@@ -1,10 +1,14 @@
 package handlers
 
 import (
+	"fmt"
+	"github.com/xuri/excelize/v2"
 	"log/slog"
 	"net/http"
+	"strconv"
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/views/realized"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -19,13 +23,103 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
-	t_data, err := server.MyS.DB.AllRealizedThesisEntries("id", false, r.URL.Query())
+	t_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", false, r.URL.Query())
 	if err != nil {
 		return err
 	}
-	for _, t := range t_data {
-		slog.Info("GenExcel", "thesis", t)
+
+	filePath := "/realized/generate_excel"
+
+	currentTime := time.Now()
+	fileName := "Wybrane Prace " + currentTime.Format("2-01-2006 15h04m05s") + ".xlsx"
+
+	println(fileName)
+
+	w.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
+	w.Header().Set("HX-Redirect", filePath)
+
+	f := excelize.NewFile()
+
+	sheetName := "Prace"
+	sheetIndex, _ := f.NewSheet(sheetName)
+
+	headers := []string{
+		"Numer Pracy", "Data Egzaminu", "Średnia Ocen ze Studiów", "Ocena z Egzaminu Kompetecyjnego",
+		"Ocena z Egzaminu dyplomowego", "Ostateczny Wynik Studiów", "Ostateczny Wynik Studiów (słownie)",
+		"Tytuł Pracy Dyplomowej (polski)", "Tytuł Pracy Dyplomowej (angielski)",
+		"Język Pracy", "Biblioteka", "Numer Indeksu", "Imię Studenta", "Nazwisko Studenta",
+		"Kierunek", "Specjalność", "Tryb", "Tytuł Naukowy", "Przewodniczący Imię", "Przewodniczący Nazwisko",
+		"Tytuł Naukowy", "Promotor Imię", "Promotor Nazwisko",
+		"Tytuł Naukowy", "Promotor Pomocniczy Imię", "Promotor Pomocniczy Nazwisko",
+		"Tytuł Naukowy", "Recenzent Imię", "Recenzent Nazwisko",
+		"Recenzent Godziny Rozliczeń", "Promotor Godziny Rozliczeń", "Promotor Pomocniczy Godziny Rozliczeń"}
+
+	for i, header := range headers {
+		col := ""
+		index := i
+		for index >= 0 {
+			col = string(rune('A'+index%26)) + col
+			index = index/26 - 1
+		}
+		err := f.SetCellValue(sheetName, col+"1", header)
+		if err != nil {
+			return err
+		}
 	}
+
+	for i, t := range t_data {
+		row := strconv.Itoa(i + 2) // Starts from second row
+		data := map[string]interface{}{
+			"A":  t.ThesisNumber,
+			"B":  t.ExamDate,
+			"C":  t.AverageStudyGrade,
+			"D":  t.CompetencyExamGrade,
+			"E":  t.DiplomaExamGrade,
+			"F":  t.FinalStudyResult,
+			"G":  t.FinalStudyResultText,
+			"H":  t.ThesisTitlePolish,
+			"I":  t.ThesisTitleEnglish,
+			"J":  t.ThesisLanguage,
+			"K":  t.Library,
+			"L":  t.Student.StudentNumber,
+			"M":  t.Student.FirstName,
+			"N":  t.Student.LastName,
+			"O":  t.Student.FieldOfStudy,
+			"P":  t.Student.Specialization,
+			"Q":  t.Student.ModeOfStudies,
+			"R":  t.Chair.CurrentAcademicTitle,
+			"S":  t.Chair.FirstName,
+			"T":  t.Chair.LastName,
+			"U":  t.Supervisor.CurrentAcademicTitle,
+			"V":  t.Supervisor.FirstName,
+			"W":  t.Supervisor.LastName,
+			"X":  t.AssistantSupervisor.CurrentAcademicTitle,
+			"Y":  t.AssistantSupervisor.FirstName,
+			"Z":  t.AssistantSupervisor.LastName,
+			"AA": t.Reviewer.CurrentAcademicTitle,
+			"AB": t.Reviewer.FirstName,
+			"AC": t.Reviewer.LastName,
+			"AD": t.HourlySettlement.ReviewerHours,
+			"AE": t.HourlySettlement.SupervisorHours,
+			"AF": t.HourlySettlement.AssistantSupervisorHours,
+		}
+
+		for col, value := range data {
+			cell := col + row
+			if err := f.SetCellValue(sheetName, cell, value); err != nil {
+				return fmt.Errorf("error setting cell %s: %w", cell, err)
+			}
+		}
+	}
+
+	f.SetActiveSheet(sheetIndex)
+
+	if err := f.Write(w); err != nil {
+		slog.Info("ERROR:")
+	}
+	slog.Info("Worked!")
+
 	return nil
 }
 
