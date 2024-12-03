@@ -2,7 +2,7 @@ package realized
 
 import "thesis-management-app/types"
 
-templ NewEntry(errs types.RealizedThesisEntryErrors) {
+templ NewEntry(vals types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
 	<span id="newEntryForm">
 		<form
 			id="new"
@@ -21,6 +21,7 @@ templ NewEntry(errs types.RealizedThesisEntryErrors) {
 					type="text"
 					id="thesisTitlePolish"
 					name="thesisTitlePolish"
+					value={ vals.ThesisTitlePolish }
 					required
 					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
 					placeholder="Tytuł Pracy"
@@ -34,6 +35,7 @@ templ NewEntry(errs types.RealizedThesisEntryErrors) {
 					type="text"
 					id="thesisTitleEnglish"
 					name="thesisTitleEnglish"
+					value={ vals.ThesisTitleEnglish }
 					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
 					placeholder="Tytuł Pracy"
 				/>
@@ -50,6 +52,7 @@ templ NewEntry(errs types.RealizedThesisEntryErrors) {
 					type="text"
 					id="thesisLanguage"
 					name="thesisLanguage"
+					value={ vals.ThesisLanguage }
 					required
 					class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
 					placeholder="Język Pracy"
@@ -64,15 +67,14 @@ templ NewEntry(errs types.RealizedThesisEntryErrors) {
 					</label>
 					<input
 						type="text"
-						id="student_name"
-						name="student_name"
+						id="firstNameStudent"
+						name="firstNameStudent"
 						required
+						value={ vals.Student.FirstName }
 						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
 						placeholder="Imię"
 					/>
-					if errs.ThesisLanguage != "" {
-						<span class="error">{ errs.ThesisLanguage }</span>
-					}
+					@ErrorMsg(errs.Student.FirstName)
 				</div>
 				<div>
 					<label for="student_surname">
@@ -80,25 +82,17 @@ templ NewEntry(errs types.RealizedThesisEntryErrors) {
 					</label>
 					<input
 						type="text"
-						id="student_surname"
-						name="student_surname"
+						id="lastNameStudent"
+						name="lastNameStudent"
 						required
 						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
 						placeholder="Nazwisko"
 					/>
+					@ErrorMsg(errs.Student.LastName)
 				</div>
 				<div>
-					<label for="student_number">
-						Numer indeksu
-					</label>
-					<input
-						type="text"
-						id="student_number"
-						name="student_number"
-						required
-						class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-						placeholder="Numer indeksu"
-					/>
+					@InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
+					@ErrorMsg(errs.Student.StudentNumber)
 				</div>
 			</div>
 			<div>
@@ -118,6 +112,29 @@ templ NewEntry(errs types.RealizedThesisEntryErrors) {
 			<button id="add-btn">Dodaj</button>
 		</form>
 	</span>
+}
+
+templ InputField(inputType, id, label, val string, req bool) {
+	<label for={ id }>
+		{ label }
+	</label>
+	<input
+		type={ inputType }
+		id={ id }
+		name={ id }
+		value={ val }
+		if req {
+			required
+		}
+		class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+		placeholder={ label }
+	/>
+}
+
+templ ErrorMsg(msg string) {
+	if msg != "" {
+		<span class="text-tul-medium-red">{ msg }</span>
+	}
 }
 
 templ EmptySpace() {

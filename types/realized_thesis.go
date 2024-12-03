@@ -72,4 +72,5 @@ type RealizedThesisEntryErrors struct {
 	ReviewerAcademicTitle            string
 	Reviewer                         UniversityEmployeeErrors
 	HourlySettlement                 HourlySettlementErrors
+	Correct                          bool
 }
