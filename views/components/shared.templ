@@ -1,0 +1,24 @@
+package components
+
+templ InputField(inputType, id, label, val string, req bool) {
+	<label for={ id }>
+		{ label }
+	</label>
+	<input
+		type={ inputType }
+		id={ id }
+		name={ id }
+		value={ val }
+		if req {
+			required
+		}
+		class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+		placeholder={ label }
+	/>
+}
+
+templ ErrorMsg(msg string) {
+	if msg != "" {
+		<span class="text-tul-medium-red">{ msg }</span>
+	}
+}
