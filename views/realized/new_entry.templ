@@ -33,10 +33,125 @@ templ NewEntry(vals types.RealizedThesisEntry, errs types.RealizedThesisEntryErr
                 @InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
                 @ErrorMsg(errs.Student.StudentNumber)
             </div>
+            <div>
+                @InputField("text", "modeOfStudies", "Tryb Studiów", vals.Student.ModeOfStudies, true)
+                @ErrorMsg(errs.Student.ModeOfStudies)
+            </div>
+            <div>
+                @InputField("text", "fieldOfStudy", "Kierunek", vals.Student.FieldOfStudy, true)
+                @ErrorMsg(errs.Student.FieldOfStudy)
+            </div>
+            <div>
+                @InputField("text", "specialization", "Specjalizacja", vals.Student.Specialization, false)
+                @ErrorMsg(errs.Student.Specialization)
+            </div>
         </div>
         <div>
-            @InputField("date", "exam-date", "Data Egzaminu", vals.ExamDate, false)
+            @InputField("date", "examDate", "Data Egzaminu", vals.ExamDate, false)
             @ErrorMsg(errs.ExamDate)
+        </div>
+        <div>
+            Promotor
+            <div>
+                @InputField("text", "supervisorAcademicTitle", "Tytuł", vals.SupervisorAcademicTitle, true)
+                @ErrorMsg(errs.Supervisor.FirstName)
+            </div>
+            <div>
+                @InputField("text", "firstNameSupervisor", "Imię", vals.Supervisor.FirstName, true)
+                @ErrorMsg(errs.Supervisor.FirstName)
+            </div>
+            <div>
+                @InputField("text", "lastNameSupervisor", "Nazwisko", vals.Supervisor.LastName, true)
+                @ErrorMsg(errs.Supervisor.LastName)
+            </div>
+        </div>
+        <div>
+            Promotor Pomocniczy
+            <div>
+                @InputField("text", "assistantSupervisorAcademicTitle", "Tytuł", vals.AssistantSupervisorAcademicTitle,
+                false)
+                @ErrorMsg(errs.AssistantSupervisor.FirstName)
+            </div>
+            <div>
+                @InputField("text", "firstNameAssistantSupervisor", "Imię", vals.AssistantSupervisor.FirstName, false)
+                @ErrorMsg(errs.AssistantSupervisor.FirstName)
+            </div>
+            <div>
+                @InputField("text", "lastNameAssistantSupervisor", "Nazwisko", vals.AssistantSupervisor.LastName, false)
+                @ErrorMsg(errs.AssistantSupervisor.LastName)
+            </div>
+        </div>
+        <div>
+            Recenzent
+            <div>
+                @InputField("text", "reviewerAcademicTitle", "Tytuł", vals.ReviewerAcademicTitle, false)
+                @ErrorMsg(errs.Reviewer.FirstName)
+            </div>
+            <div>
+                @InputField("text", "firstNameReviewer", "Imię", vals.Reviewer.FirstName, false)
+                @ErrorMsg(errs.Reviewer.FirstName)
+            </div>
+            <div>
+                @InputField("text", "lastNameReviewer", "Nazwisko", vals.Reviewer.LastName, false)
+                @ErrorMsg(errs.Reviewer.LastName)
+            </div>
+        </div>
+        <div>
+            Przewodniczący Komisji
+            <div>
+                @InputField("text", "chairAcademicTitle", "Tytuł", vals.ChairAcademicTitle, false)
+                @ErrorMsg(errs.Chair.FirstName)
+            </div>
+            <div>
+                @InputField("text", "firstNameChair", "Imię", vals.Chair.FirstName, false)
+                @ErrorMsg(errs.Chair.FirstName)
+            </div>
+            <div>
+                @InputField("text", "lastNameChair", "Nazwisko", vals.Chair.LastName, false)
+                @ErrorMsg(errs.Chair.LastName)
+            </div>
+        </div>
+        <div>
+            <h3>Godziny Do Rozliczeń</h3>
+            <div>
+                @InputField("number", "supervisorHours", "Promotor", "10", false)
+                @ErrorMsg(errs.HourlySettlement.SupervisorHours)
+            </div>
+            <div>
+                @InputField("number", "AssistantSupervisorHours", "Promotor Pom.", "0", false)
+                @ErrorMsg(errs.HourlySettlement.AssistantSupervisorHours)
+            </div>
+            <div>
+                @InputField("number", "reviewerHours", "Recenzent", "2", false)
+                @ErrorMsg(errs.HourlySettlement.SupervisorHours)
+            </div>
+        </div>
+        <div>
+            @InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego", vals.CompetencyExamGrade,
+            false)
+            @ErrorMsg(errs.CompetencyExamGrade)
+        </div>
+        <div>
+            @InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego", vals.DiplomaExamGrade, false)
+            @ErrorMsg(errs.DiplomaExamGrade)
+        </div>
+        <div>
+            @InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade, false)
+            @ErrorMsg(errs.AverageStudyGrade)
+        </div>
+        <div>
+            @InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult, false)
+            @ErrorMsg(errs.FinalStudyResult)
+        </div>
+        <div>
+            @InputField("text", "finalStudyResultText", "Ostateczny wynik studiów słownie", vals.FinalStudyResultText,
+            false)
+            @ErrorMsg(errs.FinalStudyResultText)
+        </div>
+        <div>
+            @InputField("text", "library", "Biblioteka", vals.Library,
+            false)
+            @ErrorMsg(errs.Library)
         </div>
         <div hx-get="realized/clear-new" hx-target="#new" hx-trigger="click" hx-swap="outerHTML">
             <button>Anuluj</button>
