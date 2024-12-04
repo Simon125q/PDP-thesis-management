@@ -225,6 +225,11 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	slog.Info("add thesis", "correct", true)
+	id, err := server.MyS.DB.InsertStudent(t.Student)
+	if err != nil {
+		slog.Error("student to db", "err", err)
+	}
+	slog.Info("sudent to db", "new_id", id)
 	errors.Correct = true
 	return Render(w, r, realized.NewEntrySwap(t, types.RealizedThesisEntry{}, errors))
 }

@@ -29,3 +29,14 @@ func (m *Model) StudentById(id string) (types.Student, error) {
 	}
 	return s, nil
 }
+
+func (m *Model) InsertStudent(student types.Student) (int64, error) {
+	query := `
+        INSERT INTO Student (student_number, first_name, last_name, field_of_study, specialization, mode_of_study)
+        VALUES (?, ?, ?, ?, ?, ?)`
+	result, err := m.DB.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}
