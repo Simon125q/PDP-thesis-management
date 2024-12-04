@@ -274,3 +274,23 @@ func (m *Model) RealizedThesisEntryByID(id string) (types.RealizedThesisEntry, e
 	}, nil
 
 }
+
+func (m *Model) InsertRealizedThesis(thesis types.RealizedThesis) (int64, error) {
+	query := `
+        INSERT INTO Completed_Thesis (
+            thesis_number, exam_date, average_study_grade, competency_exam_grade,
+            diploma_exam_grade, final_study_result, final_study_result_text,
+            thesis_title_polish, thesis_title_english, thesis_language, library,
+            student_id, chair_id, supervisor_id, assistant_supervisor_id, reviewer_id, hourly_settlement_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	result, err := m.DB.Exec(query,
+		thesis.ThesisNumber, thesis.ExamDate, thesis.AverageStudyGrade, thesis.CompetencyExamGrade,
+		thesis.DiplomaExamGrade, thesis.FinalStudyResult, thesis.FinalStudyResultText,
+		thesis.ThesisTitlePolish, thesis.ThesisTitleEnglish, thesis.ThesisLanguage, thesis.Library,
+		thesis.StudentId, thesis.ChairId, thesis.SupervisorId, thesis.AssistantSupervisorId, thesis.ReviewerId, thesis.HourlySettlementId)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}

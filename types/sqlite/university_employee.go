@@ -55,3 +55,14 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 	}
 	return e, nil
 }
+
+func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployee) (int64, error) {
+	query := `
+        INSERT INTO University_Employee (first_name, last_name, current_academic_title, department_unit)
+        VALUES (?, ?, ?, ?)`
+	result, err := m.DB.Exec(query, employee.FirstName, employee.LastName, employee.CurrentAcademicTitle, employee.DepartmentUnit)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}
