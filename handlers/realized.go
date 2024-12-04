@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"github.com/xuri/excelize/v2"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -11,6 +10,8 @@ import (
 	"thesis-management-app/types"
 	"thesis-management-app/views/realized"
 	"time"
+
+	"github.com/xuri/excelize/v2"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -154,7 +155,7 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	slog.Info("HRealizedDetails", "thes", thes_data)
-	return Render(w, r, realized.Details(thes_data))
+	return Render(w, r, realized.Details(thes_data, types.RealizedThesisEntryErrors{}))
 }
 
 func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
@@ -228,20 +229,62 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.NewEntrySwap(t, types.RealizedThesisEntry{}, errors))
 }
 
-// if !validators.IsValidEmail(credentials.Login) {
-// 	loginErrs := auth.LoginErrors{
-// 		Email: "invalid email",
-// 	}
-// 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
-// }
-// resp, err := ldap.MockLDAPAuthenticate(credentials)
-// if err != nil {
-// 	slog.Error("coudnt authenticate", "err", err)
-// 	loginErrs := auth.LoginErrors{
-// 		InvalidCredentials: fmt.Sprintf("coudnt authenticate user, error occurred: %v", err),
-// 	}
-// 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
-// }
+func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
+	t := types.RealizedThesisEntry{
+		ThesisNumber:         r.FormValue("thesisNumber"),
+		ExamDate:             r.FormValue("examDate"),
+		AverageStudyGrade:    r.FormValue("averageStudyGrade"),
+		CompetencyExamGrade:  r.FormValue("competencyExamGrade"),
+		DiplomaExamGrade:     r.FormValue("diplomaExamGrade"),
+		FinalStudyResult:     r.FormValue("finalStudyResult"),
+		FinalStudyResultText: r.FormValue("finalStudyResultText"),
+		ThesisTitlePolish:    r.FormValue("thesisTitlePolish"),
+		ThesisTitleEnglish:   r.FormValue("thesisTitleEnglish"),
+		ThesisLanguage:       r.FormValue("thesisLanguage"),
+		Library:              r.FormValue("library"),
+		Student: types.Student{
+			StudentNumber:  r.FormValue("studentNumber"),
+			FirstName:      r.FormValue("firstNameStudent"),
+			LastName:       r.FormValue("lastNameStudent"),
+			FieldOfStudy:   r.FormValue("fieldOfStudy"),
+			Specialization: r.FormValue("specialization"),
+			ModeOfStudies:  r.FormValue("modeOfStudies"),
+		},
+		ChairAcademicTitle: r.FormValue("chairAcademicTitle"),
+		Chair: types.UniversityEmployee{
+			FirstName:            r.FormValue("firstNameChair"),
+			LastName:             r.FormValue("lastNameChair"),
+			CurrentAcademicTitle: r.FormValue("chairAcademicTitle"),
+		},
+		SupervisorAcademicTitle: r.FormValue("supervisorAcademicTitle"),
+		Supervisor: types.UniversityEmployee{
+			FirstName:            r.FormValue("firstNameSupervisor"),
+			LastName:             r.FormValue("lastNameSupervisor"),
+			CurrentAcademicTitle: r.FormValue("supervisorAcademicTitle"),
+		},
+		AssistantSupervisorAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
+		AssistantSupervisor: types.UniversityEmployee{
+			FirstName:            r.FormValue("firstNameAssistantSupervisor"),
+			LastName:             r.FormValue("lastNameAssistantSupervisor"),
+			CurrentAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
+		},
+		ReviewerAcademicTitle: r.FormValue("reviewerAcademicTitle"),
+		Reviewer: types.UniversityEmployee{
+			FirstName:            r.FormValue("firstNameReviewer"),
+			LastName:             r.FormValue("lastNameReviewer"),
+			CurrentAcademicTitle: r.FormValue("reviewerAcademicTitle"),
+		},
+		HourlySettlement: types.HourlySettlement{},
+	}
+	errors, ok := validators.ValidateRealizedThesis(t)
+	if !ok {
+		errors.Correct = false
+		return Render(w, r, realized.Details(t, errors))
+	}
+	slog.Info("add thesis", "correct", true)
+	errors.Correct = true
+	return Render(w, r, realized.Entry(t))
+}
 
 func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.NewEntry(types.RealizedThesisEntry{}, types.RealizedThesisEntryErrors{}))

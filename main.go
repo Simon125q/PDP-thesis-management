@@ -37,7 +37,6 @@ func main() {
 	server.MyS.Router.Use(middleware.Logger)
 	server.MyS.Router.Use(handlers.WithUser)
 	server.MyS.Router.Use(handlers.RefreshSession)
-	server.MyS.Router.Get("/validate-language", handlers.Make(handlers.HandleLanguageValidation))
 
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Handle("/*", public())
@@ -65,6 +64,7 @@ func main() {
 		r.Get("/settings", handlers.Make(handlers.HandleSettings))
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
+		r.Put("/realized", handlers.Make(handlers.HandleRealizedUpdate))
 	})
 
 	listenAddr := os.Getenv("LISTEN_ADDR")

@@ -2,66 +2,63 @@ package realized
 
 import (
 	"fmt"
-	"strconv"
 	"thesis-management-app/types"
 )
 
-templ Details(thesis types.RealizedThesisEntry) {
+templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
 	<div style="border-width: 3px;" class="p-4 border-red-800 rounded-2xl" id={ fmt.Sprintf("details-%v", thesis.Id) }>
-		<div class="bg-gray-100 px-4 py-2">
-			<h2 class="text-lg font-medium text-gray-800">Szczegóły Pracy</h2>
-		</div>
-		<div class="flex flex-row items-center justify-between text-sm text-gray-700">
-			<div>
-				<label for="id-pracy" class="text-sm font-medium text-gray-900 block mb-2">ID Pracy</label>
-				<input
-					type="number"
-					id="id"
-					name="id"
-					class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					value={ strconv.Itoa(thesis.Id) }
-				/>
+		<form>
+			<div class="bg-gray-100 px-4 py-2">
+				<h2 class="text-lg font-medium text-gray-800">Szczegóły Pracy</h2>
 			</div>
-			<div>
-				<label for="data-egzaminu" class="text-sm font-medium text-gray-900 block mb-2">Data Egzaminu</label>
-				<input
-					type="date"
-					id="exam-date"
-					name="exam-date"
-					class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					value={ thesis.ExamDate }
-				/>
-			</div>
-			<div>
-				<label for="polski-tytul" class="text-sm font-medium text-gray-900 block mb-2">Polski Tytuł</label>
-				<input
-					type="text"
-					id="title"
-					name="title"
-					class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-					value={ thesis.ThesisTitlePolish }
-				/>
-			</div>
-		</div>
-		<div class="flex flex-row items-center justify-between">
-			<div
-				hx-get={ fmt.Sprintf("/realized/%v", thesis.Id) }
-				hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
-				hx-trigger="click"
-				hx-swap="outerHTML"
-				class="p-4"
-			>
-				<button
-					class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+			@InputFields(thesis, errs)
+			<div class="flex flex-row items-center justify-between">
+				<div
+					hx-get={ fmt.Sprintf("/realized/%v", thesis.Id) }
+					hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
+					hx-trigger="click"
+					hx-swap="outerHTML"
+					class="p-4"
 				>
-					Zamknij
+					<button
+						class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+					>
+						Zamknij
+					</button>
+				</div>
+				<button
+					class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+					type="submit"
+					hx-put="/realized"
+					hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
+					hx-swap="outerHTML"
+				>
+					Zapisz
 				</button>
 			</div>
-			<button
-				class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-			>
-				Zapisz
-			</button>
-		</div>
+		</form>
 	</div>
 }
+
+/*
+<div class="flex flex-row items-center justify-between text-sm text-gray-700">
+    <div>
+        <label for="id-pracy" class="text-sm font-medium text-gray-900 block mb-2">ID Pracy</label>
+        <input type="number" id="id" name="id"
+            class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ strconv.Itoa(thesis.Id) } />
+    </div>
+    <div>
+        <label for="data-egzaminu" class="text-sm font-medium text-gray-900 block mb-2">Data Egzaminu</label>
+        <input type="date" id="exam-date" name="exam-date"
+            class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ thesis.ExamDate } />
+    </div>
+    <div>
+        <label for="polski-tytul" class="text-sm font-medium text-gray-900 block mb-2">Polski Tytuł</label>
+        <input type="text" id="title" name="title"
+            class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ thesis.ThesisTitlePolish } />
+    </div>
+</div>
+*/

@@ -1,0 +1,165 @@
+package realized
+
+import (
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
+)
+
+templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
+	<div>
+		@components.InputField("text", "thesisTitlePolish", "Polski Tytuł Pracy", vals.ThesisTitlePolish, true)
+		@components.ErrorMsg(errs.ThesisTitlePolish)
+	</div>
+	<div>
+		@components.InputField("text", "thesisTitleEnglish", "Angielski Tytuł Pracy", vals.ThesisTitleEnglish,
+			false)
+		@components.ErrorMsg(errs.ThesisTitleEnglish)
+	</div>
+	<div>
+		@components.InputField("text", "thesisLanguage", "Język Pracy", vals.ThesisLanguage, true)
+		@components.ErrorMsg(errs.ThesisLanguage)
+	</div>
+	<div>
+		Student
+		<div>
+			@components.InputField("text", "firstNameStudent", "Imię", vals.Student.FirstName, true)
+			@components.ErrorMsg(errs.Student.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, true)
+			@components.ErrorMsg(errs.Student.LastName)
+		</div>
+		<div>
+			@components.InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
+			@components.ErrorMsg(errs.Student.StudentNumber)
+		</div>
+		<div>
+			@components.InputField("text", "modeOfStudies", "Tryb Studiów", vals.Student.ModeOfStudies, true)
+			@components.ErrorMsg(errs.Student.ModeOfStudies)
+		</div>
+		<div>
+			@components.InputField("text", "fieldOfStudy", "Kierunek", vals.Student.FieldOfStudy, true)
+			@components.ErrorMsg(errs.Student.FieldOfStudy)
+		</div>
+		<div>
+			@components.InputField("text", "specialization", "Specjalizacja", vals.Student.Specialization, false)
+			@components.ErrorMsg(errs.Student.Specialization)
+		</div>
+	</div>
+	<div>
+		@components.InputField("date", "examDate", "Data Egzaminu", vals.ExamDate, false)
+		@components.ErrorMsg(errs.ExamDate)
+	</div>
+	<div>
+		Promotor
+		<div>
+			@components.InputField("text", "supervisorAcademicTitle", "Tytuł", vals.SupervisorAcademicTitle, true)
+			@components.ErrorMsg(errs.Supervisor.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "firstNameSupervisor", "Imię", vals.Supervisor.FirstName, true)
+			@components.ErrorMsg(errs.Supervisor.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "lastNameSupervisor", "Nazwisko", vals.Supervisor.LastName, true)
+			@components.ErrorMsg(errs.Supervisor.LastName)
+		</div>
+	</div>
+	<div>
+		Promotor Pomocniczy
+		<div>
+			@components.InputField("text", "assistantSupervisorAcademicTitle", "Tytuł",
+				vals.AssistantSupervisorAcademicTitle,
+				false)
+			@components.ErrorMsg(errs.AssistantSupervisor.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "firstNameAssistantSupervisor", "Imię",
+				vals.AssistantSupervisor.FirstName, false)
+			@components.ErrorMsg(errs.AssistantSupervisor.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "lastNameAssistantSupervisor", "Nazwisko",
+				vals.AssistantSupervisor.LastName, false)
+			@components.ErrorMsg(errs.AssistantSupervisor.LastName)
+		</div>
+	</div>
+	<div>
+		Recenzent
+		<div>
+			@components.InputField("text", "reviewerAcademicTitle", "Tytuł", vals.ReviewerAcademicTitle, false)
+			@components.ErrorMsg(errs.Reviewer.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "firstNameReviewer", "Imię", vals.Reviewer.FirstName, false)
+			@components.ErrorMsg(errs.Reviewer.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "lastNameReviewer", "Nazwisko", vals.Reviewer.LastName, false)
+			@components.ErrorMsg(errs.Reviewer.LastName)
+		</div>
+	</div>
+	<div>
+		Przewodniczący Komisji
+		<div>
+			@components.InputField("text", "chairAcademicTitle", "Tytuł", vals.ChairAcademicTitle, false)
+			@components.ErrorMsg(errs.Chair.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "firstNameChair", "Imię", vals.Chair.FirstName, false)
+			@components.ErrorMsg(errs.Chair.FirstName)
+		</div>
+		<div>
+			@components.InputField("text", "lastNameChair", "Nazwisko", vals.Chair.LastName, false)
+			@components.ErrorMsg(errs.Chair.LastName)
+		</div>
+	</div>
+	<div>
+		<h3>Godziny Do Rozliczeń</h3>
+		<div>
+			@components.InputField("number", "supervisorHours", "Promotor", "10", false)
+			@components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
+		</div>
+		<div>
+			@components.InputField("number", "AssistantSupervisorHours", "Promotor Pom.", "0", false)
+			@components.ErrorMsg(errs.HourlySettlement.AssistantSupervisorHours)
+		</div>
+		<div>
+			@components.InputField("number", "reviewerHours", "Recenzent", "2", false)
+			@components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
+		</div>
+		@components.ErrorMsg(errs.HourlySettlement.Total)
+	</div>
+	<div>
+		@components.InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego",
+			vals.CompetencyExamGrade,
+			false)
+		@components.ErrorMsg(errs.CompetencyExamGrade)
+	</div>
+	<div>
+		@components.InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego", vals.DiplomaExamGrade,
+			false)
+		@components.ErrorMsg(errs.DiplomaExamGrade)
+	</div>
+	<div>
+		@components.InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade,
+			false)
+		@components.ErrorMsg(errs.AverageStudyGrade)
+	</div>
+	<div>
+		@components.InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult,
+			false)
+		@components.ErrorMsg(errs.FinalStudyResult)
+	</div>
+	<div>
+		@components.InputField("text", "finalStudyResultText", "Ostateczny wynik studiów słownie",
+			vals.FinalStudyResultText,
+			false)
+		@components.ErrorMsg(errs.FinalStudyResultText)
+	</div>
+	<div>
+		@components.InputField("text", "library", "Biblioteka", vals.Library,
+			false)
+		@components.ErrorMsg(errs.Library)
+	</div>
+}

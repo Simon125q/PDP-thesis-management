@@ -11,4 +11,5 @@ type HourlySettlementErrors struct {
 	SupervisorHours          string
 	AssistantSupervisorHours string
 	ReviewerHours            string
+	Total                    string
 }
