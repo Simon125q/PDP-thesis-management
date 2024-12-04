@@ -1,30 +1,33 @@
 package realized
 
 import (
-	"thesis-management-app/types"
-	"thesis-management-app/views"
-	"thesis-management-app/views/components"
-	"thesis-management-app/views/layouts"
+"thesis-management-app/types"
+"thesis-management-app/views/components"
+"thesis-management-app/views/layouts"
 )
 
 templ Index(thes_data []types.RealizedThesisEntry) {
 @layouts.Base(true) {
-<div class="flex justify-center items-start">
-    <div class="text-xl text-tul-dark-red font-bold">
-        { views.AuthenticatedUser(ctx).Login }, witaj na stronie ze zrealizowanymi pracami.
-        <br />
-        if views.AuthenticatedUser(ctx).IsAdmin {
-            Jesteś zalogowany jako administrator
-        } else {
-            Jesteś zalogowany jako użytkownik
-        }
-        <br />
+<div class="flex flex-col items-center min-h-screen w-full p-4">
+    <!-- Search Bar at the Top -->
+    <div class="w-full max-w-5xl mb-4">
         @components.SearchBar("/realized")
-        @Results(thes_data)
     </div>
-    <div class="w-1/5">
-        @components.Filter(true)
+    <!-- Filters and Results Section -->
+    <div class="flex w-full max-w-5xl justify-center">
+        <!-- Filters on the Left -->
+        <div class="flex-shrink-0 w-1/6 mr-8">
+            <div class="p-4 rounded shadow">
+                @components.Filter(true)
+            </div>
+        </div>
+        <!-- Results on the Right -->
+        <div class="w-5/6">
+            <div class="bg-white p-4 rounded shadow">
+                @Results(thes_data)
+            </div>
+        </div>
     </div>
-    </div>
-    }
+</div>
+}
 }
