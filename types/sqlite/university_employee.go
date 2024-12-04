@@ -3,6 +3,7 @@ package sqlite
 import (
 	"database/sql"
 	"fmt"
+	"log/slog"
 	"thesis-management-app/types"
 )
 
@@ -54,6 +55,21 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 		return types.UniversityEmployee{}, err
 	}
 	return e, nil
+}
+
+func (m *Model) EmployeeIdByName(name string) (int, error) {
+
+	query := fmt.Sprintf(`SELECT id FROM University_Employee WHERE first_name || ' ' || last_name = ?`)
+	slog.Info("employeeId by Name", "q", query)
+	row := m.DB.QueryRow(query, name)
+	id := 0
+	err := row.Scan(&id)
+	if err == sql.ErrNoRows {
+		return 0, nil
+	} else if err != nil {
+		return 0, err
+	}
+	return id, nil
 }
 
 func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployee) (int64, error) {

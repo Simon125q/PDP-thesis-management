@@ -64,9 +64,9 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		COALESCE(s.specialization, '') AS student_specialization,
 		COALESCE(s.mode_of_study, '') AS student_mode_of_study,
 		
-		ch.id AS chair_id,
-		ch.first_name AS chair_first_name,
-		ch.last_name AS chair_last_name,
+		COALESCE(ch.id, '0') AS chair_id,
+		COALESCE(ch.first_name, '') AS chair_first_name,
+		COALESCE(ch.last_name, '') AS chair_last_name,
 		COALESCE(ch.current_academic_title, '') AS chair_curr_academic_title,
 		COALESCE(ch.department_unit, '') AS chair_department_unit,
 		
@@ -111,7 +111,6 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		return nil, err
 	}
 	thesis := []types.RealizedThesisEntry{}
-	slog.Info("RealizedThesisEntry", "row", rows.Next())
 	for rows.Next() {
 		t := types.RealizedThesisEntry{}
 		err := rows.Scan(&t.Id, &t.ThesisNumber, &t.ExamDate, &t.AverageStudyGrade, &t.CompetencyExamGrade,
@@ -275,7 +274,7 @@ func (m *Model) RealizedThesisEntryByID(id string) (types.RealizedThesisEntry, e
 
 }
 
-func (m *Model) InsertRealizedThesis(thesis types.RealizedThesis) (int64, error) {
+func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (int64, error) {
 	query := `
         INSERT INTO Completed_Thesis (
             thesis_number, exam_date, average_study_grade, competency_exam_grade,
@@ -284,11 +283,36 @@ func (m *Model) InsertRealizedThesis(thesis types.RealizedThesis) (int64, error)
             student_id, chair_id, supervisor_id, assistant_supervisor_id, reviewer_id, hourly_settlement_id
         )
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	var sId interface{}
+	if thesis.Student.Id != 0 {
+		sId = thesis.Student.Id
+	}
+	var suId interface{}
+	if thesis.Supervisor.Id != 0 {
+		suId = thesis.Supervisor.Id
+	}
+	var asId interface{}
+	if thesis.AssistantSupervisor.Id != 0 {
+		asId = thesis.AssistantSupervisor.Id
+	}
+	var rId interface{}
+	if thesis.Reviewer.Id != 0 {
+		rId = thesis.Reviewer.Id
+	}
+	var cId interface{}
+	if thesis.Chair.Id != 0 {
+		cId = thesis.Chair.Id
+	}
+	var hId interface{}
+	if thesis.HourlySettlement.Id != 0 {
+		hId = thesis.HourlySettlement.Id
+	}
 	result, err := m.DB.Exec(query,
 		thesis.ThesisNumber, thesis.ExamDate, thesis.AverageStudyGrade, thesis.CompetencyExamGrade,
 		thesis.DiplomaExamGrade, thesis.FinalStudyResult, thesis.FinalStudyResultText,
 		thesis.ThesisTitlePolish, thesis.ThesisTitleEnglish, thesis.ThesisLanguage, thesis.Library,
-		thesis.StudentId, thesis.ChairId, thesis.SupervisorId, thesis.AssistantSupervisorId, thesis.ReviewerId, thesis.HourlySettlementId)
+
+		sId, cId, suId, asId, rId, hId)
 	if err != nil {
 		return 0, err
 	}

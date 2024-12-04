@@ -18,10 +18,11 @@ import (
 
 func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
-	slog.Info("quere", "q", r.URL.Query())
+	slog.Info("HandleRealized", "q", r.URL.Query())
 	if err != nil {
 		return err
 	}
+	slog.Info("HandleRealized", "thesis", thes_data[0])
 	return Render(w, r, realized.Index(thes_data))
 }
 
@@ -170,8 +171,8 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.Entry(thes_data))
 }
 
-func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
-	t := types.RealizedThesisEntry{
+func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
+	return &types.RealizedThesisEntry{
 		ThesisNumber:         r.FormValue("thesisNumber"),
 		ExamDate:             r.FormValue("examDate"),
 		AverageStudyGrade:    r.FormValue("averageStudyGrade"),
@@ -217,70 +218,73 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		},
 		HourlySettlement: types.HourlySettlement{},
 	}
+}
+
+func getEmployeeId(emp types.UniversityEmployee) (int, error) {
+	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
+	if err != nil {
+		slog.Error("emp to db", "err", err)
+	}
+	if empId == 0 {
+		if emp.FirstName != "" && emp.LastName != "" {
+			var id int64
+			id, err = server.MyS.DB.InsertUniversityEmployee(emp)
+			empId = int(id)
+		}
+	}
+	return empId, err
+}
+
+func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
+	t := *extractRealizedThesisFromForm(r)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
-		slog.Info("add thesis", "correct", false)
-		slog.Info("add thesis", "errs", errors)
 		errors.Correct = false
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	slog.Info("add thesis", "correct", true)
-	id, err := server.MyS.DB.InsertStudent(t.Student)
+
+	sId, err := server.MyS.DB.InsertStudent(t.Student)
 	if err != nil {
 		slog.Error("student to db", "err", err)
 	}
-	slog.Info("sudent to db", "new_id", id)
+	t.Student.Id = int(sId)
+	supId, err := getEmployeeId(t.Supervisor)
+	if err != nil {
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
+	}
+	t.Supervisor.Id = supId
+	asId, err := getEmployeeId(t.AssistantSupervisor)
+	if err != nil {
+		slog.Error("InsertNew", "err", err)
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
+	}
+	t.AssistantSupervisor.Id = asId
+	reId, err := getEmployeeId(t.Reviewer)
+	if err != nil {
+		slog.Error("InsertNew", "err", err)
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
+	}
+	t.Reviewer.Id = reId
+	chId, err := getEmployeeId(t.Chair)
+	if err != nil {
+		slog.Error("InsertNew", "err", err)
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
+	}
+	t.Chair.Id = chId
+	tId, err := server.MyS.DB.InsertRealizedThesisByEntry(&t)
+	if err != nil {
+		slog.Error("InsertNew", "err", err)
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
+	}
+	slog.Info("thesis to db", "new_id", tId)
+	slog.Info("sudent to db", "new_id", sId)
 	errors.Correct = true
 	return Render(w, r, realized.NewEntrySwap(t, types.RealizedThesisEntry{}, errors))
 }
 
 func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
-	t := types.RealizedThesisEntry{
-		ThesisNumber:         r.FormValue("thesisNumber"),
-		ExamDate:             r.FormValue("examDate"),
-		AverageStudyGrade:    r.FormValue("averageStudyGrade"),
-		CompetencyExamGrade:  r.FormValue("competencyExamGrade"),
-		DiplomaExamGrade:     r.FormValue("diplomaExamGrade"),
-		FinalStudyResult:     r.FormValue("finalStudyResult"),
-		FinalStudyResultText: r.FormValue("finalStudyResultText"),
-		ThesisTitlePolish:    r.FormValue("thesisTitlePolish"),
-		ThesisTitleEnglish:   r.FormValue("thesisTitleEnglish"),
-		ThesisLanguage:       r.FormValue("thesisLanguage"),
-		Library:              r.FormValue("library"),
-		Student: types.Student{
-			StudentNumber:  r.FormValue("studentNumber"),
-			FirstName:      r.FormValue("firstNameStudent"),
-			LastName:       r.FormValue("lastNameStudent"),
-			FieldOfStudy:   r.FormValue("fieldOfStudy"),
-			Specialization: r.FormValue("specialization"),
-			ModeOfStudies:  r.FormValue("modeOfStudies"),
-		},
-		ChairAcademicTitle: r.FormValue("chairAcademicTitle"),
-		Chair: types.UniversityEmployee{
-			FirstName:            r.FormValue("firstNameChair"),
-			LastName:             r.FormValue("lastNameChair"),
-			CurrentAcademicTitle: r.FormValue("chairAcademicTitle"),
-		},
-		SupervisorAcademicTitle: r.FormValue("supervisorAcademicTitle"),
-		Supervisor: types.UniversityEmployee{
-			FirstName:            r.FormValue("firstNameSupervisor"),
-			LastName:             r.FormValue("lastNameSupervisor"),
-			CurrentAcademicTitle: r.FormValue("supervisorAcademicTitle"),
-		},
-		AssistantSupervisorAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
-		AssistantSupervisor: types.UniversityEmployee{
-			FirstName:            r.FormValue("firstNameAssistantSupervisor"),
-			LastName:             r.FormValue("lastNameAssistantSupervisor"),
-			CurrentAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
-		},
-		ReviewerAcademicTitle: r.FormValue("reviewerAcademicTitle"),
-		Reviewer: types.UniversityEmployee{
-			FirstName:            r.FormValue("firstNameReviewer"),
-			LastName:             r.FormValue("lastNameReviewer"),
-			CurrentAcademicTitle: r.FormValue("reviewerAcademicTitle"),
-		},
-		HourlySettlement: types.HourlySettlement{},
-	}
+	t := *extractRealizedThesisFromForm(r)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
 		errors.Correct = false
