@@ -24,6 +24,7 @@ func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams u
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	thesis := []types.RealizedThesis{}
 	for rows.Next() {
 		t := types.RealizedThesis{}
@@ -112,6 +113,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	thesis := []types.RealizedThesisEntry{}
 	for rows.Next() {
 		t := types.RealizedThesisEntry{}
@@ -137,67 +139,6 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 	return thesis, nil
 }
 
-func (m *Model) AllRealizedThesisEntriesOld(sort_by string, desc_order bool, queryParams url.Values) ([]types.RealizedThesisEntry, error) {
-	// TODO: to delete probably
-	thesis, err := m.AllRealizedThesis(sort_by, desc_order, queryParams)
-	if err != nil {
-		return nil, err
-	}
-	var result []types.RealizedThesisEntry
-	for _, t := range thesis {
-		student, err := m.StudentById(strconv.Itoa(t.StudentId))
-		if err != nil {
-			return nil, err
-		}
-		chair, err := m.EmployeeById(strconv.Itoa(t.ChairId))
-		if err != nil {
-			return nil, err
-		}
-		supervisor, err := m.EmployeeById(strconv.Itoa(t.SupervisorId))
-		if err != nil {
-			return nil, err
-		}
-		assistant_supervisor, err := m.EmployeeById(strconv.Itoa(t.AssistantSupervisorId))
-		if err != nil {
-			return nil, err
-		}
-		reviewer, err := m.EmployeeById(strconv.Itoa(t.ReviewerId))
-		if err != nil {
-			return nil, err
-		}
-		hours, err := m.HoursById(strconv.Itoa(t.HourlySettlementId))
-		if err != nil {
-			return nil, err
-		}
-		t_entry := types.RealizedThesisEntry{
-			Id:                               t.Id,
-			ThesisNumber:                     t.ThesisNumber,
-			ExamDate:                         t.ExamDate,
-			AverageStudyGrade:                t.AverageStudyGrade,
-			CompetencyExamGrade:              t.CompetencyExamGrade,
-			DiplomaExamGrade:                 t.DiplomaExamGrade,
-			FinalStudyResult:                 t.FinalStudyResult,
-			FinalStudyResultText:             t.FinalStudyResultText,
-			ThesisTitlePolish:                t.ThesisTitlePolish,
-			ThesisTitleEnglish:               t.ThesisTitleEnglish,
-			ThesisLanguage:                   t.ThesisLanguage,
-			Library:                          t.Library,
-			Student:                          student,
-			ChairAcademicTitle:               t.ChairAcademicTitle,
-			Chair:                            chair,
-			SupervisorAcademicTitle:          t.SupervisorAcademicTitle,
-			Supervisor:                       supervisor,
-			AssistantSupervisorAcademicTitle: t.AssistantSupervisorAcademicTitle,
-			AssistantSupervisor:              assistant_supervisor,
-			ReviewerAcademicTitle:            t.ReviewerAcademicTitle,
-			Reviewer:                         reviewer,
-			HourlySettlement:                 hours,
-		}
-		result = append(result, t_entry)
-	}
-	return result, nil
-}
-
 func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),
@@ -209,6 +150,7 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	if err != nil {
 		return types.RealizedThesis{}, err
 	}
+	defer rows.Close()
 	t := types.RealizedThesis{}
 	rows.Next()
 	err = rows.Scan(&t.Id, &t.ThesisNumber, &t.ExamDate, &t.AverageStudyGrade, &t.CompetencyExamGrade, &t.DiplomaExamGrade,
@@ -320,4 +262,89 @@ func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (
 		return 0, err
 	}
 	return result.LastInsertId()
+}
+func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) error {
+	var sId interface{}
+	if thesis.Student.Id != 0 {
+		sId = thesis.Student.Id
+	}
+	var suId interface{}
+	if thesis.Supervisor.Id != 0 {
+		suId = thesis.Supervisor.Id
+	}
+	var asId interface{}
+	if thesis.AssistantSupervisor.Id != 0 {
+		asId = thesis.AssistantSupervisor.Id
+	}
+	var rId interface{}
+	if thesis.Reviewer.Id != 0 {
+		rId = thesis.Reviewer.Id
+	}
+	var cId interface{}
+	if thesis.Chair.Id != 0 {
+		cId = thesis.Chair.Id
+	}
+	var hId interface{}
+	if thesis.HourlySettlement.Id != 0 {
+		hId = thesis.HourlySettlement.Id
+	}
+	query := `UPDATE Completed_Thesis SET 
+		thesis_number = ?,
+		exam_date = ?,
+		average_study_grade = ?,
+		competency_exam_grade = ?,
+		diploma_exam_grade = ?,
+		final_study_result = ?,
+		final_study_result_text = ?,
+		thesis_title_polish = ?,
+		thesis_title_english = ?,
+		thesis_language = ?,
+		library = ?,
+        student_id = ?,
+        chair_id = ?,
+        supervisor_id = ?,
+        assistant_supervisor_id = ?,
+        reviewer_id = ?,
+        hourly_settlement_id = ?
+	WHERE id = ?`
+	_, err := m.DB.Exec(query,
+		thesis.ThesisNumber,
+		thesis.ExamDate,
+		thesis.AverageStudyGrade,
+		thesis.CompetencyExamGrade,
+		thesis.DiplomaExamGrade,
+		thesis.FinalStudyResult,
+		thesis.FinalStudyResultText,
+		thesis.ThesisTitlePolish,
+		thesis.ThesisTitleEnglish,
+		thesis.ThesisLanguage,
+		thesis.Library,
+		sId,
+		suId,
+		asId,
+		rId,
+		cId,
+		hId,
+		thesis.Id,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update Completed_Thesis: %w", err)
+	}
+	return nil
+}
+
+func (m *Model) GetStudentIdFromThesisEntry(thesisId int) (int, error) {
+	query := `SELECT student_id FROM Completed_Thesis WHERE id = ?`
+	rows, err := m.DB.Query(query, thesisId)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	var studentId int
+	rows.Next()
+	err = rows.Scan(&studentId)
+	if err != nil {
+		return 0, err
+	}
+	return studentId, nil
 }

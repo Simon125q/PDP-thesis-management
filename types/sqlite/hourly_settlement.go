@@ -16,6 +16,7 @@ func (m *Model) HoursById(id string) (types.HourlySettlement, error) {
 	if err != nil {
 		return types.HourlySettlement{}, err
 	}
+	defer rows.Close()
 	h := types.HourlySettlement{}
 	rows.Next()
 	err = rows.Scan(&h.Id, &h.SupervisorHours, &h.AssistantSupervisorHours, &h.ReviewerHours)

@@ -18,6 +18,7 @@ func (m *Model) StudentById(id string) (types.Student, error) {
 	if err != nil {
 		return types.Student{}, err
 	}
+	defer rows.Close()
 	s := types.Student{}
 	rows.Next()
 	err = rows.Scan(&s.Id, &s.StudentNumber, &s.FirstName, &s.LastName, &s.FieldOfStudy,
@@ -40,6 +41,7 @@ func (m *Model) StudentByNumber(studentNumber string) (types.Student, error) {
 	if err != nil {
 		return types.Student{}, err
 	}
+	defer rows.Close()
 	s := types.Student{}
 	rows.Next()
 	err = rows.Scan(&s.Id, &s.StudentNumber, &s.FirstName, &s.LastName, &s.FieldOfStudy,
@@ -63,4 +65,24 @@ func (m *Model) InsertStudent(student types.Student) (int64, error) {
 		return 0, err
 	}
 	return result.LastInsertId()
+}
+
+func (m *Model) UpdateStudent(student types.Student) (int, error) {
+	tx, err := m.DB.Begin()
+	if err != nil {
+		return 0, fmt.Errorf("failed to begin transaction: %w", err)
+	}
+	defer tx.Rollback() // Ensure rollback if commit doesn't happen
+	query := `
+    UPDATE Student SET student_number = ?, first_name = ?, last_name = ?, field_of_study = ?, specialization = ?, mode_of_study = ?
+    WHERE id = ?`
+	_, err = tx.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies, student.Id)
+	if err != nil {
+		return 0, fmt.Errorf("failed to execute query: %w", err)
+	}
+	err = tx.Commit()
+	if err != nil {
+		return 0, fmt.Errorf("failed to commit transaction: %w", err)
+	}
+	return student.Id, nil
 }

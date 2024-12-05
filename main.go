@@ -10,6 +10,7 @@ import (
 	"thesis-management-app/pkgs/ldap"
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/types/sqlite"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
@@ -33,6 +34,14 @@ func main() {
 	defer db.Close()
 
 	server.MyS.DB = &sqlite.Model{DB: db}
+
+	server.MyS.DB.DB.SetConnMaxLifetime(time.Minute)
+	server.MyS.DB.DB.SetMaxOpenConns(1)
+	_, _ = server.MyS.DB.DB.Exec("PRAGMA busy_timeout = 5000") // Log retries
+	_, err = server.MyS.DB.DB.Exec("PRAGMA journal_mode=WAL;")
+	if err != nil {
+		log.Fatal("Failed to enable WAL mode:", err)
+	}
 
 	server.MyS.Router.Use(middleware.Logger)
 	server.MyS.Router.Use(handlers.WithUser)
@@ -64,7 +73,7 @@ func main() {
 		r.Get("/settings", handlers.Make(handlers.HandleSettings))
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
-		r.Put("/realized", handlers.Make(handlers.HandleRealizedUpdate))
+		r.Put("/realized/{id}", handlers.Make(handlers.HandleRealizedUpdate))
 	})
 
 	listenAddr := os.Getenv("LISTEN_ADDR")

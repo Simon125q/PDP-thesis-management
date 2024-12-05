@@ -17,6 +17,7 @@ func (m *Model) AllUniversityEmployee() ([]types.UniversityEmployee, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	employee := []types.UniversityEmployee{}
 	for rows.Next() {
 		e := types.UniversityEmployee{}
@@ -44,6 +45,7 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 	if err != nil {
 		return types.UniversityEmployee{}, err
 	}
+	defer rows.Close()
 	e := types.UniversityEmployee{}
 	rows.Next()
 	err = rows.Scan(&e.Id, &e.FirstName, &e.LastName, &e.CurrentAcademicTitle, &e.DepartmentUnit)

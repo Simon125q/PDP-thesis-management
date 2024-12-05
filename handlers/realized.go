@@ -284,13 +284,62 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("UPDATE", "here", true)
+	id_param := chi.URLParam(r, "id")
+	slog.Info("UPDATE", "id_param", id_param)
 	t := *extractRealizedThesisFromForm(r)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
 		errors.Correct = false
 		return Render(w, r, realized.Details(t, errors))
 	}
-	slog.Info("add thesis", "correct", true)
+	var err error
+	t.Id, err = strconv.Atoi(id_param)
+	if err != nil {
+		slog.Error("Update", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.Student.Id, err = server.MyS.DB.GetStudentIdFromThesisEntry(t.Id)
+	if err != nil {
+		slog.Error("Update get stud id", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	sId, err := server.MyS.DB.UpdateStudent(t.Student)
+	if err != nil {
+		slog.Error("Update stud", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.Student.Id = int(sId)
+	supId, err := getEmployeeId(t.Supervisor)
+	if err != nil {
+		slog.Error("Update emp", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.Supervisor.Id = supId
+	asId, err := getEmployeeId(t.AssistantSupervisor)
+	if err != nil {
+		slog.Error("Update emp", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.AssistantSupervisor.Id = asId
+	reId, err := getEmployeeId(t.Reviewer)
+	if err != nil {
+		slog.Error("update emp", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.Reviewer.Id = reId
+	chId, err := getEmployeeId(t.Chair)
+	if err != nil {
+		slog.Error("update emp", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.Chair.Id = chId
+	err = server.MyS.DB.UpdateRealizedThesisByEntry(&t)
+	if err != nil {
+		slog.Error("Update Thesis", "err", err)
+		return Render(w, r, realized.Details(t, errors))
+	}
+	slog.Info("update thesis", "correct", true)
 	errors.Correct = true
 	return Render(w, r, realized.Entry(t))
 }

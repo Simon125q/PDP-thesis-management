@@ -15,6 +15,7 @@ func (m *Model) GetStudentID(value string, column string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	var ids []string
 	for rows.Next() {
 		var str string
@@ -32,6 +33,7 @@ func (m *Model) GetPersonID(name string, personRank string) ([]string, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 	var ids []string
 	for rows.Next() {
 		var str string
