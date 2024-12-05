@@ -6,6 +6,7 @@ type Student struct {
 	FirstName      string
 	LastName       string
 	FieldOfStudy   string
+	Degree         string
 	Specialization string
 	ModeOfStudies  string
 }
@@ -15,6 +16,7 @@ type StudentErrors struct {
 	FirstName      string
 	LastName       string
 	FieldOfStudy   string
+	Degree         string
 	Specialization string
 	ModeOfStudies  string
 }

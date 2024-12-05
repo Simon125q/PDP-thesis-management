@@ -1,5 +1,7 @@
 package sqlite
 
+// TODO: add degree
+
 import (
 	"fmt"
 	"thesis-management-app/types"
@@ -32,7 +34,7 @@ func (m *Model) StudentById(id string) (types.Student, error) {
 
 func (m *Model) StudentByNumber(studentNumber string) (types.Student, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(student_number, '0'), first_name, last_name,
-    COALESCE(field_of_study, ''), COALESCE(specialization, ''), COALESCE(mode_of_study, '')
+    COALESCE(field_of_study, ''), COALESCE(specialization, ''), COALESCE(mode_of_study, ''))
     FROM Student WHERE student_number = %v`, studentNumber)
 	rows, err := m.DB.Query(query)
 	if err != nil {
@@ -55,7 +57,7 @@ func (m *Model) StudentByNumber(studentNumber string) (types.Student, error) {
 func (m *Model) InsertStudent(student types.Student) (int64, error) {
 	query := `
         INSERT INTO Student (student_number, first_name, last_name, field_of_study, specialization, mode_of_study)
-        VALUES (?, ?, ?, ?, ?, ?)`
+        VALUES (?, ?, ?, ?, ?, ?, ?)`
 	result, err := m.DB.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies)
 	if err != nil {
 		return 0, err

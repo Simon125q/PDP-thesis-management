@@ -1,5 +1,7 @@
 package sqlite
 
+// TODO: Add all university employee current academic titles
+
 import (
 	"fmt"
 	"log/slog"
@@ -136,6 +138,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 }
 
 func (m *Model) AllRealizedThesisEntriesOld(sort_by string, desc_order bool, queryParams url.Values) ([]types.RealizedThesisEntry, error) {
+	// TODO: to delete probably
 	thesis, err := m.AllRealizedThesis(sort_by, desc_order, queryParams)
 	if err != nil {
 		return nil, err
