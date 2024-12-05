@@ -170,4 +170,13 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     false)
     @components.ErrorMsg(errs.Library)
 </div>
+<!--place for displaying in case of any internal error with db -->
+<!--Make it like a light red squere at the bottom-->
+<!--for easier styling now set to true-->
+<!--TODO: change true to errs.InternalError or smth. like that-->
+if true {
+<div>
+    Wystąpił nieoczekiwany błąd, spróbuj jeszcze raz.
+</div>
+}
 }
