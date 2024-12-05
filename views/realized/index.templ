@@ -14,15 +14,15 @@ templ Index(thes_data []types.RealizedThesisEntry) {
         @components.SearchBar("/realized")
     </div>
     <!-- Filters and Results Section -->
-    <div class="flex w-full max-w-5xl justify-center">
+    <div class="flex w-full max-w-7xl justify-center">
         <!-- Filters on the Left -->
-        <div class="flex-shrink-0 w-1/6 mr-8">
-            <div class="p-4 rounded shadow">
+        <div class="flex-shrink-0 w-3/12 mr-2">
+            <div class="p-2">
                 @components.Filter(true)
             </div>
         </div>
         <!-- Results on the Right -->
-        <div class="w-5/6">
+        <div class="w-9/12">
             <div class="bg-white p-4 rounded shadow">
                 @Results(thes_data)
             </div>
