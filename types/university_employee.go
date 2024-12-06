@@ -13,4 +13,22 @@ type UniversityEmployeeErrors struct {
 	LastName             string
 	CurrentAcademicTitle string
 	DepartmentUnit       string
+	Correct              bool
+}
+
+type UniversityEmployeeEntry struct {
+	Id                   int
+	FirstName            string
+	LastName             string
+	CurrentAcademicTitle string
+	DepartmentUnit       string
+}
+
+type UniversityEmployeeEntryErrors struct {
+	Id                   int
+	FirstName            string
+	LastName             string
+	CurrentAcademicTitle string
+	DepartmentUnit       string
+	Correct              bool
 }

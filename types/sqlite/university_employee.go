@@ -84,3 +84,43 @@ func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployee) (int
 	}
 	return result.LastInsertId()
 }
+
+func (m *Model) UpdateEmployee(empl *types.UniversityEmployee) error {
+	// Define the SQL query for updating the employee
+	query := `
+        UPDATE university_employees
+        SET 
+            first_name = ?,
+            last_name = ?,
+            current_academic_title = ?,
+            department_unit = ?
+        WHERE id = ?
+    `
+
+	// Execute the query with the provided employee data
+	_, err := m.DB.Exec(query,
+		empl.FirstName,
+		empl.LastName,
+		empl.CurrentAcademicTitle,
+		empl.DepartmentUnit,
+		empl.Id,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update university_employees: %w", err)
+	}
+	return nil
+}
+
+func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployee, error) {
+	empl, err := m.EmployeeById(id)
+	if err != nil {
+		return types.UniversityEmployee{}, err
+	}
+	return types.UniversityEmployee{
+		Id:                   empl.Id,
+		FirstName:            empl.FirstName,
+		LastName:             empl.LastName,
+		CurrentAcademicTitle: empl.CurrentAcademicTitle,
+		DepartmentUnit:       empl.DepartmentUnit,
+	}, nil
+}

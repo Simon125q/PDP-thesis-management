@@ -71,6 +71,12 @@ func main() {
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Use(handlers.WithAdminRights)
 		r.Get("/settings", handlers.Make(handlers.HandleSettings))
+		r.Get("/settings/clear-new", handlers.Make(handlers.HandleSettingsClearNew))
+		r.Get("/settings/{id}", handlers.Make(handlers.HandleSettingsEntry))
+		r.Post("/settings", handlers.Make(handlers.HandleSettingsNew))
+		r.Get("/settings/new", handlers.Make(handlers.HandleSettingsGetNew))
+		r.Get("/settings/details/{id}", handlers.Make(handlers.HandleSettingsDetails))
+		r.Put("/settings/{id}", handlers.Make(handlers.HandleSettingsUpdate))
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
 		r.Put("/realized/{id}", handlers.Make(handlers.HandleRealizedUpdate))

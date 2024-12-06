@@ -1,0 +1,22 @@
+package settings
+
+import "thesis-management-app/types"
+
+
+templ NewEntry(vals types.UniversityEmployee, errs types.UniversityEmployeeErrors) {
+<span id="newEntryForm">
+    <form id="new" hx-post="/settings" hx-disabled-elt="#add-btn" hx-target="#results" hx-swap="afterbegin"
+        class="text-black font-normal">
+        Dodaj Nowego Pracownika
+        @InputFields(vals, errs)
+        <div hx-get="settings/clear-new" hx-target="#new" hx-trigger="click" hx-swap="outerHTML">
+            <button>Anuluj</button>
+        </div>
+        <button id="add-btn">Dodaj</button>
+    </form>
+</span>
+}
+
+templ EmptySpace() {
+<span id="new_entry"></span>
+}

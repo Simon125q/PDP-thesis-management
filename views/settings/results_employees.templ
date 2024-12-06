@@ -3,14 +3,15 @@ package settings
 import "thesis-management-app/types"
 
 templ ResultsUsers(empl_data []types.UniversityEmployee) {
-<div id="results">
+    <div id="results">
     for _, user := range empl_data {
-    <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer">
+    /*<div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer">
         <h3 class="font-semibold text-lg text-gray-900">
             {user.CurrentAcademicTitle} { user.LastName }
         </h3>
-    </div>
-    <br />
+    </div>*/
+        @Entry(user)
+        <br />
     }
-</div>
+    </div>
 }
