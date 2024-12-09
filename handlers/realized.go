@@ -127,6 +127,171 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func HandleAutocompleteThesisTitlePolish(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("thesis_title")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllThesisTitlesPolish(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteStudentSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("student_name")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllStudentSurnames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+func HandleAutocompleteStudentNumber(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("student_number")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllStudentNumbers(userInput)
+	if err != nil {
+		return err
+	}
+
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Println("Thesis Title:", title)
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("supervisor_name")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("assistant_supervisor_name")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("course")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllCourseNames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
 func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	q := r.URL.Query()
 	for key, val := range q {

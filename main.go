@@ -66,6 +66,12 @@ func main() {
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
 		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/details/{id}", handlers.Make(handlers.HandleRealizedDetails))
+		r.Get("/realized/autocompleteThesisTitlePolish", handlers.Make(handlers.HandleAutocompleteThesisTitlePolish))
+		r.Get("/realized/autocompleteStudentSurname", handlers.Make(handlers.HandleAutocompleteStudentSurname))
+		r.Get("/realized/autocompleteStudentNumber", handlers.Make(handlers.HandleAutocompleteStudentNumber))
+		r.Get("/realized/autocompleteSupervisorSurname", handlers.Make(handlers.HandleAutocompleteSupervisorSurname))
+		r.Get("/realized/autocompleteAssistantSupervisorSurname", handlers.Make(handlers.HandleAutocompleteAssistantSupervisorSurname))
+		r.Get("/realized/autocompleteCourse", handlers.Make(handlers.HandleAutocompleteCourse))
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {

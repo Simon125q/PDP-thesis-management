@@ -1,8 +1,12 @@
 package components
 
+import (
+"fmt"
+)
+
 templ Filter(all bool) {
 <form hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" class="space-y-4">
-    <div class="w-full max-w-xs bg-white border border-gray-200 rounded-lg p-4 shadow">
+    <div class="relative w-full max-w-xs bg-white border border-gray-200 rounded-lg p-4 shadow">
         <!-- Input Field: Date Range -->
         if all {
         <div class="mb-4">
@@ -16,44 +20,76 @@ templ Filter(all bool) {
         </div>
         }
         <!-- Input Field-->
-        <div class="mb-4">
+        <div class="suggestion-container mb-4">
             <label for="Thesis topic" class="block text-sm font-medium text-gray-700">Temat pracy</label>
             <input type="text" id="thesis_title" name="thesis_title" placeholder="Temat pracy"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+             hx-get={ fmt.Sprintf("/realized/autocompleteThesisTitlePolish") } hx-swap="innerHTML"
+             hx-trigger="input changed" hx-target="#suggestions-for-thesis-topic-polish" 
+             class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+            <ul id="suggestions-for-thesis-topic-polish" 
+                class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
+                <!-- Suggestions will be inserted here -->
+            </ul>
         </div>
          <!-- Input Field-->
-        <div class="mb-4">
+        <div class="suggestion-container mb-4">
             <label for="Student" class="block text-sm font-medium text-gray-700">Student</label>
             <input type="text" id="student" name="student_name" placeholder="Student"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+             hx-get={ fmt.Sprintf("/realized/autocompleteStudentSurname") } hx-swap="innerHTML"
+             hx-trigger="input changed" hx-target="#suggestions-for-student-surname" 
+             class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+            <ul id="suggestions-for-student-surname" 
+                class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
+                <!-- Suggestions will be inserted here -->
+            </ul>
         </div>
         <!-- Input Field-->
-        <div class="mb-4">
+        <div class="suggestion-container mb-4">
             <label for="StudentID" class="block text-sm font-medium text-gray-700">Numer studenta</label>
             <input type="text" id="student_id" name="student_number" placeholder="Numer studenta"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+             hx-get={ fmt.Sprintf("/realized/autocompleteStudentNumber") } hx-swap="innerHTML"
+             hx-trigger="input changed" hx-target="#suggestions-for-student-number" 
+             class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+            <ul id="suggestions-for-student-number" 
+                class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
+                <!-- Suggestions will be inserted here -->
+            </ul>
         </div>
         <!-- Input Field-->
-        <div class="mb-4">
+        <div class="suggestion-container mb-4">
             <label for="Supervisor" class="block text-sm font-medium text-gray-700">Promotor</label>
             <input type="text" id="supervisor" name="supervisor_name" placeholder="Promotor"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+             hx-get={ fmt.Sprintf("/realized/autocompleteSupervisorSurname") } hx-swap="innerHTML"
+             hx-trigger="input changed" hx-target="#suggestions-for-supervisor" 
+             class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+            <ul id="suggestions-for-supervisor" 
+                class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
+                <!-- Suggestions will be inserted here -->
+            </ul>
         </div>
         <!-- Input Field-->
-        <div class="mb-4">
-            <label for="assistant_supervisor" class="block text-sm font-medium text-gray-700">
-                Promotor
-                Pomocniczy
-            </label>
-            <input type="text" id="assistant_supervisor" name="assistant_supervisor_name"
-                placeholder="Promotor Pomocniczy"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+        <div class="suggestion-container mb-4">
+            <label for="assistant_supervisor" class="block text-sm font-medium text-gray-700">Promotor Pomocniczy</label>
+            <input type="text" id="assistant_supervisor" name="assistant_supervisor_name" placeholder="Promotor Pomocniczy"
+             hx-get={ fmt.Sprintf("/realized/autocompleteAssistantSupervisorSurname") } hx-swap="innerHTML"
+             hx-trigger="input changed" hx-target="#suggestions-for-assistant-supervisor" 
+             class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+            <ul id="suggestions-for-assistant-supervisor"
+                class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
+                <!-- Suggestions will be inserted here -->
+            </ul>
         </div>
         <!-- Input Field-->
-        <div class="mb-4">
+        <div class="suggestion-container mb-4">
             <label for="course" class="block text-sm font-medium text-gray-700">Kierunek</label>
             <input type="text" id="course" name="course" placeholder="Kierunek"
-                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
+             hx-get={ fmt.Sprintf("/realized/autocompleteCourse") } hx-swap="innerHTML"
+             hx-trigger="input changed" hx-target="#suggestions-for-course" 
+             class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"/>
+            <ul id="suggestions-for-course" 
+                class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
+                <!-- Suggestions will be inserted here -->
+            </ul>
         </div>
         <!-- Input Field - Range -->
         if all {

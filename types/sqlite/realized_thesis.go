@@ -139,6 +139,155 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 	return thesis, nil
 }
 
+func (m *Model) GetAllThesisTitlesPolish(searchString string) ([]string, error) {
+    query := `
+        SELECT COALESCE(thesis_title_polish, '')
+        FROM Completed_Thesis
+        WHERE thesis_title_polish LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+func (m *Model) GetAllStudentSurnames(searchString string) ([]string, error) {
+    query := `
+        SELECT COALESCE(last_name, '')
+        FROM Student
+        WHERE last_name LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+func (m *Model) GetAllStudentNumbers(searchString string) ([]string, error) {
+    query := `
+        SELECT COALESCE(student_number, '')
+        FROM Student
+        WHERE student_number LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+func (m *Model) GetAllUniversityEmployeesSurnames(searchString string) ([]string, error) {
+    query := `
+        SELECT DISTINCT COALESCE (last_name, '')
+        FROM University_Employee
+        WHERE last_name LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+func (m *Model) GetAllCourseNames(searchString string) ([]string, error) {
+    query := `
+        SELECT DISTINCT COALESCE(field_of_study, '')
+        FROM Student
+        WHERE field_of_study LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+
+
+
+
 func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),

@@ -14,6 +14,62 @@ templ Base(nav bool) {
 			<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 			<script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
 			<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+			<script>
+				document.addEventListener('DOMContentLoaded', function() {
+
+					function handleSuggestionClicked(event) {
+	
+						const suggestionText = event.target.textContent;
+
+						console.log('Selected suggestion text:', suggestionText);
+
+						const inputElement = event.target.closest('.suggestion-container').querySelector('.input-form');
+						if (inputElement) {
+							inputElement.value = suggestionText;
+						}
+
+						const suggestionList = event.target.closest('.suggestion-container').querySelector('.suggestions');
+						if (suggestionList) {
+							suggestionList.style.display = 'none';
+						}
+					}
+
+					function attachListeners() {
+					document.querySelectorAll('.suggestion').forEach(function(item) {
+						item.addEventListener('click', handleSuggestionClicked);
+					});
+					}
+
+					attachListeners();
+
+					document.body.addEventListener('htmx:afterSwap', function(event) {
+					attachListeners();
+					});
+
+					function handleFocus(event) {
+
+						document.querySelectorAll('.suggestions').forEach(function(suggestionList) {
+               				suggestionList.style.display = 'none';
+           				});
+						const suggestionList = event.target.closest('.suggestion-container').querySelector('.suggestions');
+							if (suggestionList) {
+								suggestionList.style.display = 'block';
+							}
+					}
+
+					document.querySelectorAll('.input-form').forEach(function(inputElement) {
+						inputElement.addEventListener('focus', handleFocus);
+					});
+
+					document.addEventListener('click', function(event) {
+						const suggestionContainer = event.target.closest('.suggestion-container');
+						if (suggestionContainer) return;
+						document.querySelectorAll('.suggestions').forEach(function(suggestionList) {
+							suggestionList.style.display = 'none';
+						});
+					});
+				});
+			</script>
 		</head>
 		<body class="antialiased">
 			if nav {
@@ -24,5 +80,6 @@ templ Base(nav bool) {
 				@components.Footer()
 			}
 		</body>
+		
 	</html>
 }
