@@ -4,6 +4,9 @@ module.exports = {
   safelist: [],
   theme: {
     extend: {
+      borderWidth: {
+        3: "3px",
+      },
       colors: {
         "tul-dark-red": "#8b0002",
         "tul-medium-red": "#832941",

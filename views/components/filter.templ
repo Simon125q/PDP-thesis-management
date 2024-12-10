@@ -6,7 +6,7 @@ import (
 
 templ Filter(all bool) {
 <form hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" class="space-y-4">
-    <div class="relative w-full max-w-xs bg-white border border-gray-200 rounded-lg p-4 shadow">
+    <div class="relative w-full bg-white border border-gray-200 rounded-lg p-4 shadow">
         <!-- Input Field: Date Range -->
         if all {
         <div class="mb-4">
@@ -116,7 +116,7 @@ templ Filter(all bool) {
         }
         <!-- Apply Button -->
         <button type="submit"
-            class="w-full bg-blue-500 text-white px-4 py-2 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">
+            class="w-full bg-tul-dark-red text-white px-4 py-2 rounded-md shadow hover:bg-tul-medium-red focus:outline-none focus:ring focus:ring-tul-light-red">
             Filtruj
         </button>
     </div>

@@ -1,7 +1,7 @@
 package components
 
 templ InputField(inputType, id, label, val string, req bool) {
-	<label for={ id }>
+	<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
 		{ label }
 	</label>
 	<input
@@ -9,16 +9,16 @@ templ InputField(inputType, id, label, val string, req bool) {
 		id={ id }
 		name={ id }
 		value={ val }
+		placeholder={ label }
 		if req {
 			required
 		}
-		class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-		placeholder={ label }
-	/>
+	class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
+    />
 }
 
 templ ErrorMsg(msg string) {
 	if msg != "" {
-		<span class="text-tul-medium-red">{ msg }</span>
+		<span class="w-full text-tul-medium-red">{ msg }</span>
 	}
 }

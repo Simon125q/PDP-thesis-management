@@ -6,8 +6,9 @@ import (
 )
 
 templ Entry(thesis types.RealizedThesisEntry) {
-<div style="border-width: 3px;" class="p-4 border-red-800 rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
-    hx-get={ fmt.Sprintf("/realized/details/%v", thesis.Id) } hx-trigger="click" hx-swap="outerHTML">
+<div class="max-w-2xl p-4 border-3 border-tul-dark-red rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
+    hx-get={ fmt.Sprintf("/realized/details/%v", thesis.Id) }
+    hx-trigger="click" hx-swap="outerHTML">
     <div class="flex justify-between items-center">
         <span class="text-sm text-gray-600">
             { thesis.ThesisNumber }
@@ -20,7 +21,7 @@ templ Entry(thesis types.RealizedThesisEntry) {
         "{ thesis.ThesisTitlePolish }"
     </h3>
     <div class="flex flex-row items-center justify-between text-sm text-gray-700">
-        <div class="flex flex-col items-start">
+        <div class="flex flex-col ml-auto mr-auto">
             <p>
                 <strong>Kierunek:</strong> { thesis.Student.FieldOfStudy }
             </p>
@@ -31,7 +32,7 @@ templ Entry(thesis types.RealizedThesisEntry) {
                 <strong>Numer Indeksu:</strong> ({ thesis.Student.StudentNumber })
             </p>
         </div>
-        <div class="flex flex-col items-start">
+        <div class="flex flex-col ml-auto mr-auto">
             <p>
                 <strong>Promotor:</strong> { thesis.Supervisor.FirstName } { thesis.Supervisor.LastName }
             </p>
@@ -53,7 +54,7 @@ if errs.Correct {
     <br />
     @Entry(thesis)
 </span>
-}
+    }
 <span id="newEntryForm" hx-swap-oob="true">
     @NewEntry(vals, errs)
 </span>
