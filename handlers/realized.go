@@ -236,6 +236,7 @@ func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 }
 
 func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
+	//TODO: add HourlySettlement
 	t := *extractRealizedThesisFromForm(r)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
@@ -289,6 +290,7 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
+	//TODO: add HourlySettlement
 	slog.Info("UPDATE", "here", true)
 	id_param := chi.URLParam(r, "id")
 	slog.Info("UPDATE", "id_param", id_param)
