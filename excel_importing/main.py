@@ -37,20 +37,30 @@ def standardise_degree(degree_str):
 def standardize_title(title_str):
     if pd.notna(title_str):
         titles = {
-            'dr hab inż': 'Dr hab. inż.', 'dr inż': 'Dr inż.',
+            'dr hab inż': 'Dr hab. inż.',
+            'dr inż': 'Dr inż.',
             'dr hab inz - prof pł': 'Dr hab. inż. - prof. PŁ',
             'prof dr hab inż': 'Prof. Dr hab. inż.',
             'dr hab inż - prof pł': 'Dr hab. inż. - Prof. PŁ',
-            'mgr inż': 'Mgr inż.', 'dr inż + mgr inż': 'Dr inż. + Mgr inż.',
+            'mgr inż': 'Mgr inż.',
+            'dr inż + mgr inż': 'Dr inż. + Mgr inż.',
             'prof dr hab inż + mgr': 'Prof. dr hab. inż. + Mgr',
-            'dr inz': 'Dr inż.', 'x': None,
+            'dr inz': 'Dr inż.',
+            'x': None,
             'prof dr hab inż i mgr inż': 'Prof. dr hab. inż. + Mgr inż.',
-            'dr hab inz': 'Dr hab. inż.', 'bez udz dypl': None,
-            'dr inż szczepaniak jakub': 'Dr inż.', 'dr': 'Dr',
-            'dr hab': 'Dr hab.', 'mg inż': 'Mgr inż.',
-            'prof': 'Prof.', '-': None,
-            'dr hab - prof pł': 'Dr hab. - prof. PŁ', 'd inż': 'Dr inż.',
-            'mgr': 'Mgr', '- - -': None, 'prof dr hab': 'Prof. dr hab.'
+            'dr hab inz': 'Dr hab. inż.',
+            'bez udz dypl': None,
+            'dr inż szczepaniak jakub': 'Dr inż.',
+            'dr': 'Dr',
+            'dr hab': 'Dr hab.',
+            'mg inż': 'Mgr inż.',
+            'prof': 'Prof.',
+            '-': None,
+            'dr hab - prof pł': 'Dr hab. - prof. PŁ',
+            'd inż': 'Dr inż.',
+            'mgr': 'Mgr',
+            '- - -': None,
+            'prof dr hab': 'Prof. dr hab.'
         }
         title_str = title_str.lower().replace(' -', ' - ') \
             .replace('-', ' - ') \
@@ -155,16 +165,31 @@ def get_or_create_student(df, index, cursor):
 
         degree = standardise_degree(df['stopień'].iloc[index])
 
+        if pd.notna(df['nr_albumu'].iloc[index]):
+            student_number = str(df['nr_albumu'].iloc[index]).strip()
+        else:
+            student_number = None
+
+        if pd.notna(df['kierunek'].iloc[index]):
+            field_of_study = str(df['kierunek'].iloc[index]).strip()
+        else:
+            field_of_study = None
+
+        if pd.notna(df['specjalnosc'].iloc[index]):
+            specialization = str(df['specjalnosc'].iloc[index]).strip()
+        else:
+            specialization = None
+
         cursor.execute('''
                         INSERT INTO Student (student_number, first_name, last_name, field_of_study,
                         specialization, mode_of_study, comment, degree)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                     ''', (
-            df['nr_albumu'].iloc[index],
+            student_number,
             first_name,
             last_name,
-            df['kierunek'].iloc[index],
-            df['specjalnosc'].iloc[index],
+            field_of_study,
+            specialization,
             mode_of_study,
             comment,
             degree
@@ -210,9 +235,9 @@ def get_or_create_employee(df, index, name, title, cursor):
 
 
 def main():
-    df = pd.read_excel('C:/Users/Milosz/Desktop/databases/baza mock egzaminow dypl.xlsx', engine='openpyxl')
+    df = pd.read_excel('*/baza mock egzaminow dypl.xlsx', engine='openpyxl')
 
-    conn = sqlite3.connect('C:/Users/Milosz/Desktop/databases/diploma_database.db')
+    conn = sqlite3.connect('*/diploma_database.db')
     cursor = conn.cursor()
 
     print("Kolumny dostępne w Excelu:", df.columns)
@@ -237,6 +262,31 @@ def main():
         # print(df[['Nr pracy', 'data egz.', 'średnia ze studiów',
         # 'Ocena pracydypl.', 'Temat pl', 'Temat en']].iloc[index])
 
+        if pd.notna(df['Nr pracy'].iloc[index]):
+            thesis_number = str(df['Nr pracy'].iloc[index]).strip()
+        else:
+            thesis_number = None
+
+        if pd.notna(df['średnia ze studiów'].iloc[index]):
+            average_from_study = str(df['średnia ze studiów'].iloc[index]).strip()
+        else:
+            average_from_study = None
+
+        if pd.notna(df['Ocena pracydypl.'].iloc[index]):
+            thesis_grade = str(df['Ocena pracydypl.'].iloc[index]).strip()
+        else:
+            thesis_grade = None
+
+        if pd.notna(df['Temat pl'].iloc[index]):
+            topic_pl = str(df['Temat pl'].iloc[index]).strip()
+        else:
+            topic_pl = None
+
+        if pd.notna(df['Temat en'].iloc[index]):
+            topic_en = str(df['Temat en'].iloc[index]).strip()
+        else:
+            topic_en = None
+
         chair_academic_title = standardize_title(df['tytuł przewodniczącego'].iloc[index])
         supervisor_academic_title = standardize_title(df['tytuł promotora'].iloc[index])
         assistant_supervisor_academic_title = standardize_title(df['tytuł opiekuna'].iloc[index])
@@ -249,12 +299,12 @@ def main():
                 supervisor_academic_title, assistant_supervisor_academic_title, reviewer_academic_title)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''', (
-            df['Nr pracy'].iloc[index],
+            thesis_number,
             parse_exam_date(df['data egz.'].iloc[index]),
-            df['średnia ze studiów'].iloc[index],
-            df['Ocena pracydypl.'].iloc[index],
-            df['Temat pl'].iloc[index],
-            df['Temat en'].iloc[index],
+            average_from_study,
+            thesis_grade,
+            topic_pl,
+            topic_en,
             student_id,
             chair_id,
             supervisor_id,

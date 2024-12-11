@@ -8,6 +8,7 @@ import (
 	"os"
 	"thesis-management-app/handlers"
 	"thesis-management-app/pkgs/ldap"
+	"thesis-management-app/pkgs/logging"
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/types/sqlite"
 	"time"
@@ -20,6 +21,8 @@ import (
 )
 
 func main() {
+
+	logging.SetupLogger()
 
 	if err := godotenv.Load(); err != nil {
 		log.Fatal(err)
