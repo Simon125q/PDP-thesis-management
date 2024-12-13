@@ -16,12 +16,12 @@ templ Entry(empl types.UniversityEmployee) {
 
 templ NewEntrySwap(empl, vals types.UniversityEmployee, errs types.UniversityEmployeeErrors) {
 if errs.Correct {
-<span>
-    @Entry(empl)
-    <br />
-</span>
-}
+    <span>
+        @Entry(empl)
+        <br />
+    </span>
+    }
 <span id="newEntryForm" hx-swap-oob="true">
-    @NewEntry(empl, errs) /* tu chyba trzeba coś zmienic will check later*/
+    @NewEntry(vals, errs)
 </span>
 }

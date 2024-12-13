@@ -2,7 +2,6 @@ package settings
 
 import (
     "thesis-management-app/types"
-	"thesis-management-app/views"
 	"thesis-management-app/views/layouts"
 	"thesis-management-app/views/components"
 )
@@ -11,20 +10,11 @@ templ Index(empl_data []types.UniversityEmployee) {
 	@layouts.Base(true) {
 		<div class="flex flex-col items-center">
 			<div class="text-xl text-tul-dark-red font-bold">
-				{ views.AuthenticatedUser(ctx).Login }, witaj na stronie z ustawieniami.
-				<br/>
-				if views.AuthenticatedUser(ctx).IsAdmin {
-					Jesteś zalogowany jako administrator.
-				} else {
-					Jesteś zalogowany jako użytkownik.
-				}
-				<br/>
 				@components.SearchBar("/settings")
-				<br/>
-                @ResultsUsers(empl_data)
-
-				Tutaj bedzie mozna zarzadzac użytkownikami: dodawac nowych, edytowac, oraz przypisywac istniejacych
-				użytkownikow do ich loginu w ldap
+				<br>
+                <div class="flex flex-wrap justify-center w-full h-full">
+                    @ResultsUsers(empl_data)
+                </div>
 			</div>
 		</div>
 	}

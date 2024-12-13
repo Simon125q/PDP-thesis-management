@@ -49,6 +49,15 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 	e := types.UniversityEmployee{}
 	rows.Next()
 	err = rows.Scan(&e.Id, &e.FirstName, &e.LastName, &e.CurrentAcademicTitle, &e.DepartmentUnit)
+
+	/*var thesisCount int
+		err = m.DB.QueryRow(`
+	    SELECT COUNT(*)
+	    FROM Completed_Thesis
+	    WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
+		e.ThesisCount = fmt.Sprintf("%d", thesisCount)*/
+	// kurwa mać
+
 	if err != nil {
 		return types.UniversityEmployee{}, err
 	}
@@ -86,9 +95,8 @@ func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployee) (int
 }
 
 func (m *Model) UpdateEmployee(empl *types.UniversityEmployee) error {
-	// Define the SQL query for updating the employee
 	query := `
-        UPDATE university_employees
+        UPDATE University_Employee
         SET 
             first_name = ?,
             last_name = ?,
@@ -96,8 +104,11 @@ func (m *Model) UpdateEmployee(empl *types.UniversityEmployee) error {
             department_unit = ?
         WHERE id = ?
     `
+	slog.Info("Executing UpdateEmployee Query",
+		"query", query,
+		"params", empl,
+	)
 
-	// Execute the query with the provided employee data
 	_, err := m.DB.Exec(query,
 		empl.FirstName,
 		empl.LastName,
@@ -106,7 +117,7 @@ func (m *Model) UpdateEmployee(empl *types.UniversityEmployee) error {
 		empl.Id,
 	)
 	if err != nil {
-		return fmt.Errorf("failed to update university_employees: %w", err)
+		return fmt.Errorf("failed to update university_employee: %w", err)
 	}
 	return nil
 }
@@ -116,11 +127,24 @@ func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployee, error) {
 	if err != nil {
 		return types.UniversityEmployee{}, err
 	}
+
+	var thesisCount int
+	err = m.DB.QueryRow(`
+    SELECT COUNT(*)
+    FROM Completed_Thesis
+    WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
+	if err != nil {
+		return types.UniversityEmployee{}, err
+	}
+
+	thesisCount = 1
+
 	return types.UniversityEmployee{
 		Id:                   empl.Id,
 		FirstName:            empl.FirstName,
 		LastName:             empl.LastName,
 		CurrentAcademicTitle: empl.CurrentAcademicTitle,
 		DepartmentUnit:       empl.DepartmentUnit,
+		ThesisCount:          fmt.Sprintf("%d", thesisCount),
 	}, nil
 }

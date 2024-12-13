@@ -6,6 +6,7 @@ type UniversityEmployee struct {
 	LastName             string
 	CurrentAcademicTitle string
 	DepartmentUnit       string
+	ThesisCount          string
 }
 
 type UniversityEmployeeErrors struct {
@@ -13,6 +14,7 @@ type UniversityEmployeeErrors struct {
 	LastName             string
 	CurrentAcademicTitle string
 	DepartmentUnit       string
+	ThesisCount          string
 	Correct              bool
 }
 
@@ -22,6 +24,7 @@ type UniversityEmployeeEntry struct {
 	LastName             string
 	CurrentAcademicTitle string
 	DepartmentUnit       string
+	ThesisCount          string
 }
 
 type UniversityEmployeeEntryErrors struct {
@@ -30,5 +33,6 @@ type UniversityEmployeeEntryErrors struct {
 	LastName             string
 	CurrentAcademicTitle string
 	DepartmentUnit       string
+	ThesisCount          string
 	Correct              bool
 }

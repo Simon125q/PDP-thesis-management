@@ -7,19 +7,19 @@ import (
 
 templ InputFields(vals types.UniversityEmployee, errs types.UniversityEmployeeErrors) {
 	<div>
-		@components.InputField("text", "FirstName", "Imię", vals.FirstName, true)
+		@components.InputField("text", "first_name", "Imię", vals.FirstName, true)
 		@components.ErrorMsg(errs.FirstName)
 	</div>
 	<div>
-		@components.InputField("text", "LastName", "Nazwisko", vals.LastName, false)
+		@components.InputField("text", "last_name", "Nazwisko", vals.LastName, false)
 		@components.ErrorMsg(errs.LastName)
 	</div>
 	<div>
-		@components.InputField("text", "CurrentAcademicTitle", "Tytuł Naukowy", vals.CurrentAcademicTitle, true)
+		@components.InputField("text", "current_academic_title", "Tytuł Naukowy", vals.CurrentAcademicTitle, true)
 		@components.ErrorMsg(errs.CurrentAcademicTitle)
 	</div>
 	<div>
-		@components.InputField("text", "DepartmentUnit", "Jednostka", vals.DepartmentUnit, false)
+		@components.InputField("text", "department_unit", "Jednostka", vals.DepartmentUnit, false)
 		@components.ErrorMsg(errs.DepartmentUnit)
 	</div>
 }

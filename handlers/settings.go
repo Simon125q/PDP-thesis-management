@@ -8,7 +8,6 @@ import (
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
-	"thesis-management-app/views/realized"
 	"thesis-management-app/views/settings"
 )
 
@@ -41,7 +40,7 @@ func HandleSettingsDetails(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	slog.Info("HSettingsDetails", "thes", empl_data)
+	slog.Info("HSettingsDetails", "empl", empl_data)
 	return Render(w, r, settings.Details(empl_data, types.UniversityEmployeeErrors{}))
 }
 
@@ -119,5 +118,5 @@ func HandleSettingsGetNew(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleSettingsClearNew(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, realized.EmptySpace())
+	return Render(w, r, settings.EmptySpace())
 }

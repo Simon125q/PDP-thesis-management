@@ -12,27 +12,33 @@ templ Details(empl types.UniversityEmployee, errs types.UniversityEmployeeErrors
             <h2 class="text-lg font-medium text-gray-800">Szczegóły Pracownika</h2>
         </div>
         @InputFields(empl, errs)
+         <div>
+             <label class="text-sm font-medium text-gray-900 block mb-2">Thesis Count</label>
+             <span class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none">
+                 { empl.ThesisCount }
+             </span>
+         </div>
         <div class="flex flex-row items-center justify-between">
             <div hx-get={ fmt.Sprintf("/settings/%v", empl.Id) }
-                hx-target={ fmt.Sprintf("#details-%v", empl.Id) }
-                hx-trigger="click"
-                hx-swap="outerHTML"
-                class="p-4"
-            >
-                <button
-                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Zamknij
-                </button>
+                 hx-target={ fmt.Sprintf("#details-%v", empl.Id) }
+                 hx-trigger="click"
+                 hx-swap="outerHTML"
+                 class="p-4">
+                 <button type="button"
+                     class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                     Zamknij
+                 </button>
             </div>
             <button
                 class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 type="submit"
-                hx-put="/settings"
+                hx-put={ fmt.Sprintf("/settings/%v", empl.Id) }
                 hx-target={ fmt.Sprintf("#details-%v", empl.Id) }
                 hx-swap="outerHTML"
             >
                 Zapisz
             </button>
+
         </div>
     </form>
 </div>
