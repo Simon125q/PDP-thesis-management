@@ -1,21 +1,21 @@
 package settings
 
 import (
-    "thesis-management-app/types"
-	"thesis-management-app/views/layouts"
-	"thesis-management-app/views/components"
+"thesis-management-app/types"
+"thesis-management-app/views/components"
+"thesis-management-app/views/layouts"
 )
 
 templ Index(empl_data []types.UniversityEmployee) {
-	@layouts.Base(true) {
-		<div class="flex flex-col items-center">
-			<div class="text-xl text-tul-dark-red font-bold">
-				@components.SearchBar("/settings")
-				<br>
-                <div class="flex flex-wrap justify-center w-full h-full">
-                    @ResultsUsers(empl_data)
-                </div>
-			</div>
-		</div>
-	}
+@layouts.Base(true) {
+<div class="flex flex-col items-center">
+    <div class="text-xl text-tul-dark-red font-bold">
+        @components.SearchBar(false)
+        <br />
+        <div class="flex flex-wrap justify-center w-full h-full">
+            @ResultsUsers(empl_data)
+        </div>
+    </div>
+</div>
+}
 }
