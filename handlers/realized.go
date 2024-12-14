@@ -18,17 +18,17 @@ import (
 
 func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
-	slog.Info("HandleRealized", "q", r.URL.Query())
 	if err != nil {
+		slog.Error("HandleRealized", "err", err)
 		return err
 	}
-	slog.Info("HandleRealized", "thesis", thes_data[0])
 	return Render(w, r, realized.Index(thes_data))
 }
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	t_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", false, r.URL.Query())
 	if err != nil {
+		slog.Error("HandleRealizedGenerateExcel", "err", err)
 		return err
 	}
 
@@ -68,6 +68,7 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 		}
 		err := f.SetCellValue(sheetName, col+"1", header)
 		if err != nil {
+			slog.Error("HandleRealizedGenerateExcel", "err", err)
 			return err
 		}
 	}
@@ -120,10 +121,8 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	f.SetActiveSheet(sheetIndex)
 
 	if err := f.Write(w); err != nil {
-		slog.Info("ERROR:")
+		slog.Error("RealizedThesisGenerateExcel", "err", err)
 	}
-	slog.Info("Worked!")
-
 	return nil
 }
 
@@ -137,6 +136,7 @@ func HandleAutocompleteThesisTitlePolish(w http.ResponseWriter, r *http.Request)
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllThesisTitlesPolish(userInput)
 	if err != nil {
+		slog.Error("HandleAutocompleteThesisTitlePolish", "err", err)
 		return err
 	}
 
@@ -164,6 +164,7 @@ func HandleAutocompleteStudentSurname(w http.ResponseWriter, r *http.Request) er
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllStudentSurnames(userInput)
 	if err != nil {
+		slog.Error("HandleAutocompleteStudentSurname", "err", err)
 		return err
 	}
 
@@ -190,6 +191,7 @@ func HandleAutocompleteStudentNumber(w http.ResponseWriter, r *http.Request) err
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllStudentNumbers(userInput)
 	if err != nil {
+		slog.Error("HandleAutocompleteStudentNumber", "err", err)
 		return err
 	}
 
@@ -221,6 +223,7 @@ func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request)
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
 	if err != nil {
+		slog.Error("HandleAutocompleteSupervisorSurname", "err", err)
 		return err
 	}
 
@@ -248,6 +251,7 @@ func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
 	if err != nil {
+		slog.Error("HandleAutocompleteAssistantSupervisorSurname", "err", err)
 		return err
 	}
 
@@ -275,6 +279,7 @@ func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllCourseNames(userInput)
 	if err != nil {
+		slog.Error("HandleAutocompleteCourse", "err", err)
 		return err
 	}
 
@@ -297,16 +302,13 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	for key, val := range q {
 		if val[0] == "" {
 			q.Del(key)
-			slog.Info("Filter", "key", key)
-			slog.Info("Filter", "val", val)
 		}
 	}
 	slog.Info("HRFiltered", "q", q)
-	dateStart := r.FormValue("date[gte]")
-	slog.Info("HRFiltered", "date[gte]", dateStart)
 	r.URL.RawQuery = q.Encode()
 	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
 	if err != nil {
+		slog.Error("HRFiltered", "err", err)
 		return err
 	}
 	return Render(w, r, realized.Results(thes_data))
@@ -316,8 +318,9 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HRDetails", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
-	slog.Info("quere", "q", r.URL.Query())
+	slog.Info("HRDetails", "q", r.URL.Query())
 	if err != nil {
+		slog.Error("HRDetails", "err", err)
 		return err
 	}
 	slog.Info("HRealizedDetails", "thes", thes_data)
@@ -328,7 +331,6 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HREntry", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
-	slog.Info("quere", "q", r.URL.Query())
 	if err != nil {
 		return err
 	}
@@ -388,7 +390,7 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
 	if err != nil {
-		slog.Error("emp to db", "err", err)
+		slog.Error("getEmployeeId", "err", err)
 	}
 	if empId == 0 {
 		if emp.FirstName != "" && emp.LastName != "" {
@@ -407,7 +409,6 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		errors.Correct = false
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
-	slog.Info("add thesis", "correct", true)
 	// TODO: set errors.internalError to true in case of err
 	sId, err := server.MyS.DB.InsertStudent(t.Student)
 	if err != nil {
@@ -451,7 +452,6 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("UPDATE", "here", true)
 	id_param := chi.URLParam(r, "id")
 	slog.Info("UPDATE", "id_param", id_param)
 	t := *extractRealizedThesisFromForm(r)

@@ -4,7 +4,6 @@ package sqlite
 
 import (
 	"fmt"
-	"log/slog"
 	"net/url"
 	"strconv"
 	"thesis-management-app/types"
@@ -18,8 +17,6 @@ func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams u
     FROM Completed_Thesis`)
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
-	slog.Info("Query", "query", query)
-	slog.Info("Query", "params", params)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
 		return nil, err
@@ -107,8 +104,6 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
     `)
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
-	slog.Info("AllRealizedThesisEntries", "query", query)
-	slog.Info("AllRealizedThesisEntries", "Qparams", params)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
 		return nil, err
@@ -288,9 +283,8 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),
     COALESCE(thesis_title_polish, ''), COALESCE(thesis_title_english, ''), COALESCE(thesis_language, ''), COALESCE(library, ''),
-    student_id, chair_id, supervisor_id, COALESCE(assistant_supervisor_id, 0), reviewer_id, COALESCE(hourly_settlement_id, 0)
+    student_id, COALESCE(chair_id, 0), supervisor_id, COALESCE(assistant_supervisor_id, 0), COALESCE(reviewer_id, 0), COALESCE(hourly_settlement_id, 0)
     FROM Completed_Thesis WHERE id = %v`, id)
-	slog.Info("Query by ID", "query", query)
 	rows, err := m.DB.Query(query)
 	if err != nil {
 		return types.RealizedThesis{}, err
@@ -313,6 +307,9 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 
 func (m *Model) RealizedThesisEntryByID(id string) (types.RealizedThesisEntry, error) {
 	t, err := m.RealizedThesisByID(id)
+	if err != nil {
+		return types.RealizedThesisEntry{}, err
+	}
 	student, err := m.StudentById(strconv.Itoa(t.StudentId))
 	if err != nil {
 		return types.RealizedThesisEntry{}, err
