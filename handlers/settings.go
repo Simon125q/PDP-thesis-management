@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"github.com/go-chi/chi/v5"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -9,6 +8,8 @@ import (
 	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
 	"thesis-management-app/views/settings"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func HandleSettings(w http.ResponseWriter, r *http.Request) error {
@@ -36,6 +37,8 @@ func HandleSettingsDetails(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HSDetails", "id_param", id_param)
 	empl_data, err := server.MyS.DB.EmployeeById(id_param)
+	empl_t_count, err := server.MyS.DB.ThesisCountByEmpId(id_param)
+	empl_data.ThesisCount = empl_t_count
 	slog.Info("quere", "q", r.URL.Query())
 	if err != nil {
 		return err

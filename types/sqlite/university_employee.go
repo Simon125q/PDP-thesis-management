@@ -49,15 +49,6 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 	e := types.UniversityEmployee{}
 	rows.Next()
 	err = rows.Scan(&e.Id, &e.FirstName, &e.LastName, &e.CurrentAcademicTitle, &e.DepartmentUnit)
-
-	/*var thesisCount int
-		err = m.DB.QueryRow(`
-	    SELECT COUNT(*)
-	    FROM Completed_Thesis
-	    WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
-		e.ThesisCount = fmt.Sprintf("%d", thesisCount)*/
-	// kurwa mać
-
 	if err != nil {
 		return types.UniversityEmployee{}, err
 	}
@@ -66,6 +57,18 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 		return types.UniversityEmployee{}, err
 	}
 	return e, nil
+}
+
+func (m *Model) ThesisCountByEmpId(id string) (string, error) {
+	var thesisCount string
+	err := m.DB.QueryRow(`
+	    SELECT COUNT(*)
+	    FROM Completed_Thesis
+	    WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
+	if err != nil {
+		return "error", err
+	}
+	return thesisCount, nil
 }
 
 func (m *Model) EmployeeIdByName(name string) (int, error) {
