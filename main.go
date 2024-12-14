@@ -30,7 +30,8 @@ func main() {
 	server.MyS.Router = chi.NewRouter()
 	ldap.SetupLDAP()
 
-	db, err := sql.Open("sqlite3", "./diploma_database.db")
+	db_path := os.Getenv("DB_PATH")
+	db, err := sql.Open("sqlite3", db_path)
 	if err != nil {
 		log.Fatal(err)
 	}
