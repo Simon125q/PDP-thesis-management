@@ -26,13 +26,25 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
+	q := r.URL.Query()
+	for key, val := range q {
+		if val[0] == "" {
+			q.Del(key)
+			slog.Info("filterExcel", "key", key)
+			slog.Info("filterExcel", "val", val)
+		}
+	}
+	r.URL.RawQuery = q.Encode()
+	slog.Info("excel", "q", r.URL.Query())
 	t_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", false, r.URL.Query())
 	if err != nil {
 		slog.Error("HandleRealizedGenerateExcel", "err", err)
 		return err
 	}
 
+	queryParams := r.URL.Query()
 	filePath := "/realized/generate_excel"
+	redirectURL := filePath + "?" + queryParams.Encode()
 
 	currentTime := time.Now()
 	fileName := "Wybrane Prace " + currentTime.Format("2-01-2006 15h04m05s") + ".xlsx"
@@ -41,7 +53,7 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 
 	w.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
-	w.Header().Set("HX-Redirect", filePath)
+	w.Header().Set("HX-Redirect", redirectURL)
 
 	f := excelize.NewFile()
 

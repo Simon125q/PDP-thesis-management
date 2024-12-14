@@ -28,7 +28,7 @@ templ SearchBar(all bool) {
         if views.AuthenticatedUser(ctx).IsAdmin {
         if all {
         <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
-            <a type="button" hx-get={ fmt.Sprintf("realized/generate_excel") } hx-swap="none"
+            <a type="button" hx-get={ fmt.Sprintf("realized/generate_excel") } hx-swap="none" hx-include="#filterForm"
                 class="text-tul-dark-gray cursor-pointer">Eksportuj</a>
             <span class="absolute right-3 text-gray-500">
                 <i class="fa fa-download" aria-hidden="true"></i>
