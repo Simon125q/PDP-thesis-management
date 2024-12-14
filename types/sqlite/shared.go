@@ -8,7 +8,7 @@ import (
 )
 
 func (m *Model) GetStudentID(value string, column string) ([]string, error) {
-	value = value + "%"
+	value = "%" + value + "%"
 	queryString := fmt.Sprintf("SELECT id FROM 'Student' WHERE %v LIKE '%v'", column, value)
 	slog.Info(queryString)
 	rows, err := m.DB.Query(queryString)
@@ -26,7 +26,7 @@ func (m *Model) GetStudentID(value string, column string) ([]string, error) {
 }
 
 func (m *Model) GetPersonID(name string, personRank string) ([]string, error) {
-	name = name + "%"
+	name = "%" + strings.Replace(name, " ", "%", -1) + "%"
 	queryString := fmt.Sprintf("SELECT id FROM '%v' WHERE CONCAT(first_name, ' ', last_name) LIKE '%v'", personRank, name)
 	slog.Info(queryString)
 	rows, err := m.DB.Query(queryString)
@@ -40,24 +40,32 @@ func (m *Model) GetPersonID(name string, personRank string) ([]string, error) {
 		rows.Scan(&str)
 		ids = append(ids, str)
 	}
+	if len(ids) == 0 {
+		ids = append(ids, "0")
+	}
 	return ids, nil
 }
 
 func (m *Model) GetConditionValuesFromName(name string, personRank string, column string, conditions []string, values []interface{}) ([]string, []interface{}) {
+	slog.Info("GetConditionValuesFromName", "personRank", personRank)
 	ids, err := m.GetPersonID(name, personRank)
 	if err != nil {
-		slog.Error(err.Error())
+		slog.Error("GetConditionValuesFromName", "err", err)
+		return nil, nil
 	}
+	slog.Info("GetConditionValuesFromName", "ids", ids)
 	str := "("
 	for _, id := range ids {
 		str = str + " " + column + " = ? OR"
 		values = append(values, id)
 	}
-	if len(str) > 0 {
+	if len(str) > 1 {
 		str = str[0 : len(str)-3]
 		str = str + ")"
+		conditions = append(conditions, str)
 	}
-	conditions = append(conditions, str)
+	slog.Info("GetConditionValuesFromName", "conditions", conditions)
+	slog.Info("GetConditionValuesFromName", "vals", values)
 	return conditions, values
 }
 
@@ -103,7 +111,7 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 			continue
 		case "thesis_title":
 			thesisTitle := value[0]
-			thesisTitle = thesisTitle + "%"
+			thesisTitle = "%" + thesisTitle + "%"
 			conditionStr := fmt.Sprintf("(thesis_title_polish LIKE '%v' OR thesis_title_english LIKE '%v')", thesisTitle, thesisTitle)
 			conditions = append(conditions, conditionStr)
 			continue
@@ -152,6 +160,9 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 		}
 	}
 	if len(conditions) > 0 {
+		slog.Info("adding conds to query", "conds", conditions)
+		slog.Info("adding conds to query", "len(conds)", len(conditions))
+		slog.Info("adding conds to query", "conds[0]", conditions[0])
 		baseQuery += " WHERE " + strings.Join(conditions, " AND ")
 	}
 	return baseQuery, values

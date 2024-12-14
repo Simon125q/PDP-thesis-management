@@ -4,6 +4,7 @@ package sqlite
 
 import (
 	"fmt"
+	"log/slog"
 	"net/url"
 	"strconv"
 	"thesis-management-app/types"
@@ -19,6 +20,7 @@ func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams u
 	query = AddSQLOrder(query, sort_by, desc_order)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
+		slog.Error("AllRealizedThesis", "err", err)
 		return nil, err
 	}
 	defer rows.Close()
@@ -104,8 +106,10 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
     `)
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
+	slog.Error("AllRealizedThesisEntries", "query", query)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
+		slog.Error("AllRealizedThesisEntries", "err", err)
 		return nil, err
 	}
 	defer rows.Close()
