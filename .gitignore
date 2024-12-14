@@ -2,6 +2,7 @@ bin
 .idea
 *.log
 *.db
+*.db*
 tmp/*
 !tmp/.gitignore
 public/*
