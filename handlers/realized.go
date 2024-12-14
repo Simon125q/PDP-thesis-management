@@ -323,7 +323,6 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 		slog.Error("HRDetails", "err", err)
 		return err
 	}
-	slog.Info("HRealizedDetails", "thes", thes_data)
 	return Render(w, r, realized.Details(thes_data, types.RealizedThesisEntryErrors{}))
 }
 
@@ -334,7 +333,6 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	slog.Info("HRealizedEntry", "thes", thes_data)
 	return Render(w, r, realized.Entry(thes_data))
 }
 
