@@ -412,10 +412,12 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 	sId, err := server.MyS.DB.InsertStudent(t.Student)
 	if err != nil {
 		slog.Error("student to db", "err", err)
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Student.Id = int(sId)
 	supId, err := getEmployeeId(t.Supervisor)
 	if err != nil {
+		slog.Error("InsertNew", "err", err)
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Supervisor.Id = supId
