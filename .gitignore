@@ -1,7 +1,8 @@
 bin
 .idea
-.log
-.db
+*.log
+*.db
+*.db*
 tmp/*
 !tmp/.gitignore
 public/*
