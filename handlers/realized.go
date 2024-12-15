@@ -40,27 +40,7 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
 	w.Header().Set("HX-Redirect", redirectURL)
 
-	q := r.URL.Query()
-	sortBy := "thesis_id"
-	desc := true
-	for key, val := range q {
-		if val[0] == "" {
-			q.Del(key)
-		}
-		if key == "SortBy" {
-			sortBy = val[0]
-			q.Del(key)
-		}
-		if key == "Order" {
-			if val[0] == "ASC" {
-				desc = false
-			}
-			q.Del(key)
-		}
-	}
-	r.URL.RawQuery = q.Encode()
-	slog.Info("excel", "q", r.URL.Query())
-	t_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, r.URL.Query())
+	t_data, err := filterRealizedThesisEntries(r)
 	if err != nil {
 		slog.Error("HandleRealizedGenerateExcel", "err", err)
 		return err
@@ -320,7 +300,7 @@ func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
+func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, error) {
 	q := r.URL.Query()
 	sortBy := "thesis_id"
 	desc := true
@@ -344,20 +324,19 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 			q.Del(key)
 		}
 	}
-	slog.Info("HRFiltered", "searchString", searchString)
+	slog.Info("filterRealizedThesisEntries", "searchString", searchString)
 	r.URL.RawQuery = q.Encode()
 	thes_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, r.URL.Query())
 	if err != nil {
-		slog.Error("HRFiltered", "err", err)
-		return err
+		return nil, err
 	}
 	if searchString == "" {
-		return Render(w, r, realized.Results(thes_data))
+		return thes_data, err
 	}
 	results := []types.RealizedThesisEntry{}
 	for _, t := range thes_data {
 		lookupString := strings.ToLower(fmt.Sprintf("%v", t))
-		slog.Info("HRFiltered", "lookupString", lookupString)
+		slog.Info("filterRealizedThesisEntries", "lookupString", lookupString)
 		match := true
 		for _, part := range strings.Split(strings.ToLower(searchString), " ") {
 			if !strings.Contains(lookupString, part) {
@@ -368,6 +347,14 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 		if match {
 			results = append(results, t)
 		}
+	}
+	return results, nil
+}
+
+func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
+	results, err := filterRealizedThesisEntries(r)
+	if err != nil {
+		return err
 	}
 	return Render(w, r, realized.Results(results))
 }
