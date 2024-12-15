@@ -73,5 +73,5 @@ type RealizedThesisEntryErrors struct {
 	Reviewer                         UniversityEmployeeErrors
 	HourlySettlement                 HourlySettlementErrors
 	Correct                          bool
-	internalError                    bool
+	InternalError                    bool
 }
