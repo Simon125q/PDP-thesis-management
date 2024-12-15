@@ -29,8 +29,7 @@ templ generate &
 /usr/bin/go/go/bin/go build -tags=dev -o ./tmp/main .
 
 # Run the Go app in a detached tmux session
-nohup ./tmp/main > app.log 2>&1 &
-
+tmux new-session -d -s go_app './tmp/main'
 
 # Log that the app is running in the background inside tmux
 echo "App is running in the background inside tmux session 'go_app'."
