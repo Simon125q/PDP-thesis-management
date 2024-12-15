@@ -364,6 +364,7 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HRDetails", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
 	slog.Info("HRDetails", "q", r.URL.Query())
+	slog.Info("HRDetails", "thes", thes_data)
 	if err != nil {
 		slog.Error("HRDetails", "err", err)
 		return err
@@ -503,19 +504,20 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("UPDATE", "id_param", id_param)
 	t := *extractRealizedThesisFromForm(r)
+	var err error
+	t.Id, err = strconv.Atoi(id_param)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
 		errors.Correct = false
 		return Render(w, r, realized.Details(t, errors))
 	}
-	var err error
-	t.Id, err = strconv.Atoi(id_param)
 	if err != nil {
 		slog.Error("Update", "err", err)
 		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Student.Id, err = server.MyS.DB.GetStudentIdFromThesisEntry(t.Id)
+	slog.Info("UpdateRealizedThesis", "student_id", t.Student.Id)
 	if err != nil {
 		slog.Error("Update get stud id", "err", err)
 		errors.InternalError = true
