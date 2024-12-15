@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
@@ -323,6 +324,7 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	q := r.URL.Query()
 	sortBy := "thesis_id"
 	desc := true
+	searchString := ""
 	for key, val := range q {
 		if val[0] == "" {
 			q.Del(key)
@@ -337,15 +339,37 @@ func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 			}
 			q.Del(key)
 		}
+		if key == "Search" {
+			searchString = val[0]
+			q.Del(key)
+		}
 	}
-	slog.Info("HRFiltered", "q", q)
+	slog.Info("HRFiltered", "searchString", searchString)
 	r.URL.RawQuery = q.Encode()
 	thes_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, r.URL.Query())
 	if err != nil {
 		slog.Error("HRFiltered", "err", err)
 		return err
 	}
-	return Render(w, r, realized.Results(thes_data))
+	if searchString == "" {
+		return Render(w, r, realized.Results(thes_data))
+	}
+	results := []types.RealizedThesisEntry{}
+	for _, t := range thes_data {
+		lookupString := strings.ToLower(fmt.Sprintf("%v", t))
+		slog.Info("HRFiltered", "lookupString", lookupString)
+		match := true
+		for _, part := range strings.Split(strings.ToLower(searchString), " ") {
+			if !strings.Contains(lookupString, part) {
+				match = false
+				break
+			}
+		}
+		if match {
+			results = append(results, t)
+		}
+	}
+	return Render(w, r, realized.Results(results))
 }
 
 func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
