@@ -44,8 +44,8 @@ templ Filter(all bool) {
         </div>
         <!-- Input Field-->
         <div class="suggestion-container mb-4">
-            <label for="StudentID" class="block text-sm font-medium text-gray-700">Numer studenta</label>
-            <input type="text" id="student_id" name="student_number" placeholder="Numer studenta" hx-get={
+            <label for="StudentID" class="block text-sm font-medium text-gray-700">Numer indeksu</label>
+            <input type="text" id="student_id" name="student_number" placeholder="Numer indeksu" hx-get={
                 fmt.Sprintf("/realized/autocompleteStudentNumber") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-student-number"
                 class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />

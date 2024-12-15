@@ -1,82 +1,63 @@
 package components
 
 import (
-	"fmt"
-	"thesis-management-app/views"
+"fmt"
+"thesis-management-app/views"
 )
 
 templ SearchBar(all bool) {
-	<div class="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded shadow border-gray-50">
-		<!-- Search Bar Section -->
-		<div class="mb-4">
-			<div class="relative flex items-center w-full">
-				<input
-					type="text"
-					name="Search"
-					placeholder="Szukaj..."
-					class="w-full rounded-full bg-rose-50 py-2 px-4 focus:outline-none"
-				/>
-				<span class="absolute right-3 text-gray-500">
-					<i class="fa fa-search" aria-hidden="true"></i>
-				</span>
-			</div>
-		</div>
-		<!-- Buttons Section -->
-		<div class="flex items-center justify-between space-x-4">
-			<div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
-				<select name="SortBy" class="text-tul-dark-gray">
-					<option value="thesis_id">Dodane</option>
-					<option value="thesis_title_polish">Tytul pracy</option>
-					<option value="exam_date">Data egzaminu</option>
-					<option value="student_id">Imie studenta</option>
-					<option value="supervisor_name">Imie promotora</option>
-				</select>
-				<select name="Order" class="text-tul-dark-gray">
-					<option value="DESC">
-						down
-					</option>
-					<option value="ASC">
-						up
-					</option>
-				</select>
-			</div>
-			if views.AuthenticatedUser(ctx).IsAdmin {
-				if all {
-					<div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
-						<a
-							type="button"
-							hx-get={ fmt.Sprintf("realized/generate_excel") }
-							hx-swap="none"
-							hx-include="#filterForm"
-							class="text-tul-dark-gray cursor-pointer"
-						>Eksportuj</a>
-						<span class="absolute right-3 text-gray-500">
-							<i class="fa fa-download" aria-hidden="true"></i>
-						</span>
-					</div>
-					<div
-						class="w-10 h-10 rounded-lg bg-tul-dark-red cursor-pointer flex justify-center items-start text-3xl"
-						hx-get={ fmt.Sprintf("/realized/new") }
-						hx-target="#new_entry"
-						hx-trigger="click"
-						hx-swap="outerHTML"
-					>
-						<button class="text-white font-bold">+</button>
-					</div>
-				} else {
-					<div
-						class="w-10 h-10 rounded-lg bg-tul-dark-red cursor-pointer flex justify-center items-start text-3xl"
-						hx-get={ fmt.Sprintf("/realized/new") }
-						hx-target="#new_entry"
-						hx-trigger="click"
-						hx-swap="outerHTML"
-					>
-						<button class="text-white font-bold">+</button>
-					</div>
-				}
-			}
-		</div>
-	</div>
+<div class="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded shadow border-gray-50">
+    <!-- Search Bar Section -->
+    <div class="mb-4">
+        <div class="relative flex items-center w-full">
+            <input type="text" name="Search" placeholder="Szukaj..."
+                class="w-full rounded-full bg-rose-50 py-2 px-4 focus:outline-none" />
+            <span class="absolute right-3 text-gray-500">
+                <i class="fa fa-search" aria-hidden="true"></i>
+            </span>
+        </div>
+    </div>
+    <!-- Buttons Section -->
+    <div class="flex items-center justify-between space-x-4">
+        <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
+            <select name="SortBy" class="text-tul-dark-gray">
+                <option value="thesis_id" selected>Dodane</option>
+                <option value="thesis_title_polish">Tytul pracy</option>
+                <option value="exam_date">Data egzaminu</option>
+                <option value="student_id">Imie studenta</option>
+                <option value="supervisor_name">Imie promotora</option>
+            </select>
+            <select name="Order" class="text-tul-dark-gray">
+                <option value="ASC">
+                    ▲
+                </option>
+                <option value="DESC" selected>
+                    ▼
+                </option>
+            </select>
+        </div>
+        if views.AuthenticatedUser(ctx).IsAdmin {
+        if all {
+        <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
+            <a type="button" hx-get={ fmt.Sprintf("realized/generate_excel") } hx-swap="none" hx-include="#filterForm"
+                class="text-tul-dark-gray cursor-pointer">Eksportuj</a>
+            <span class="absolute right-3 text-gray-500">
+                <i class="fa fa-download" aria-hidden="true"></i>
+            </span>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-tul-dark-red cursor-pointer flex justify-center items-start text-3xl"
+            hx-get={ fmt.Sprintf("/realized/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
+            <button class="text-white font-bold">+</button>
+        </div>
+        } else {
+        <div class="w-10 h-10 rounded-lg bg-tul-dark-red cursor-pointer flex justify-center items-start text-3xl"
+            hx-get={ fmt.Sprintf("/realized/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
+            <button class="text-white font-bold">+</button>
+        </div>
+        }
+        }
+    </div>
+</div>
 }
 
 /*
@@ -125,42 +106,28 @@ templ SearchBar(all bool) {
 /*
 
 templ SearchBar(url string) {
-	<div class="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded shadow border-gray-50">
-		<div class="flex items-center space-x-4">
-			<input type="text" name="search" placeholder="search..."/>
-			<div class="relative"><label>Sort by</label></div>
-			if views.AuthenticatedUser(ctx).IsAdmin {
-				if url == "/realized" {
-					<a
-						type="button"
-						hx-get={ fmt.Sprintf("%v/generate_excel", url) }
-						hx-swap="none"
-						class="border-black"
-					>Exportuj</a>
-					<div
-						class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer"
-						hx-get={ fmt.Sprintf("/realized/new") }
-						hx-target="#new_entry"
-						hx-trigger="click"
-						hx-swap="outerHTML"
-					>
-						<button class="border-white bg-red-300">New</button>
-					</div>
-				} else if url == "/ongoing" || url == "/settings" {
-					<div
-						class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer"
-						hx-get={ fmt.Sprintf("%v/new", url) }
-						hx-target="#new_entry"
-						hx-trigger="click"
-						hx-swap="outerHTML"
-					>
-						<button class="border-white bg-red-300">New</button>
-					</div>
-				}
-			}
-		</div>
-	</div>
-	<span id="new_entry"></span>
+<div class="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded shadow border-gray-50">
+    <div class="flex items-center space-x-4">
+        <input type="text" name="search" placeholder="search..." />
+        <div class="relative"><label>Sort by</label></div>
+        if views.AuthenticatedUser(ctx).IsAdmin {
+        if url == "/realized" {
+        <a type="button" hx-get={ fmt.Sprintf("%v/generate_excel", url) } hx-swap="none"
+            class="border-black">Exportuj</a>
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
+            fmt.Sprintf("/realized/new") } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
+            <button class="border-white bg-red-300">New</button>
+        </div>
+        } else if url == "/ongoing" || url == "/settings" {
+        <div class="p-4 border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 cursor-pointer" hx-get={
+            fmt.Sprintf("%v/new", url) } hx-target="#new_entry" hx-trigger="click" hx-swap="outerHTML">
+            <button class="border-white bg-red-300">New</button>
+        </div>
+        }
+        }
+    </div>
+</div>
+<span id="new_entry"></span>
 }
 
 */
