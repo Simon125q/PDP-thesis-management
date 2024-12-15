@@ -20,10 +20,21 @@ templ SearchBar(all bool) {
     <!-- Buttons Section -->
     <div class="flex items-center justify-between space-x-4">
         <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
-            <button class="text-tul-dark-gray">Sortuj</button>
-            <span class="absolute right-3 text-gray-500">
-                <i class="fa fa-arrow-up" aria-hidden="true"></i>
-            </span>
+            <select name="SortBy" class="text-tul-dark-gray">
+                <option value="thesis_id">Dodane</option>
+                <option value="thesis_title_polish">Tytul pracy</option>
+                <option value="exam_date">Data egzaminu</option>
+                <option value="student_id">Imie studenta</option>
+                <option value="supervisor_name">Imie promotora</option>
+            </select>
+            <select name="Order" class="text-tul-dark-gray">
+                <option value="DESC">
+                    down
+                </option>
+                <option value="ASC">
+                    up
+                </option>
+            </select>
         </div>
         if views.AuthenticatedUser(ctx).IsAdmin {
         if all {

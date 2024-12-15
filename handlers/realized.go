@@ -26,22 +26,6 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
-	q := r.URL.Query()
-	for key, val := range q {
-		if val[0] == "" {
-			q.Del(key)
-			slog.Info("filterExcel", "key", key)
-			slog.Info("filterExcel", "val", val)
-		}
-	}
-	r.URL.RawQuery = q.Encode()
-	slog.Info("excel", "q", r.URL.Query())
-	t_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", false, r.URL.Query())
-	if err != nil {
-		slog.Error("HandleRealizedGenerateExcel", "err", err)
-		return err
-	}
-
 	queryParams := r.URL.Query()
 	filePath := "/realized/generate_excel"
 	redirectURL := filePath + "?" + queryParams.Encode()
@@ -54,6 +38,32 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	w.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
 	w.Header().Set("HX-Redirect", redirectURL)
+
+	q := r.URL.Query()
+	sortBy := "thesis_id"
+	desc := true
+	for key, val := range q {
+		if val[0] == "" {
+			q.Del(key)
+		}
+		if key == "SortBy" {
+			sortBy = val[0]
+			q.Del(key)
+		}
+		if key == "Order" {
+			if val[0] == "ASC" {
+				desc = false
+			}
+			q.Del(key)
+		}
+	}
+	r.URL.RawQuery = q.Encode()
+	slog.Info("excel", "q", r.URL.Query())
+	t_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, r.URL.Query())
+	if err != nil {
+		slog.Error("HandleRealizedGenerateExcel", "err", err)
+		return err
+	}
 
 	f := excelize.NewFile()
 
@@ -311,14 +321,26 @@ func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
 
 func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
 	q := r.URL.Query()
+	sortBy := "thesis_id"
+	desc := true
 	for key, val := range q {
 		if val[0] == "" {
+			q.Del(key)
+		}
+		if key == "SortBy" {
+			sortBy = val[0]
+			q.Del(key)
+		}
+		if key == "Order" {
+			if val[0] == "ASC" {
+				desc = false
+			}
 			q.Del(key)
 		}
 	}
 	slog.Info("HRFiltered", "q", q)
 	r.URL.RawQuery = q.Encode()
-	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
+	thes_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, r.URL.Query())
 	if err != nil {
 		slog.Error("HRFiltered", "err", err)
 		return err
