@@ -8,7 +8,7 @@ kill_running_process() {
     pid=$(ps aux | grep 'tmp/main' | grep -v 'grep' | awk '{print $2}')
     if [ -n "$pid" ]; then
         echo "Killing existing Go application with PID: $pid"
-        kill -9 $pid
+        sudo kill -9 $pid
         if [ $? -eq 0 ]; then
             echo "Go application killed successfully."
         else
@@ -22,7 +22,7 @@ kill_running_process() {
     pid=$(ps aux | grep 'templ generate' | grep -v 'grep' | awk '{print $2}')
     if [ -n "$pid" ]; then
         echo "Killing existing templ generate process with PID: $pid"
-        kill -9 $pid
+        sudo kill -9 $pid
         if [ $? -eq 0 ]; then
             echo "templ generate process killed successfully."
         else
