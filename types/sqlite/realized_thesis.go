@@ -466,10 +466,10 @@ func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) e
 		thesis.ThesisLanguage,
 		thesis.Library,
 		sId,
+		cId,
 		suId,
 		asId,
 		rId,
-		cId,
 		hId,
 		thesis.Id,
 	)

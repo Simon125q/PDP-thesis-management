@@ -433,6 +433,8 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 
 func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
+	slog.Info("getEmployeeId", "empName", emp.FirstName+" "+emp.LastName)
+	slog.Info("getEmployeeId", "empId", empId)
 	if err != nil {
 		slog.Error("getEmployeeId", "err", err)
 	}
@@ -440,6 +442,10 @@ func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 		if emp.FirstName != "" && emp.LastName != "" {
 			var id int64
 			id, err = server.MyS.DB.InsertUniversityEmployee(emp)
+			if err != nil {
+				slog.Error("getEmployeeId", "err", err)
+			}
+			slog.Info("getEmployeeId", "inserting new emp, id", id)
 			empId = int(id)
 		}
 	}
@@ -506,6 +512,7 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	t := *extractRealizedThesisFromForm(r)
 	var err error
 	t.Id, err = strconv.Atoi(id_param)
+	slog.Info("UpdateRealizedThesis", "t before", t)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
 		errors.Correct = false
@@ -531,6 +538,8 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 	t.Student.Id = int(sId)
 	supId, err := getEmployeeId(t.Supervisor)
+	slog.Info("UpdateRealizedThesis", "supervisor", t.Supervisor)
+	slog.Info("UpdateRealizedThesis", "supervisor_id", supId)
 	if err != nil {
 		slog.Error("Update emp", "err", err)
 		errors.InternalError = true
@@ -538,6 +547,8 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 	t.Supervisor.Id = supId
 	asId, err := getEmployeeId(t.AssistantSupervisor)
+	slog.Info("UpdateRealizedThesis", "assistant_supervisor", t.AssistantSupervisor)
+	slog.Info("UpdateRealizedThesis", "assistant_supervisor_id", asId)
 	if err != nil {
 		slog.Error("Update emp", "err", err)
 		errors.InternalError = true
@@ -545,6 +556,7 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 	t.AssistantSupervisor.Id = asId
 	reId, err := getEmployeeId(t.Reviewer)
+	slog.Info("UpdateRealizedThesis", "Reviewer_id", reId)
 	if err != nil {
 		slog.Error("update emp", "err", err)
 		errors.InternalError = true
@@ -566,6 +578,7 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	}
 	slog.Info("update thesis", "correct", true)
 	errors.Correct = true
+	slog.Info("UpdateRealizedThesis", "t after", t)
 	return Render(w, r, realized.Entry(t))
 }
 
