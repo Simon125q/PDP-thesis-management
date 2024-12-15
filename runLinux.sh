@@ -59,7 +59,7 @@ fi
 
 # Run the Go app in a detached tmux session
 echo "Starting Go application in tmux..."
-tmux new-session -d -s go_app './tmp/main'
+sudo tmux new-session -d -s go_app './tmp/main'
 if [ $? -eq 0 ]; then
     echo "Go app started successfully in tmux session 'go_app'."
 else
