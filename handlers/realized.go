@@ -364,6 +364,7 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HRDetails", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
 	slog.Info("HRDetails", "q", r.URL.Query())
+	slog.Info("HRDetails", "thes", thes_data)
 	if err != nil {
 		slog.Error("HRDetails", "err", err)
 		return err
@@ -432,6 +433,8 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 
 func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
+	slog.Info("getEmployeeId", "empName", emp.FirstName+" "+emp.LastName)
+	slog.Info("getEmployeeId", "empId", empId)
 	if err != nil {
 		slog.Error("getEmployeeId", "err", err)
 	}
@@ -439,6 +442,10 @@ func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 		if emp.FirstName != "" && emp.LastName != "" {
 			var id int64
 			id, err = server.MyS.DB.InsertUniversityEmployee(emp)
+			if err != nil {
+				slog.Error("getEmployeeId", "err", err)
+			}
+			slog.Info("getEmployeeId", "inserting new emp, id", id)
 			empId = int(id)
 		}
 	}
@@ -452,40 +459,45 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		errors.Correct = false
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
-	// TODO: set errors.internalError to true in case of err
 	sId, err := server.MyS.DB.InsertStudent(t.Student)
 	if err != nil {
 		slog.Error("student to db", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Student.Id = int(sId)
 	supId, err := getEmployeeId(t.Supervisor)
 	if err != nil {
 		slog.Error("InsertNew", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Supervisor.Id = supId
 	asId, err := getEmployeeId(t.AssistantSupervisor)
 	if err != nil {
 		slog.Error("InsertNew", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.AssistantSupervisor.Id = asId
 	reId, err := getEmployeeId(t.Reviewer)
 	if err != nil {
 		slog.Error("InsertNew", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Reviewer.Id = reId
 	chId, err := getEmployeeId(t.Chair)
 	if err != nil {
 		slog.Error("InsertNew", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Chair.Id = chId
 	tId, err := server.MyS.DB.InsertRealizedThesisByEntry(&t)
 	if err != nil {
 		slog.Error("InsertNew", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	slog.Info("thesis to db", "new_id", tId)
@@ -498,59 +510,75 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("UPDATE", "id_param", id_param)
 	t := *extractRealizedThesisFromForm(r)
+	var err error
+	t.Id, err = strconv.Atoi(id_param)
+	slog.Info("UpdateRealizedThesis", "t before", t)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
 		errors.Correct = false
 		return Render(w, r, realized.Details(t, errors))
 	}
-	var err error
-	t.Id, err = strconv.Atoi(id_param)
 	if err != nil {
 		slog.Error("Update", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Student.Id, err = server.MyS.DB.GetStudentIdFromThesisEntry(t.Id)
+	slog.Info("UpdateRealizedThesis", "student_id", t.Student.Id)
 	if err != nil {
 		slog.Error("Update get stud id", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	sId, err := server.MyS.DB.UpdateStudent(t.Student)
 	if err != nil {
 		slog.Error("Update stud", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Student.Id = int(sId)
 	supId, err := getEmployeeId(t.Supervisor)
+	slog.Info("UpdateRealizedThesis", "supervisor", t.Supervisor)
+	slog.Info("UpdateRealizedThesis", "supervisor_id", supId)
 	if err != nil {
 		slog.Error("Update emp", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Supervisor.Id = supId
 	asId, err := getEmployeeId(t.AssistantSupervisor)
+	slog.Info("UpdateRealizedThesis", "assistant_supervisor", t.AssistantSupervisor)
+	slog.Info("UpdateRealizedThesis", "assistant_supervisor_id", asId)
 	if err != nil {
 		slog.Error("Update emp", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.AssistantSupervisor.Id = asId
 	reId, err := getEmployeeId(t.Reviewer)
+	slog.Info("UpdateRealizedThesis", "Reviewer_id", reId)
 	if err != nil {
 		slog.Error("update emp", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Reviewer.Id = reId
 	chId, err := getEmployeeId(t.Chair)
 	if err != nil {
 		slog.Error("update emp", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Chair.Id = chId
 	err = server.MyS.DB.UpdateRealizedThesisByEntry(&t)
 	if err != nil {
 		slog.Error("Update Thesis", "err", err)
+		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
 	slog.Info("update thesis", "correct", true)
 	errors.Correct = true
+	slog.Info("UpdateRealizedThesis", "t after", t)
 	return Render(w, r, realized.Entry(t))
 }
 

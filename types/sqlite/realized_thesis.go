@@ -72,9 +72,9 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		COALESCE(ch.current_academic_title, '') AS chair_curr_academic_title,
 		COALESCE(ch.department_unit, '') AS chair_department_unit,
 		
-		sp.id AS supervisor_id,
-		sp.first_name AS supervisor_first_name,
-		sp.last_name AS supervisor_last_name,
+		COALESCE(sp.id, '0') AS supervisor_id,
+		COALESCE(sp.first_name, '') AS supervisor_first_name,
+		COALESCE(sp.last_name, '') AS supervisor_last_name,
 		COALESCE(sp.current_academic_title, '') AS supervisor_curr_academic_title,
 		COALESCE(sp.department_unit, '') AS supervisor_department_unit,
 		
@@ -287,7 +287,7 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),
     COALESCE(thesis_title_polish, ''), COALESCE(thesis_title_english, ''), COALESCE(thesis_language, ''), COALESCE(library, ''),
-    student_id, COALESCE(chair_id, 0), supervisor_id, COALESCE(assistant_supervisor_id, 0), COALESCE(reviewer_id, 0), COALESCE(hourly_settlement_id, 0)
+    student_id, COALESCE(chair_id, '0'), COALESCE(supervisor_id, '0'), COALESCE(assistant_supervisor_id, '0'), COALESCE(reviewer_id, '0'), COALESCE(hourly_settlement_id, '0')
     FROM Completed_Thesis WHERE id = %v`, id)
 	rows, err := m.DB.Query(query)
 	if err != nil {
@@ -466,10 +466,10 @@ func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) e
 		thesis.ThesisLanguage,
 		thesis.Library,
 		sId,
+		cId,
 		suId,
 		asId,
 		rId,
-		cId,
 		hId,
 		thesis.Id,
 	)

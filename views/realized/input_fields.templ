@@ -35,36 +35,38 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     </div>
     <div class="mt-5 -mx-3 flex flex-wrap">
         <div class="w-full px-3 sm:w-1/2">
-           <div>
-               @components.InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego", vals.CompetencyExamGrade, false)
-               @components.ErrorMsg(errs.CompetencyExamGrade)
-           </div>
+            <div>
+                @components.InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego",
+                vals.CompetencyExamGrade, false)
+                @components.ErrorMsg(errs.CompetencyExamGrade)
+            </div>
         </div>
         <div class="w-full px-3 sm:w-1/2">
-           <div>
-               @components.InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego", vals.DiplomaExamGrade, false)
-               @components.ErrorMsg(errs.DiplomaExamGrade)
-           </div>
+            <div>
+                @components.InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego",
+                vals.DiplomaExamGrade, false)
+                @components.ErrorMsg(errs.DiplomaExamGrade)
+            </div>
         </div>
     </div>
     <div class="mt-5">
-       @components.InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade, false)
-       @components.ErrorMsg(errs.AverageStudyGrade)
+        @components.InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade, false)
+        @components.ErrorMsg(errs.AverageStudyGrade)
     </div>
     <div class="mt-5">
-       @components.InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult, false)
-       @components.ErrorMsg(errs.FinalStudyResult)
+        @components.InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult, false)
+        @components.ErrorMsg(errs.FinalStudyResult)
     </div>
     <div class="mt-5">
-       @components.InputField("text", "finalStudyResultText", "Ostateczny wynik studiów słownie", vals.FinalStudyResultText, false)
-       @components.ErrorMsg(errs.FinalStudyResultText)
+        @components.InputField("text", "finalStudyResultText", "Ostateczny wynik studiów słownie",
+        vals.FinalStudyResultText, false)
+        @components.ErrorMsg(errs.FinalStudyResultText)
     </div>
     <div class="mt-5">
-       @components.InputField("text", "library", "Biblioteka", vals.Library, false)
-       @components.ErrorMsg(errs.Library)
+        @components.InputField("text", "library", "Biblioteka", vals.Library, false)
+        @components.ErrorMsg(errs.Library)
     </div>
 </div>
-
 <div class="mt-5">
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Student</h3>
@@ -87,7 +89,6 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         @components.InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
         @components.ErrorMsg(errs.Student.StudentNumber)
     </div>
-
     <div class="-mx-3 flex flex-wrap">
         <div class="w-full px-3 sm:w-1/2">
             <div>
@@ -117,8 +118,6 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
     </div>
 </div>
-
-
 <div class="mt-5">
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Promotor</h3>
@@ -144,7 +143,6 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
     </div>
 </div>
-
 <div class="mt-5">
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Promotor Pomocniczy</h3>
@@ -152,25 +150,27 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="-mx-3 flex flex-wrap">
         <div class="w-4/12 px-2">
             <div>
-                @components.InputField("text", "assistantSupervisorAcademicTitle", "Tytuł", vals.AssistantSupervisorAcademicTitle, false)
+                @components.InputField("text", "assistantSupervisorAcademicTitle", "Tytuł",
+                vals.AssistantSupervisorAcademicTitle, false)
                 @components.ErrorMsg(errs.AssistantSupervisor.FirstName)
             </div>
         </div>
         <div class="w-4/12 px-2">
             <div>
-                @components.InputField("text", "firstNameAssistantSupervisor", "Imię", vals.AssistantSupervisor.FirstName, false)
+                @components.InputField("text", "firstNameAssistantSupervisor", "Imię",
+                vals.AssistantSupervisor.FirstName, false)
                 @components.ErrorMsg(errs.AssistantSupervisor.FirstName)
             </div>
         </div>
         <div class="w-4/12 px-2">
             <div>
-                @components.InputField("text", "lastNameAssistantSupervisor", "Nazwisko", vals.AssistantSupervisor.LastName, false)
+                @components.InputField("text", "lastNameAssistantSupervisor", "Nazwisko",
+                vals.AssistantSupervisor.LastName, false)
                 @components.ErrorMsg(errs.AssistantSupervisor.LastName)
             </div>
         </div>
     </div>
 </div>
-
 <div class="mt-5">
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Recenzent</h3>
@@ -196,7 +196,6 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
     </div>
 </div>
-
 <div class="mt-5">
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Przewodniczący Komisji</h3>
@@ -222,35 +221,32 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
     </div>
 </div>
-
 <div class="mt-5">
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Godziny Do Rozliczeń</h3>
     </div>
-        <div class="-mx-3 flex flex-wrap">
-            <div class="w-4/12 px-2">
-                <div>
-                    @components.InputField("number", "supervisorHours", "Promotor", "10", false)
-                    @components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
-                </div>
+    <div class="-mx-3 flex flex-wrap">
+        <div class="w-4/12 px-2">
+            <div>
+                @components.InputField("number", "supervisorHours", "Promotor", "10", false)
+                @components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
             </div>
-            <div class="w-4/12 px-2">
-                <div>
-                    @components.InputField("number", "AssistantSupervisorHours", "Promotor Pom.", "0", false)
-                    @components.ErrorMsg(errs.HourlySettlement.AssistantSupervisorHours)
-                </div>
-            </div>
-            <div class="w-4/12 px-2">
-                <div>
-                    @components.InputField("number", "reviewerHours", "Recenzent", "2", false)
-                    @components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
-                </div>
-            </div>
-            @components.ErrorMsg(errs.HourlySettlement.Total)
         </div>
+        <div class="w-4/12 px-2">
+            <div>
+                @components.InputField("number", "AssistantSupervisorHours", "Promotor Pom.", "0", false)
+                @components.ErrorMsg(errs.HourlySettlement.AssistantSupervisorHours)
+            </div>
+        </div>
+        <div class="w-4/12 px-2">
+            <div>
+                @components.InputField("number", "reviewerHours", "Recenzent", "2", false)
+                @components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
+            </div>
+        </div>
+        @components.ErrorMsg(errs.HourlySettlement.Total)
+    </div>
 </div>
-
-
 <!--place for displaying in case of any internal error with db -->
 <!--Make it like a light red squere at the bottom-->
 <!--for easier styling now set to true-->
@@ -259,5 +255,5 @@ if true {
 <div>
     Wystąpił nieoczekiwany błąd, spróbuj jeszcze raz.
 </div>
-    }
+}
 }

@@ -40,8 +40,8 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
 	}
 	query := fmt.Sprintf(`SELECT id, first_name, last_name,
     COALESCE(current_academic_title, ''), COALESCE(department_unit, '')
-    FROM University_Employee WHERE id = %v`, id)
-	rows, err := m.DB.Query(query)
+    FROM University_Employee WHERE id = ?`)
+	rows, err := m.DB.Query(query, id)
 	if err != nil {
 		return types.UniversityEmployee{}, err
 	}
@@ -72,12 +72,13 @@ func (m *Model) ThesisCountByEmpId(id string) (string, error) {
 }
 
 func (m *Model) EmployeeIdByName(name string) (int, error) {
-
 	query := fmt.Sprintf(`SELECT id FROM University_Employee WHERE first_name || ' ' || last_name = ?`)
 	slog.Info("employeeId by Name", "q", query)
+	slog.Info("employeeId by Name", "name", name)
 	row := m.DB.QueryRow(query, name)
 	id := 0
 	err := row.Scan(&id)
+	slog.Info("employeeId by Name", "id", id)
 	if err == sql.ErrNoRows {
 		return 0, nil
 	} else if err != nil {
