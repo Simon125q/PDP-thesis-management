@@ -19,25 +19,66 @@ templ Footer() {
 			<div>
 				<h3 class="text-lg font-semibold">Katedra Mikroelektroniki i Technik Informatycznych</h3>
 				<ul class="space-y-2 mt-4">
-					<li><a href="https://k22.p.lodz.pl" class="text-white hover:underline"><i class="fas fa-home mr-2"></i>Strona główna katedry</a></li>
-					<li><a href="https://www.google.com/maps/search/ul.+W%C3%B3lcza%C5%84ska+221,+budynek+B18,+93-005+%C5%81%C3%B3d%C5%BA/@51.7461219,19.4530959,17z/data=!3m1!4b1?entry=ttug_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D" class="text-white hover:underline"><i class="fas fa-map-marker-alt mr-2"></i>Lokalizacja</a></li>
-					<li><a href="https://edu.p.lodz.pl/mod/page/view.php?id=7311" class="text-white hover:underline"><i class="fas fa-clock mr-2"></i>Godziny pracy</a></li>
+					<li>
+						<a href="https://k22.p.lodz.pl" class="text-white hover:underline">
+							<i class="fas fa-home mr-2"></i>Strona główna katedry
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://www.google.com/maps/search/ul.+W%C3%B3lcza%C5%84ska+221,+budynek+B18,+93-005+%C5%81%C3%B3d%C5%BA/@51.7461219,19.4530959,17z/data=!3m1!4b1?entry=ttug_ep=EgoyMDI0MTEyNC4xIKXMDSoASAFQAw%3D%3D"
+							class="text-white hover:underline"
+						><i class="fas fa-map-marker-alt mr-2"></i>Lokalizacja</a>
+					</li>
+					<li>
+						<a href="https://edu.p.lodz.pl/mod/page/view.php?id=7311" class="text-white hover:underline">
+							<i class="fas fa-clock mr-2"></i>Godziny pracy
+						</a>
+					</li>
 				</ul>
 				<hr class="border-t border-white my-4"/>
-				<p>Pomoc techniczna WIKAMP</p>
-				<p><i class="fas fa-envelope mr-2"></i>bok@edu.p.lodz.pl</p>
-				<p><i class="fas fa-phone mr-2"></i>+48426312806</p>
+				<a
+					href="https://forms.office.com/Pages/ResponsePage.aspx?id=VVnqZ1ybk0ao-ZYPKjtJu86nx6wo2cZCi2eXquex2IZUNENSRTMzTzZWS01CTjhEVE9YOVhTWUEzNS4u"
+					target="_blank"
+					class="text-white hover:underline"
+				>
+					<p>Zgłoś błąd w aplikacji lub poproś o nową funkcjonalność</p>
+				</a>
 			</div>
 			<!-- Useful Links Section -->
 			<div>
 				<h3 class="text-lg font-semibold">Przydatne linki</h3>
 				<ul class="space-y-2 mt-4">
-					<li><a href="https://p.lodz.pl" class="text-white hover:underline"><i class="fas fa-home mr-2"></i>Strona główna PŁ</a></li>
-					<li><a href="http://bg.p.lodz.pl" class="text-white hover:underline"><i class="fas fa-book mr-2"></i>Biblioteka PŁ</a></li>
-					<li><a href="https://poczta.p.lodz.pl" class="text-white hover:underline"><i class="fas fa-envelope mr-2"></i>Poczta elektroniczna</a></li>
-					<li><a href="https://webdziekanat.p.lodz.pl" class="text-white hover:underline"><i class="fas fa-user-graduate mr-2"></i>WebDziekanat</a></li>
-					<li><a href="https://office.p.lodz.pl" class="text-white hover:underline"><i class="fab fa-microsoft mr-2"></i>Office</a></li>
-					<li><a href="http://virtul.p.lodz.pl" class="text-white hover:underline"><i class="fas fa-laptop mr-2"></i>VirTUL</a></li>
+					<li>
+						<a href="https://p.lodz.pl" class="text-white hover:underline">
+							<i class="fas fa-home mr-2"></i>Strona główna PŁ
+						</a>
+					</li>
+					<li>
+						<a href="http://bg.p.lodz.pl" class="text-white hover:underline">
+							<i class="fas fa-book mr-2"></i>Biblioteka PŁ
+						</a>
+					</li>
+					<li>
+						<a href="https://poczta.p.lodz.pl" class="text-white hover:underline">
+							<i class="fas fa-envelope mr-2"></i>Poczta elektroniczna
+						</a>
+					</li>
+					<li>
+						<a href="https://webdziekanat.p.lodz.pl" class="text-white hover:underline">
+							<i class="fas fa-user-graduate mr-2"></i>WebDziekanat
+						</a>
+					</li>
+					<li>
+						<a href="https://office.p.lodz.pl" class="text-white hover:underline">
+							<i class="fab fa-microsoft mr-2"></i>Office
+						</a>
+					</li>
+					<li>
+						<a href="http://virtul.p.lodz.pl" class="text-white hover:underline">
+							<i class="fas fa-laptop mr-2"></i>VirTUL
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -45,9 +86,13 @@ templ Footer() {
 		<div class="container mx-auto flex justify-center space-x-4 mt-8">
 			<a href="https://www.facebook.com/Politechnika.Lodzka" class="text-white"><i class="fab fa-facebook-f"></i></a>
 			<a href="https://x.com/p_lodz_pl" class="text-white"><i class="fab fa-twitter"></i></a>
-			<a href="https://pl.linkedin.com/school/politechnika-lodzka/" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+			<a href="https://pl.linkedin.com/school/politechnika-lodzka/" class="text-white">
+				<i class="fab fa-linkedin-in"></i>
+			</a>
 			<a href="https://www.instagram.com/Politechnika_Lodzka/" class="text-white"><i class="fab fa-instagram"></i></a>
-			<a href="https://www.youtube.com/channel/UCbBnxpxg1DbSrIBwvebJghg" class="text-white"><i class="fab fa-youtube"></i></a>
+			<a href="https://www.youtube.com/channel/UCbBnxpxg1DbSrIBwvebJghg" class="text-white">
+				<i class="fab fa-youtube"></i>
+			</a>
 			<a href="https://vk.com/politechnikalodzka" class="text-white"><i class="fab fa-vk"></i></a>
 		</div>
 		<!-- Bottom Text -->
