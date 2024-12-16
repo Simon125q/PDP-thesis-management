@@ -7,18 +7,34 @@ import (
 
 templ Index() {
 	@layouts.Base(true) {
-		<div class="flex flex-col items-center min-h-[70vh] justify-center">
-			<div class="text-xl text-tul-dark-red font-bold mb-8 p-8">
-				Witaj w applikacji do zarządzania pracami na Politechnice Łódzkiej
+		<div class="flex flex-col items-center min-h-[70vh] justify-center text-center">
+        	<div class="text-2xl text-tul-dark-red font-bold mb-8 p-8">
+				<span class="underline text-tul-dark-red">Witaj w aplikacji do zarządzania pracami dyplomowymi na Politechnice Łódzkiej</span>
 				<br/>
 				if views.AuthenticatedUser(ctx).LoggedIn {
 					<span>
-						Jesteś zalogowany jako { views.AuthenticatedUser(ctx).Login }
+						Jesteś zalogowany jako <strong>{ views.AuthenticatedUser(ctx).Login }</strong>
+						<br/>
+						<br/>
+						    <p class="text-lg text-gray-700 mt-4">
+                                <strong>Jak korzystać z aplikacji?</strong><br/>
+                                1. Przejdź do sekcji <a href="/settings" class="text-tul-light-red underline">Ustawienia</a>, aby podejrzeć i edytować dane pracowników.<br/>
+                                2. W sekcji <a href="/realized" class="text-tul-light-red underline">Zrealizowane prace</a> znajdziesz szczegóły dotyczące archiwum prac dyplomowych. Obsługujemy przeszukiwanie najbardziej znaczących pól. Można również eksportować konkretny widok (np. przefiltrowanych prac) do excela.<br/>
+                                3. W sekcji <a href="/ongoing" class="text-tul-light-red underline">Prace do Zrealizowania</a> znajdziesz prace, które wymagają uwagi lub dodasz nową. Po ukończeniu dodawania wszystkich wymagań, można przenieść je do zrealizowanych.<br/>
+						        4. Po kliknięciu wybranego rekordu, rozwiną się jego edytowalne szczegóły. Można zamknąć, lub zapisać poczynione zmiany.<br/>
+						    </p>
 					</span>
+					<br/>
+					<br/>
+					<!-- Placeholder for future statistics -->
+                    <div class="mt-12 text-lg text-gray-600 italic">
+                        <!-- Future Section for Statistics -->
+                        <p>Miejsce na przyszłe (potencjalne) statystyki prac i pracowników.</p>
+                    </div>
 				} else {
 					<span>
-						Nie jesteś jeszcze zalogowany.
-						<a href="/login">Zaloguj się teraz</a>
+						<span class="underline text-tul-dark-red">Nie jesteś jeszcze zalogowany.</span>
+						<a href="/login" class="underline text-tul-light-red">Zaloguj się teraz</a>
 					</span>
 				}
 			</div>
