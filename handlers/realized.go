@@ -832,6 +832,7 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		errors.InternalError = true
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
+	t.Id = int(tId)
 	slog.Info("thesis to db", "new_id", tId)
 	slog.Info("sudent to db", "new_id", sId)
 	errors.Correct = true

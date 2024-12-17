@@ -20,7 +20,7 @@ templ Filter(all bool) {
         }
         <!-- Input Field-->
         <div class="suggestion-container mb-4">
-            <label for="Thesis topic" class="block text-sm font-medium text-gray-700">Temat pracy</label>
+            <label for="thesis_title" class="block text-sm font-medium text-gray-700">Temat pracy</label>
             <input type="text" id="thesis_title" name="thesis_title" placeholder="Temat pracy" hx-get={
                 fmt.Sprintf("/realized/autocompleteThesisTitlePolish") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-thesis-topic-polish"
