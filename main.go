@@ -68,7 +68,7 @@ func main() {
 		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
 		r.Get("/realized/details/{id}", handlers.Make(handlers.HandleRealizedDetails))
-		r.Get("/realized/entry/{id}", handlers.Make(handlers.HandleRealizedEntry))
+		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/autocompleteThesisTitlePolish", handlers.Make(handlers.HandleAutocompleteThesisTitlePolish))
 		r.Get("/realized/autocompleteStudentSurname", handlers.Make(handlers.HandleAutocompleteStudentSurname))
 		r.Get("/realized/autocompleteStudentNumber", handlers.Make(handlers.HandleAutocompleteStudentNumber))
