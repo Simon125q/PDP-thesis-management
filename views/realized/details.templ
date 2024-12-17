@@ -6,7 +6,8 @@ import (
 )
 
 templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
-<div class="flex items-center justify-center p-4 border-3 border-tul-dark-red rounded-2xl w-full" id={ fmt.Sprintf("details-%v", thesis.Id) }>
+<div class="flex items-center justify-center p-4 border-3 border-tul-dark-red rounded-2xl w-full" id={
+    fmt.Sprintf("details-%v", thesis.Id) }>
     <div class="mx-auto w-full bg-white">
         <form>
             <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
@@ -14,22 +15,28 @@ templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryEr
             </div>
             @InputFields(thesis, errs)
             <div>
-                <label for="product-details" class="mt-4 text-sm font-medium text-gray-900 block mb-2">Notatka do Pracy</label>
-                <textarea id="product-details" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" placeholder="Notatka"></textarea>
+                <label for="product-details" class="mt-4 text-sm font-medium text-gray-900 block mb-2">
+                    Notatka do
+                    Pracy
+                </label>
+                <textarea id="product-details" rows="6"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4"
+                    placeholder="Notatka"></textarea>
             </div>
             <div class="flex flex-row items-center justify-between">
-                <div hx-get={ fmt.Sprintf("/realized/%v", thesis.Id) } hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
-                hx-trigger="click" hx-swap="outerHTML" class="p-4">
-                <button
+                <div hx-get={ fmt.Sprintf("/realized/entry/%v", thesis.Id) } hx-target={ fmt.Sprintf("#details-%v",
+                    thesis.Id) } hx-trigger="click" hx-swap="outerHTML" class="p-4">
+                    <button
                         class="text-white bg-tul-dark-red hover:bg-tul-medium-red focus:ring-4 focus:ring-tul-light-red font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Zamknij
-                </button>
-            </div>
-            <button
+                        Zamknij
+                    </button>
+                </div>
+                <button
                     class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                    type="submit" hx-put={ fmt.Sprintf("/realized/%v", thesis.Id) } hx-target={ fmt.Sprintf("#details-%v", thesis.Id) } hx-swap="outerHTML">
-                Zapisz
-            </button>
+                    type="submit" hx-put={ fmt.Sprintf("/realized/%v", thesis.Id) } hx-target={
+                    fmt.Sprintf("#details-%v", thesis.Id) } hx-swap="outerHTML">
+                    Zapisz
+                </button>
             </div>
         </form>
     </div>
@@ -41,20 +48,20 @@ templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryEr
     <div>
         <label for="id-pracy" class="text-sm font-medium text-gray-900 block mb-2">ID Pracy</label>
         <input type="number" id="id" name="id"
-               class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-               value={ strconv.Itoa(thesis.Id) } />
+            class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ strconv.Itoa(thesis.Id) } />
     </div>
     <div>
         <label for="data-egzaminu" class="text-sm font-medium text-gray-900 block mb-2">Data Egzaminu</label>
         <input type="date" id="exam-date" name="exam-date"
-               class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-               value={ thesis.ExamDate } />
+            class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ thesis.ExamDate } />
     </div>
     <div>
         <label for="polski-tytul" class="text-sm font-medium text-gray-900 block mb-2">Polski Tytuł</label>
         <input type="text" id="title" name="title"
-               class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
-               value={ thesis.ThesisTitlePolish } />
+            class="w-full p-2.5 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+            value={ thesis.ThesisTitlePolish } />
     </div>
 </div>
 */

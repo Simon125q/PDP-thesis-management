@@ -111,6 +111,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
 	slog.Info("AllRealizedThesisEntries", "query", query)
+	slog.Info("AllRealizedThesisEntries", "params", params)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
 		slog.Error("AllRealizedThesisEntries", "err", err)

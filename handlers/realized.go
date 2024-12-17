@@ -18,6 +18,7 @@ import (
 )
 
 func HandleRealized(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("HandleRealized", "entered", true)
 	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
 	if err != nil {
 		slog.Error("HandleRealized", "err", err)
@@ -702,6 +703,7 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("HandleRealizedEntry", "entered", true)
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HREntry", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)

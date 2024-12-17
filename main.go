@@ -63,12 +63,11 @@ func main() {
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
-		r.Get("/realized", handlers.Make(handlers.HandleRealized))
 		r.Get("/realized/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
 		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
-		r.Get("/realized/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/details/{id}", handlers.Make(handlers.HandleRealizedDetails))
+		r.Get("/realized/entry/{id}", handlers.Make(handlers.HandleRealizedEntry))
 		r.Get("/realized/autocompleteThesisTitlePolish", handlers.Make(handlers.HandleAutocompleteThesisTitlePolish))
 		r.Get("/realized/autocompleteStudentSurname", handlers.Make(handlers.HandleAutocompleteStudentSurname))
 		r.Get("/realized/autocompleteStudentNumber", handlers.Make(handlers.HandleAutocompleteStudentNumber))
@@ -86,8 +85,8 @@ func main() {
 		r.Get("/realized/autocompleteChairName", handlers.Make(handlers.HandleAutocompleteChairName))
 		r.Get("/realized/autocompleteChairSurname", handlers.Make(handlers.HandleAutocompleteChairSurname))
 		r.Get("/realized/autocompleteChairTitle", handlers.Make(handlers.HandleAutocompleteChairTitle))
-
 		r.Get("/realized/autocompleteCourse", handlers.Make(handlers.HandleAutocompleteCourse))
+		r.Get("/realized", handlers.Make(handlers.HandleRealized))
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {
