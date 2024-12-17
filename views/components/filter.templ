@@ -20,11 +20,11 @@ templ Filter(all bool) {
         }
         <!-- Input Field-->
         <div class="suggestion-container mb-4">
-            <label for="thesis_title" class="block text-sm font-medium text-gray-700">Temat pracy</label>
+            <label for="Thesis topic" class="block text-sm font-medium text-gray-700">Temat pracy</label>
             <input type="text" id="thesis_title" name="thesis_title" placeholder="Temat pracy" hx-get={
                 fmt.Sprintf("/realized/autocompleteThesisTitlePolish") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-thesis-topic-polish"
-                class="input-form w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md" />
+                class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             <ul id="suggestions-for-thesis-topic-polish"
                 class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
                 <!-- Suggestions will be inserted here -->
@@ -32,11 +32,11 @@ templ Filter(all bool) {
         </div>
         <!-- Input Field-->
         <div class="suggestion-container mb-4">
-            <label for="student" class="block text-sm font-medium text-gray-700">Student</label>
-            <input type="text" id="student" name="StudentNameAndSurname" placeholder="Student" hx-get={
-                fmt.Sprintf("/realized/autocompleteStudentNameAndSurname") } hx-swap="innerHTML" hx-trigger="input changed"
+            <label for="Student" class="block text-sm font-medium text-gray-700">Student</label>
+            <input type="text" id="student" name="student_name" placeholder="Student" hx-get={
+                fmt.Sprintf("/realized/autocompleteStudentSurname") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-student-surname"
-                class="input-form w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md" />
+                class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             <ul id="suggestions-for-student-surname"
                 class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
                 <!-- Suggestions will be inserted here -->
@@ -48,7 +48,7 @@ templ Filter(all bool) {
             <input type="text" id="student_id" name="student_number" placeholder="Numer indeksu" hx-get={
                 fmt.Sprintf("/realized/autocompleteStudentNumber") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-student-number"
-                class="input-form w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md" />
+                class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             <ul id="suggestions-for-student-number" class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md"
                 style="width: calc(100% - 2rem);">
                 <!-- Suggestions will be inserted here -->
@@ -56,11 +56,11 @@ templ Filter(all bool) {
         </div>
         <!-- Input Field-->
         <div class="suggestion-container mb-4">
-            <label for="SupervisorNameAndSurnameID" class="block text-sm font-medium text-gray-700">Promotor</label>
-            <input type="text" id="SupervisorNameAndSurnameID" name="SupervisorNameAndSurname" placeholder="Promotor" hx-get={
-                fmt.Sprintf("/realized/autocompleteSupervisorNameAndSurname") } hx-swap="innerHTML" hx-trigger="input changed"
+            <label for="supervisor_id" class="block text-sm font-medium text-gray-700">Promotor</label>
+            <input type="text" id="supervisor_id" name="supervisor_name" placeholder="Promotor" hx-get={
+                fmt.Sprintf("/realized/autocompleteSupervisorSurname") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-supervisor"
-                class="input-form w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md" />
+                class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             <ul id="suggestions-for-supervisor" class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md"
                 style="width: calc(100% - 2rem);">
                 <!-- Suggestions will be inserted here -->
@@ -68,15 +68,15 @@ templ Filter(all bool) {
         </div>
         <!-- Input Field-->
         <div class="suggestion-container mb-4">
-            <label for="assistant_supervisor" class="block text-sm font-medium text-gray-700">
+            <label for="assistant_supervisor_id" class="block text-sm font-medium text-gray-700">
                 Promotor
                 Pomocniczy
             </label>
-            <input type="text" id="assistant_supervisor" name="SupervisorNameAndSurname"
+            <input type="text" id="assistant_supervisor_id" name="assistant_supervisor_name"
                 placeholder="Promotor Pomocniczy" hx-get={
-                fmt.Sprintf("/realized/autocompleteSupervisorNameAndSurname") } hx-swap="innerHTML"
+                fmt.Sprintf("/realized/autocompleteAssistantSupervisorNameAndSurname") } hx-swap="innerHTML"
                 hx-trigger="input changed" hx-target="#suggestions-for-assistant-supervisor"
-                class="input-form w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md" />
+                class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             <ul id="suggestions-for-assistant-supervisor"
                 class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(100% - 2rem);">
                 <!-- Suggestions will be inserted here -->
@@ -88,7 +88,7 @@ templ Filter(all bool) {
             <input type="text" id="course" name="course" placeholder="Kierunek" hx-get={
                 fmt.Sprintf("/realized/autocompleteCourse") } hx-swap="innerHTML" hx-trigger="input changed"
                 hx-target="#suggestions-for-course"
-                class="input-form w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md" />
+                class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300" />
             <ul id="suggestions-for-course" class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md"
                 style="width: calc(100% - 2rem);">
                 <!-- Suggestions will be inserted here -->
