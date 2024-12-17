@@ -18,16 +18,16 @@ templ SearchBar(all bool) {
         </div>
     </div>
     <!-- Buttons Section -->
-    <div class="flex items-center justify-between space-x-4">
-        <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
-            <select name="SortBy" class="text-tul-dark-gray">
+    <div class="flex items-center justify-between space-x-3">
+        <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-2">
+            <select name="SortBy" class="text-tul-dark-gray bg-rose-50">
                 <option value="thesis_id" selected>Dodane</option>
                 <option value="thesis_title_polish">Tytul pracy</option>
                 <option value="exam_date">Data egzaminu</option>
                 <option value="student_id">Imie studenta</option>
                 <option value="supervisor_name">Imie promotora</option>
             </select>
-            <select name="Order" class="text-tul-dark-gray">
+            <select name="Order" class="text-tul-dark-gray bg-rose-50">
                 <option value="ASC">
                     ▲
                 </option>
@@ -38,7 +38,7 @@ templ SearchBar(all bool) {
         </div>
         if views.AuthenticatedUser(ctx).IsAdmin {
         if all {
-        <div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-4">
+        <div class="min-w-[140px] relative flex items-center justify-center rounded-full bg-rose-50 py-2 px-2">
             <a type="button" hx-get={ fmt.Sprintf("realized/generate_excel") } hx-swap="none" hx-include="#filterForm"
                 class="text-tul-dark-gray cursor-pointer">Eksportuj</a>
             <span class="absolute right-3 text-gray-500">

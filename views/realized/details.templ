@@ -6,7 +6,7 @@ import (
 )
 
 templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
-<div class="flex items-center justify-center p-4 border-3 border-tul-dark-red rounded-2xl max-w-2xl" id={ fmt.Sprintf("details-%v", thesis.Id) }>
+<div class="flex items-center justify-center p-4 border-3 border-tul-dark-red rounded-2xl w-full" id={ fmt.Sprintf("details-%v", thesis.Id) }>
     <div class="mx-auto w-full bg-white">
         <form>
             <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
@@ -14,7 +14,7 @@ templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryEr
             </div>
             @InputFields(thesis, errs)
             <div>
-                <label for="product-details" class="text-sm font-medium text-gray-900 block mb-2">Notatka do Pracy</label>
+                <label for="product-details" class="mt-4 text-sm font-medium text-gray-900 block mb-2">Notatka do Pracy</label>
                 <textarea id="product-details" rows="6" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4" placeholder="Notatka"></textarea>
             </div>
             <div class="flex flex-row items-center justify-between">
