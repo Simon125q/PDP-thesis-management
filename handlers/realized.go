@@ -748,6 +748,7 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 			FieldOfStudy:   r.FormValue("fieldOfStudy"),
 			Specialization: r.FormValue("specialization"),
 			ModeOfStudies:  r.FormValue("modeOfStudies"),
+			Degree:         r.FormValue("degree"),
 		},
 		ChairAcademicTitle: r.FormValue("chairAcademicTitle"),
 		Chair: types.UniversityEmployee{

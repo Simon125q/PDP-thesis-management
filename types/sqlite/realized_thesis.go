@@ -57,6 +57,10 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		COALESCE(ct.thesis_title_english, '') AS thesis_title_english,
 		COALESCE(ct.thesis_language, '') AS thesis_language,
 		COALESCE(ct.library, '') AS library,
+        COALESCE(chair_academic_title, '') AS chair_title,
+        COALESCE(supervisor_academic_title, '') AS supervisor_title,
+        COALESCE(assistant_supervisor_academic_title, '') AS assistant_title,
+        COALESCE(reviewer_academic_title, '') AS reviewer_title, 
 		
 		s.id AS student_id,
 		COALESCE(s.student_number, '') AS student_number,
@@ -119,6 +123,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		err := rows.Scan(&t.Id, &t.ThesisNumber, &t.ExamDate, &t.AverageStudyGrade, &t.CompetencyExamGrade,
 			&t.DiplomaExamGrade, &t.FinalStudyResult, &t.FinalStudyResultText, &t.ThesisTitlePolish,
 			&t.ThesisTitleEnglish, &t.ThesisLanguage, &t.Library,
+			&t.ChairAcademicTitle, &t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle, &t.ReviewerAcademicTitle,
 			&t.Student.Id, &t.Student.StudentNumber, &t.Student.FirstName, &t.Student.LastName,
 			&t.Student.FieldOfStudy, &t.Student.Specialization, &t.Student.ModeOfStudies,
 			&t.Chair.Id, &t.Chair.FirstName, &t.Chair.LastName, &t.Chair.CurrentAcademicTitle, &t.Chair.DepartmentUnit,
@@ -405,6 +410,7 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),
     COALESCE(thesis_title_polish, ''), COALESCE(thesis_title_english, ''), COALESCE(thesis_language, ''), COALESCE(library, ''),
+    COALESCE(chair_academic_title, ''), COALESCE(supervisor_academic_title, ''), COALESCE(assistant_supervisor_academic_title, ''), COALESCE(reviewer_academic_title, ''), 
     student_id, COALESCE(chair_id, '0'), COALESCE(supervisor_id, '0'), COALESCE(assistant_supervisor_id, '0'), COALESCE(reviewer_id, '0'), COALESCE(hourly_settlement_id, '0')
     FROM Completed_Thesis WHERE id = %v`, id)
 	rows, err := m.DB.Query(query)
@@ -416,7 +422,8 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	rows.Next()
 	err = rows.Scan(&t.Id, &t.ThesisNumber, &t.ExamDate, &t.AverageStudyGrade, &t.CompetencyExamGrade, &t.DiplomaExamGrade,
 		&t.FinalStudyResult, &t.FinalStudyResultText, &t.ThesisTitlePolish, &t.ThesisTitleEnglish, &t.ThesisLanguage,
-		&t.Library, &t.StudentId, &t.ChairId, &t.SupervisorId, &t.AssistantSupervisorId, &t.ReviewerId, &t.HourlySettlementId)
+		&t.Library, &t.ChairAcademicTitle, &t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle, &t.ReviewerAcademicTitle,
+		&t.StudentId, &t.ChairId, &t.SupervisorId, &t.AssistantSupervisorId, &t.ReviewerId, &t.HourlySettlementId)
 	if err != nil {
 		return types.RealizedThesis{}, err
 	}
@@ -489,9 +496,10 @@ func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (
             thesis_number, exam_date, average_study_grade, competency_exam_grade,
             diploma_exam_grade, final_study_result, final_study_result_text,
             thesis_title_polish, thesis_title_english, thesis_language, library,
+            chair_academic_title, supervisor_academic_title, assistant_supervisor_academic_title, reviewer_academic_title, 
             student_id, chair_id, supervisor_id, assistant_supervisor_id, reviewer_id, hourly_settlement_id
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 	var sId interface{}
 	if thesis.Student.Id != 0 {
 		sId = thesis.Student.Id
@@ -520,7 +528,7 @@ func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (
 		thesis.ThesisNumber, thesis.ExamDate, thesis.AverageStudyGrade, thesis.CompetencyExamGrade,
 		thesis.DiplomaExamGrade, thesis.FinalStudyResult, thesis.FinalStudyResultText,
 		thesis.ThesisTitlePolish, thesis.ThesisTitleEnglish, thesis.ThesisLanguage, thesis.Library,
-
+		thesis.ChairAcademicTitle, thesis.SupervisorAcademicTitle, thesis.AssistantSupervisorAcademicTitle, thesis.ReviewerAcademicTitle,
 		sId, cId, suId, asId, rId, hId)
 	if err != nil {
 		return 0, err
@@ -564,6 +572,10 @@ func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) e
 		thesis_title_english = ?,
 		thesis_language = ?,
 		library = ?,
+        chair_academic_title = ?,
+        supervisor_academic_title = ?,
+        assistant_supervisor_academic_title = ?,
+        reviewer_academic_title = ?, 
         student_id = ?,
         chair_id = ?,
         supervisor_id = ?,
@@ -583,6 +595,10 @@ func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) e
 		thesis.ThesisTitleEnglish,
 		thesis.ThesisLanguage,
 		thesis.Library,
+		thesis.ChairAcademicTitle,
+		thesis.SupervisorAcademicTitle,
+		thesis.AssistantSupervisorAcademicTitle,
+		thesis.ReviewerAcademicTitle,
 		sId,
 		cId,
 		suId,

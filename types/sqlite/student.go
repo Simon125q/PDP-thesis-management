@@ -12,7 +12,7 @@ func (m *Model) StudentById(id string) (types.Student, error) {
 		return types.Student{}, nil
 	}
 	query := fmt.Sprintf(`SELECT id, COALESCE(student_number, '0'), first_name, last_name,
-    COALESCE(field_of_study, ''), COALESCE(specialization, ''), COALESCE(mode_of_study, '')
+    COALESCE(field_of_study, ''), COALESCE(specialization, ''), COALESCE(mode_of_study, ''), COALESCE(degree, '')
     FROM Student WHERE id = %v`, id)
 	rows, err := m.DB.Query(query)
 	if err != nil {
@@ -22,7 +22,7 @@ func (m *Model) StudentById(id string) (types.Student, error) {
 	s := types.Student{}
 	rows.Next()
 	err = rows.Scan(&s.Id, &s.StudentNumber, &s.FirstName, &s.LastName, &s.FieldOfStudy,
-		&s.Specialization, &s.ModeOfStudies)
+		&s.Specialization, &s.ModeOfStudies, &s.Degree)
 	if err != nil {
 		return types.Student{}, err
 	}
@@ -35,7 +35,7 @@ func (m *Model) StudentById(id string) (types.Student, error) {
 
 func (m *Model) StudentByNumber(studentNumber string) (types.Student, error) {
 	query := fmt.Sprintf(`SELECT id, COALESCE(student_number, '0'), first_name, last_name,
-    COALESCE(field_of_study, ''), COALESCE(specialization, ''), COALESCE(mode_of_study, ''))
+    COALESCE(field_of_study, ''), COALESCE(specialization, ''), COALESCE(mode_of_study, ''), COALESCE(degree, '')
     FROM Student WHERE student_number = %v`, studentNumber)
 	rows, err := m.DB.Query(query)
 	if err != nil {
@@ -45,7 +45,7 @@ func (m *Model) StudentByNumber(studentNumber string) (types.Student, error) {
 	s := types.Student{}
 	rows.Next()
 	err = rows.Scan(&s.Id, &s.StudentNumber, &s.FirstName, &s.LastName, &s.FieldOfStudy,
-		&s.Specialization, &s.ModeOfStudies)
+		&s.Specialization, &s.ModeOfStudies, &s.Degree)
 	if err != nil {
 		return types.Student{}, err
 	}
@@ -58,9 +58,9 @@ func (m *Model) StudentByNumber(studentNumber string) (types.Student, error) {
 
 func (m *Model) InsertStudent(student types.Student) (int64, error) {
 	query := `
-        INSERT INTO Student (student_number, first_name, last_name, field_of_study, specialization, mode_of_study)
-        VALUES (?, ?, ?, ?, ?, ?)`
-	result, err := m.DB.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies)
+        INSERT INTO Student (student_number, first_name, last_name, field_of_study, specialization, mode_of_study, degree)
+        VALUES (?, ?, ?, ?, ?, ?, ?)`
+	result, err := m.DB.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies, student.Degree)
 	if err != nil {
 		return 0, err
 	}
@@ -74,9 +74,9 @@ func (m *Model) UpdateStudent(student types.Student) (int, error) {
 	}
 	defer tx.Rollback() // Ensure rollback if commit doesn't happen
 	query := `
-    UPDATE Student SET student_number = ?, first_name = ?, last_name = ?, field_of_study = ?, specialization = ?, mode_of_study = ?
+    UPDATE Student SET student_number = ?, first_name = ?, last_name = ?, field_of_study = ?, specialization = ?, mode_of_study = ?, degree = ?
     WHERE id = ?`
-	_, err = tx.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies, student.Id)
+	_, err = tx.Exec(query, student.StudentNumber, student.FirstName, student.LastName, student.FieldOfStudy, student.Specialization, student.ModeOfStudies, student.Degree, student.Id)
 	if err != nil {
 		return 0, fmt.Errorf("failed to execute query: %w", err)
 	}

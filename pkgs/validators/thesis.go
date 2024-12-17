@@ -81,15 +81,16 @@ func ValidateName(name string) (string, bool) {
 
 func ValidateHourlySettlement(hours types.HourlySettlement, studyLevel string) (types.HourlySettlementErrors, bool) {
 	hSum := hours.ReviewerHours + hours.SupervisorHours + hours.AssistantSupervisorHours
-	if studyLevel == "inz" {
-		if hSum != 12 {
-			return types.HourlySettlementErrors{Total: "Godziny w pracy inzynierskiej musza sumowac sie do 12"}, false
-		}
-	} else if studyLevel == "mgr" {
-		if hSum != 15 {
-			return types.HourlySettlementErrors{Total: "Godziny w pracy magisterskiej musza sumowac sie do 15"}, false
-		}
-	}
+	slog.Info("ValidateHourlySettlement", "hours sum", hSum)
+	// if studyLevel == "inz" {
+	// 	if hSum != 12 {
+	// 		return types.HourlySettlementErrors{Total: "Godziny w pracy inzynierskiej musza sumowac sie do 12"}, false
+	// 	}
+	// } else if studyLevel == "mgr" {
+	// 	if hSum != 15 {
+	// 		return types.HourlySettlementErrors{Total: "Godziny w pracy magisterskiej musza sumowac sie do 15"}, false
+	// 	}
+	// }
 	return types.HourlySettlementErrors{}, true
 }
 
