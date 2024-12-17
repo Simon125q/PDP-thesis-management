@@ -17,59 +17,58 @@ templ Base(nav bool) {
     <script src="https://unpkg.com/htmx.org@2.0.3" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
 
             function handleSuggestionClicked(event) {
-
                 const suggestionText = event.target.textContent;
-
-                console.log('Selected suggestion text:', suggestionText);
-
                 const inputElement = event.target.closest('.suggestion-container').querySelector('.input-form');
                 if (inputElement) {
                     inputElement.value = suggestionText;
                 }
-
                 const suggestionList = event.target.closest('.suggestion-container').querySelector('.suggestions');
-                if (suggestionList) {
-                    suggestionList.style.display = 'none';
-                }
+                suggestionList.style.display = 'none';
             }
-
             function attachListeners() {
-                document.querySelectorAll('.suggestion').forEach(function (item) {
-                    item.addEventListener('click', handleSuggestionClicked);
+                document.querySelectorAll('.suggestion-container').forEach(function(container) {
+                    container.addEventListener('click', function(event) {
+                        if (event.target.classList.contains('suggestion')) {
+                            handleSuggestionClicked(event);
+                        }
+                    });
                 });
             }
-
-            attachListeners();
-
-            document.body.addEventListener('htmx:afterSwap', function (event) {
-                attachListeners();
-            });
-
             function handleFocus(event) {
-
-                document.querySelectorAll('.suggestions').forEach(function (suggestionList) {
+                // Hide all suggestion lists first
+                document.querySelectorAll('.suggestions').forEach(function(suggestionList) {
                     suggestionList.style.display = 'none';
+
                 });
+
+                // Display the suggestion list for the current input
                 const suggestionList = event.target.closest('.suggestion-container').querySelector('.suggestions');
                 if (suggestionList) {
                     suggestionList.style.display = 'block';
                 }
             }
+            function handleClickOutside(event) {
+                // Check if the click is outside any suggestion container
+                const isClickInside = event.target.closest('.suggestion-container');
+                if (!isClickInside) {
+                    // Hide all suggestion lists
+                    document.querySelectorAll('.suggestions').forEach(function (suggestionList) {
+                        suggestionList.style.display = 'none';
+                    });
+                }
+            }
 
-            document.querySelectorAll('.input-form').forEach(function (inputElement) {
-                inputElement.addEventListener('focus', handleFocus);
-            });
-
-            document.addEventListener('click', function (event) {
-                const suggestionContainer = event.target.closest('.suggestion-container');
-                if (suggestionContainer) return;
-                document.querySelectorAll('.suggestions').forEach(function (suggestionList) {
-                    suggestionList.style.display = 'none';
+            document.body.addEventListener('htmx:afterSwap', function(event) {
+                attachListeners();
+                document.querySelectorAll('.input-form').forEach(function(inputElement) {
+                    inputElement.addEventListener('focus', handleFocus);
                 });
             });
+            document.addEventListener('click', handleClickOutside);
+
         });
     </script>
 </head>

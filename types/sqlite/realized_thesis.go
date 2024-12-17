@@ -198,7 +198,7 @@ func (m *Model) GetAllStudentSurnames(searchString string) ([]string, error) {
 
 func (m *Model) GetAllStudentNumbers(searchString string) ([]string, error) {
 	query := `
-        SELECT COALESCE(student_number, '')
+        SELECT DISTINCT COALESCE(student_number, '')
         FROM Student
         WHERE student_number LIKE '%' || ? || '%'
     `
@@ -225,33 +225,151 @@ func (m *Model) GetAllStudentNumbers(searchString string) ([]string, error) {
 	return values, nil
 }
 
+func (m *Model) GetAllUniversityEmployeesNames(searchString string) ([]string, error) {
+    query := `
+        SELECT DISTINCT COALESCE(first_name, '')
+        FROM University_Employee
+        WHERE first_name LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
 func (m *Model) GetAllUniversityEmployeesSurnames(searchString string) ([]string, error) {
-	query := `
+    query := `
         SELECT DISTINCT COALESCE (last_name, '')
         FROM University_Employee
         WHERE last_name LIKE '%' || ? || '%'
     `
-	rows, err := m.DB.Query(query, searchString)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
 
-	values := []string{}
+    values := []string{}
 
-	for rows.Next() {
-		var value string
-		if err := rows.Scan(&value); err != nil {
-			return nil, err
-		}
-		values = append(values, value)
-	}
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
 
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
 
-	return values, nil
+    return values, nil
+}
+
+
+
+func (m *Model) GetAllUniversityEmployeesNamesAndSurnames(searchString string) ([]string, error) {
+    query := `
+	SELECT DISTINCT 
+	COALESCE(first_name, '') || ' ' || COALESCE(last_name, '') AS result
+	FROM University_Employee
+	WHERE result LIKE '%' || ? || '%';`
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+func (m *Model) GetAllStudentsNamesAndSurnames(searchString string) ([]string, error) {
+    query := `
+	SELECT DISTINCT 
+	COALESCE(first_name, '') || ' ' || COALESCE(last_name, '') AS result
+	FROM Student
+	WHERE result LIKE '%' || ? || '%';`
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
+}
+
+func (m *Model) GetAllUniversityEmployeesTitles(searchString string) ([]string, error) {
+    query := `
+        SELECT DISTINCT COALESCE (current_academic_title, '')
+        FROM University_Employee
+        WHERE current_academic_title LIKE '%' || ? || '%'
+    `
+    rows, err := m.DB.Query(query, searchString)
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    values := []string{}
+
+    for rows.Next() {
+        var value string
+        if err := rows.Scan(&value); err != nil {
+            return nil, err
+        }
+        values = append(values, value)
+    }
+
+    if err := rows.Err(); err != nil {
+        return nil, err
+    }
+
+    return values, nil
 }
 
 func (m *Model) GetAllCourseNames(searchString string) ([]string, error) {

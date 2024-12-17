@@ -192,17 +192,47 @@ func HandleAutocompleteStudentNumber(w http.ResponseWriter, r *http.Request) err
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllStudentNumbers(userInput)
+	queryResult, err := server.MyS.DB.GetAllStudentNumbers(userInput)
 	if err != nil {
 		slog.Error("HandleAutocompleteStudentNumber", "err", err)
 		return err
 	}
 
-	for _, title := range filteredThesisTitlesPolish {
+	for _, title := range queryResult {
 		fmt.Println("Thesis Title:", title)
 	}
 
 	maxResults := 6
+	if len(queryResult) > maxResults {
+		queryResult = queryResult[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range queryResult {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteStudentNameAndSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("StudentNameAndSurname")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllStudentsNamesAndSurnames(userInput)
+	if err != nil {
+		return err
+	}
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Println(title)
+	}
+
+	maxResults := 6
 	if len(filteredThesisTitlesPolish) > maxResults {
 		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
 	}
@@ -215,10 +245,39 @@ func HandleAutocompleteStudentNumber(w http.ResponseWriter, r *http.Request) err
 
 	return nil
 }
+
+func HandleAutocompleteSupervisorName(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("firstNameSupervisor")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
 
 func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request) error {
 
-	userInput := r.URL.Query().Get("supervisor_name")
+	userInput := r.URL.Query().Get("lastNameSupervisor")
 
 	if userInput == "" {
 		return nil
@@ -226,7 +285,6 @@ func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request)
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
 	if err != nil {
-		slog.Error("HandleAutocompleteSupervisorSurname", "err", err)
 		return err
 	}
 
@@ -243,10 +301,66 @@ func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request)
 
 	return nil
 }
+
+func HandleAutocompleteSupervisorTitle(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("supervisorAcademicTitle")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+func HandleAutocompleteAssistantSupervisorName(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("firstNameAssistantSupervisor")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
+
 
 func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http.Request) error {
 
-	userInput := r.URL.Query().Get("assistant_supervisor_name")
+	userInput := r.URL.Query().Get("lastNameAssistantSupervisor")
 
 	if userInput == "" {
 		return nil
@@ -254,7 +368,6 @@ func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http
 
 	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
 	if err != nil {
-		slog.Error("HandleAutocompleteAssistantSupervisorSurname", "err", err)
 		return err
 	}
 
@@ -272,6 +385,236 @@ func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http
 	return nil
 }
 
+func HandleAutocompleteSupervisorNameAndSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("SupervisorNameAndSurname")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNamesAndSurnames(userInput)
+	if err != nil {
+		return err
+	}
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Println(title)
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteAssistantSupervisorTitle(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("assistantSupervisorAcademicTitle")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
+
+
+
+func HandleAutocompleteReviewerName(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("firstNameReviewer")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
+
+
+func HandleAutocompleteReviewerSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("lastNameReviewer")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteReviewerTitle(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("reviewerAcademicTitle")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
+
+func HandleAutocompleteChairName(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("firstNameChair")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
+
+
+func HandleAutocompleteChairSurname(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("lastNameChair")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+func HandleAutocompleteChairTitle(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("chairAcademicTitle")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	if err != nil {
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredThesisTitlesPolish) > maxResults {
+		filteredThesisTitlesPolish = filteredThesisTitlesPolish[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredThesisTitlesPolish {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
 func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
 
 	userInput := r.URL.Query().Get("course")
@@ -284,6 +627,9 @@ func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		slog.Error("HandleAutocompleteCourse", "err", err)
 		return err
+	}
+	for _, name := range filteredThesisTitlesPolish {
+		fmt.Println(name)
 	}
 
 	maxResults := 6
