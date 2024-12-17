@@ -17,6 +17,89 @@ templ InputField(inputType, id, label, val string, req bool) {
     />
 }
 
+templ InputFieldWithAutosuggestions(inputType string, id string, label string, val string, req bool, hx_get_value string, hx_target_value string, inputClassVal string) {
+	<div class="suggestion-container">
+		<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+			{ label }
+		</label>
+		<input
+			type={ inputType }
+			id={ id }
+			name={ id }
+			value={ val }
+			placeholder={ label }
+			if req {
+				required
+			}
+			hx-get={ hx_get_value }
+			hx-swap="innerHTML"
+			hx-trigger="input changed"
+			hx-target={"#" + hx_target_value}
+
+		class={ inputClassVal + " w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"} 
+		/>
+		<ul id={ hx_target_value } 
+			class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(32%);">
+		</ul>
+	</div>
+}
+
+templ InputFieldWithAutosuggestionsSmaller(inputType string, id string, label string, val string, req bool, hx_get_value string, hx_target_value string, inputClassVal string) {
+	<div class="suggestion-container">
+		<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+			{ label }
+		</label>
+		<input
+			type={ inputType }
+			id={ id }
+			name={ id }
+			value={ val }
+			placeholder={ label }
+			if req {
+				required
+			}
+			hx-get={ hx_get_value }
+			hx-swap="innerHTML"
+			hx-trigger="input changed"
+			hx-target={"#" + hx_target_value}
+
+		class={ inputClassVal + " w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"} 
+		/>
+		<ul id={ hx_target_value } 
+			class="suggestions absolute z-50 mt-1 bg-white rounded-md shadow-md" style="width: calc(20%);">
+		</ul>
+	</div>
+}
+
+templ InputDropdownStudyType(inputType, id, label, val string, req bool) {
+    <label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+        { label }
+    </label>
+    <select
+        id={ id }
+        name={ id }
+        value={ val }
+        class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
+        <option value="stacjonarne">Stacjonarne</option>
+        <option value="niestacjonarne">Niestacjonarne</option>
+    </select>
+}
+
+templ InputDropdownStudyDegree(inputType, id, label, val string, req bool) {
+    <label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+        { label }
+    </label>
+    <select
+        id={ id }
+        name={ id }
+        value={ val }
+        class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
+        <option value="I stopień">I stopień</option>
+        <option value="II stopień">II stopień</option>
+		<option value="III stopień">III stopień</option>
+    </select>
+}
+
 templ ErrorMsg(msg string) {
 	if msg != "" {
 		<span class="w-full text-tul-medium-red">{ msg }</span>

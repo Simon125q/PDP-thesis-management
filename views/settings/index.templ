@@ -8,14 +8,14 @@ import (
 
 templ Index(empl_data []types.UniversityEmployee) {
 @layouts.Base(true) {
-<div class="flex flex-col items-center">
-    <div class="text-xl text-tul-dark-red font-bold">
+<div class="flex flex-col justify-center items-center">
+    <div class="text-xl px-6 w-384 text-tul-dark-red font-bold">
         @components.SearchBar(false)
         <br />
-        <div class="flex flex-wrap justify-center w-full h-full">
-            @ResultsUsers(empl_data)
-        </div>
+    </div>
+    <div class="text-xl text-tul-dark-red font-bold flex-wrap justify-center w-384 h-full">
+        @ResultsUsers(empl_data)
     </div>
 </div>
-}
+    }
 }

@@ -2,18 +2,44 @@ package validators
 
 import (
 	"log/slog"
+	"regexp"
 	"thesis-management-app/types"
 	"unicode"
 )
 
 func ValidateRealizedThesis(t types.RealizedThesisEntry) (types.RealizedThesisEntryErrors, bool) {
 	sErr, sOk := ValidateStudent(t.Student)
-	if !sOk {
+	thesisNumberErr, tnOk := ValidateThesisNumber(t.ThesisNumber)
+	supErr, supOk := ValidateEmployee(t.Supervisor)
+	asErr, asOk := ValidateEmployee(t.AssistantSupervisor)
+	rErr, rOk := ValidateEmployee(t.Reviewer)
+	chErr, chOk := ValidateEmployee(t.Chair)
+	hErr, hOk := ValidateHourlySettlement(t.HourlySettlement, t.Student.Degree)
+	if !sOk || !tnOk || !supOk || !asOk || !rOk || !chOk || !hOk {
 		return types.RealizedThesisEntryErrors{
-			Student: sErr,
+			ThesisNumber:        thesisNumberErr,
+			Student:             sErr,
+			Supervisor:          supErr,
+			AssistantSupervisor: asErr,
+			Reviewer:            rErr,
+			Chair:               chErr,
+			HourlySettlement:    hErr,
 		}, false
 	}
 	return types.RealizedThesisEntryErrors{}, true
+}
+
+func ValidateEmployee(e types.UniversityEmployee) (types.UniversityEmployeeErrors, bool) {
+	ok := true
+	fErr, fOk := ValidateName(e.FirstName)
+	lErr, lOk := ValidateName(e.LastName)
+	if !fOk || !lOk {
+		ok = false
+	}
+	return types.UniversityEmployeeErrors{
+		FirstName: fErr,
+		LastName:  lErr,
+	}, ok
 }
 
 func ValidateStudent(s types.Student) (types.StudentErrors, bool) {
@@ -51,4 +77,28 @@ func ValidateName(name string) (string, bool) {
 		}
 	}
 	return "", true
+}
+
+func ValidateHourlySettlement(hours types.HourlySettlement, studyLevel string) (types.HourlySettlementErrors, bool) {
+	hSum := hours.ReviewerHours + hours.SupervisorHours + hours.AssistantSupervisorHours
+	slog.Info("ValidateHourlySettlement", "hours sum", hSum)
+	// if studyLevel == "inz" {
+	// 	if hSum != 12 {
+	// 		return types.HourlySettlementErrors{Total: "Godziny w pracy inzynierskiej musza sumowac sie do 12"}, false
+	// 	}
+	// } else if studyLevel == "mgr" {
+	// 	if hSum != 15 {
+	// 		return types.HourlySettlementErrors{Total: "Godziny w pracy magisterskiej musza sumowac sie do 15"}, false
+	// 	}
+	// }
+	return types.HourlySettlementErrors{}, true
+}
+
+func ValidateThesisNumber(num string) (string, bool) {
+	pattern := `^[A-Za-z]\d+\/[A-Za-z]{3}\/\d+\/\d{4}$`
+	re := regexp.MustCompile(pattern)
+	if re.MatchString(num) {
+		return "", true
+	}
+	return "Numer pracy musi miec odpowiedni format: Number jednostki/stopien/numer pracy/rok", false
 }
