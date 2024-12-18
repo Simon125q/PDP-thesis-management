@@ -273,8 +273,6 @@ func HandleAutocompleteSupervisorName(w http.ResponseWriter, r *http.Request) er
 	return nil
 }
 
-
-
 func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request) error {
 
 	userInput := r.URL.Query().Get("lastNameSupervisor")
@@ -354,9 +352,6 @@ func HandleAutocompleteAssistantSupervisorName(w http.ResponseWriter, r *http.Re
 
 	return nil
 }
-
-
-
 
 func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http.Request) error {
 
@@ -442,10 +437,6 @@ func HandleAutocompleteAssistantSupervisorTitle(w http.ResponseWriter, r *http.R
 	return nil
 }
 
-
-
-
-
 func HandleAutocompleteReviewerName(w http.ResponseWriter, r *http.Request) error {
 
 	userInput := r.URL.Query().Get("firstNameReviewer")
@@ -472,9 +463,6 @@ func HandleAutocompleteReviewerName(w http.ResponseWriter, r *http.Request) erro
 
 	return nil
 }
-
-
-
 
 func HandleAutocompleteReviewerSurname(w http.ResponseWriter, r *http.Request) error {
 
@@ -530,8 +518,6 @@ func HandleAutocompleteReviewerTitle(w http.ResponseWriter, r *http.Request) err
 	return nil
 }
 
-
-
 func HandleAutocompleteChairName(w http.ResponseWriter, r *http.Request) error {
 
 	userInput := r.URL.Query().Get("firstNameChair")
@@ -558,9 +544,6 @@ func HandleAutocompleteChairName(w http.ResponseWriter, r *http.Request) error {
 
 	return nil
 }
-
-
-
 
 func HandleAutocompleteChairSurname(w http.ResponseWriter, r *http.Request) error {
 
@@ -745,7 +728,7 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 			StudentNumber:  r.FormValue("studentNumber"),
 			FirstName:      r.FormValue("firstNameStudent"),
 			LastName:       r.FormValue("lastNameStudent"),
-			FieldOfStudy:   r.FormValue("fieldOfStudy"),
+			FieldOfStudy:   r.FormValue("course"),
 			Specialization: r.FormValue("specialization"),
 			ModeOfStudies:  r.FormValue("modeOfStudies"),
 			Degree:         r.FormValue("degree"),

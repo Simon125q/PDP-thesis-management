@@ -1,262 +1,289 @@
 package realized
 
 import (
-"fmt"
-"thesis-management-app/types"
-"thesis-management-app/views/components"
+	"fmt"
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
 )
 
 templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
-<div class="mt-5">
-    <div>
-        @components.InputField("text", "thesisTitlePolish", "Polski Tytuł Pracy", vals.ThesisTitlePolish, true)
-        @components.ErrorMsg(errs.ThesisTitlePolish)
-    </div>
-    <div class="mt-5">
-        @components.InputField("text", "thesisTitleEnglish", "Angielski Tytuł Pracy", vals.ThesisTitleEnglish, false)
-        @components.ErrorMsg(errs.ThesisTitleEnglish)
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-full px-3 sm:w-1/2">
-            <div>
-                @components.InputField("text", "thesisNumber", "Numer Pracy", vals.ThesisNumber, true)
-                @components.ErrorMsg(errs.ThesisNumber)
-            </div>
-        </div>
-        <div class="w-full px-3 sm:w-1/2">
-            <div>
-                @components.InputField("text", "thesisLanguage", "Język Pracy", vals.ThesisLanguage, true)
-                @components.ErrorMsg(errs.ThesisLanguage)
-            </div>
-        </div>
-    </div>
-
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-full px-3 sm:w-1/2">
-            <div>
-                @components.InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego",
-                vals.CompetencyExamGrade, false)
-                @components.ErrorMsg(errs.CompetencyExamGrade)
-            </div>
-        </div>
-        <div class="w-full px-3 sm:w-1/2">
-            <div>
-                @components.InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego",
-                vals.DiplomaExamGrade, false)
-                @components.ErrorMsg(errs.DiplomaExamGrade)
-            </div>
-        </div>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-4/12 px-2">
-            @components.InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade, false)
-            @components.ErrorMsg(errs.AverageStudyGrade)
-        </div>
-        <div class="w-4/12 px-2">
-            @components.InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult, false)
-            @components.ErrorMsg(errs.FinalStudyResult)
-        </div>
-        <div class="w-4/12 px-2">
-            @components.InputField("text", "finalStudyResultText", "Ostateczny wynik studiów słownie",
-            vals.FinalStudyResultText, false)
-            @components.ErrorMsg(errs.FinalStudyResultText)
-        </div>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-1/2 px-3">
-            @components.InputField("text", "library", "Biblioteka", vals.Library, false)
-            @components.ErrorMsg(errs.Library)
-        </div>
-        <div class="w-1/2 px-3">
-            @components.InputField("date", "examDate", "Data Egzaminu", vals.ExamDate, false)
-            @components.ErrorMsg(errs.ExamDate)
-        </div>
-    </div>
-</div>
-<div class="mt-5">
-    <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
-        <h3 class="text-xl font-semibold text-center">Student</h3>
-    </div>
-    <div class="-mx-3 mt-5 flex flex-wrap">
-        <div class="px-2 w-5/12">
-            <div>
-                @components.InputField("text", "firstNameStudent", "Imię", vals.Student.FirstName, true)
-                @components.ErrorMsg(errs.Student.FirstName)
-            </div>
-        </div>
-        <div class="px-2 w-5/12">
-            <div>
-                @components.InputField("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, true)
-                @components.ErrorMsg(errs.Student.LastName)
-            </div>
-        </div>
-        <div class="px-2 w-2/12">
-            @components.InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
-            @components.ErrorMsg(errs.Student.StudentNumber)
-        </div>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="px-3 w-1/2">
-            <div>
-                @components.InputDropdownStudyType("text", "modeOfStudies", "Tryb Studiów", vals.Student.ModeOfStudies, true)
-                @components.ErrorMsg(errs.Student.ModeOfStudies)
-            </div>
-        </div>
-        <div class="px-3 w-1/2">
-            <div>
-                @components.InputDropdownStudyDegree("text", "degree", "Poziom Studiów", vals.Student.Degree, true)
-                @components.ErrorMsg(errs.Student.Degree)
-            </div>
-        </div>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="px-3 w-1/2">
-            <div>
-                @components.InputFieldWithAutosuggestionsSmaller("text", "course", "Kierunek", vals.Student.FieldOfStudy, true, fmt.Sprintf("/realized/autocompleteCourse"), "suggestions-for-the-course", "input-form")
-                @components.ErrorMsg(errs.Student.FieldOfStudy)
-            </div>
-        </div>
-        <div class="px-3 w-1/2">
-            <div>
-                @components.InputField("text", "specialization", "Specjalizacja", vals.Student.Specialization, false)
-                @components.ErrorMsg(errs.Student.Specialization)
-            </div>
-        </div>
-    </div>
-</div>
-<div class="relative mt-5">
-    <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
-        <h3 class="text-xl font-semibold text-center">Promotor</h3>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-6/24 px-2">
-            <div class="mb-4">
-                @components.InputFieldWithAutosuggestions("text", "supervisorAcademicTitle", "Tytuł", vals.SupervisorAcademicTitle, true, fmt.Sprintf("/realized/autocompleteSupervisorTitle"), "suggestions-for-supervisor-title", "input-form")
-                @components.ErrorMsg(errs.Supervisor.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "firstNameSupervisor", "Imię", vals.Supervisor.FirstName, true, fmt.Sprintf("/realized/autocompleteSupervisorName"), "suggestions-for-supervisor-name", "input-form")
-                @components.ErrorMsg(errs.Supervisor.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "lastNameSupervisor", "Nazwisko", vals.Supervisor.LastName, true, fmt.Sprintf("/realized/autocompleteSupervisorSurname"), "suggestions-for-supervisor-surname", "input-form")
-                @components.ErrorMsg(errs.Supervisor.LastName)
-            </div>
-        </div>
-    </div>
-</div>
-<div class="relative mt-5">
-    <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
-        <h3 class="text-xl font-semibold text-center">Promotor Pomocniczy</h3>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-6/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "assistantSupervisorAcademicTitle", "Tytuł", vals.AssistantSupervisorAcademicTitle, false, fmt.Sprintf("/realized/autocompleteAssistantSupervisorTitle"), "suggestions-for-assistant-supervisor-title", "input-form")
-                @components.ErrorMsg(errs.AssistantSupervisor.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "firstNameAssistantSupervisor", "Imię", vals.AssistantSupervisor.FirstName, false, fmt.Sprintf("/realized/autocompleteAssistantSupervisorName"), "suggestions-for-assistant-supervisor-name", "input-form")
-                @components.ErrorMsg(errs.AssistantSupervisor.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "lastNameAssistantSupervisor", "Nazwisko", vals.Supervisor.LastName, false, fmt.Sprintf("/realized/autocompleteAssistantSupervisorSurname"), "suggestions-for-assistant-supervisor-surname", "input-form")
-                @components.ErrorMsg(errs.AssistantSupervisor.LastName)
-            </div>
-        </div>
-    </div>
-</div>
-<div class="relative mt-5">
-    <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
-        <h3 class="text-xl font-semibold text-center">Recenzent</h3>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-6/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "reviewerAcademicTitle", "Tytuł", vals.ReviewerAcademicTitle, false, fmt.Sprintf("/realized/autocompleteReviewerTitle"), "suggestions-for-reviewer-title", "input-form")
-                @components.ErrorMsg(errs.Reviewer.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "firstNameReviewer", "Imię", vals.Reviewer.FirstName, false, fmt.Sprintf("/realized/autocompleteReviewerName"), "suggestions-for-reviewer-name", "input-form")
-                @components.ErrorMsg(errs.Reviewer.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "lastNameReviewer", "Nazwisko", vals.Reviewer.LastName, false, fmt.Sprintf("/realized/autocompleteReviewerSurname"), "suggestions-for-reviewer-surname", "input-form")
-                @components.ErrorMsg(errs.Reviewer.LastName)
-            </div>
-        </div>
-    </div>
-</div>
-<div class="relative mt-5">
-    <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
-        <h3 class="text-xl font-semibold text-center">Przewodniczący Komisji</h3>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-6/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "chairAcademicTitle", "Tytuł", vals.ChairAcademicTitle, false, fmt.Sprintf("/realized/autocompleteChairTitle"), "suggestions-for-chair-title", "input-form")
-                @components.ErrorMsg(errs.Chair.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "firstNameChair", "Imię", vals.Chair.FirstName, false, fmt.Sprintf("/realized/autocompleteChairName"), "suggestions-for-chair-name", "input-form")
-                @components.ErrorMsg(errs.Chair.FirstName)
-            </div>
-        </div>
-        <div class="w-9/24 px-2">
-            <div>
-                @components.InputFieldWithAutosuggestions("text", "lastNameChair", "Nazwisko", vals.Chair.LastName, false, fmt.Sprintf("/realized/autocompleteChairSurname"), "suggestions-for-chair-surname", "input-form")
-                @components.ErrorMsg(errs.Chair.LastName)
-            </div>
-        </div>
-    </div>
-</div>
-<div class="mt-5">
-    <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
-        <h3 class="text-xl font-semibold text-center">Godziny Do Rozliczeń</h3>
-    </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-4/12 px-2">
-            <div>
-                @components.InputField("number", "supervisorHours", "Promotor", "10", false)
-                @components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
-            </div>
-        </div>
-        <div class="w-4/12 px-2">
-            <div>
-                @components.InputField("number", "AssistantSupervisorHours", "Promotor Pom.", "0", false)
-                @components.ErrorMsg(errs.HourlySettlement.AssistantSupervisorHours)
-            </div>
-        </div>
-        <div class="w-4/12 px-2">
-            <div>
-                @components.InputField("number", "reviewerHours", "Recenzent", "2", false)
-                @components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
-            </div>
-        </div>
-        @components.ErrorMsg(errs.HourlySettlement.Total)
-    </div>
-</div>
-<!--place for displaying in case of any internal error with db -->
-<!--Make it like a light red squere at the bottom-->
-<!--for easier styling now set to true-->
-<!--TODO: change true to errs.InternalError or smth. like that-->
-if true {
-    <div>
-        Wystąpił nieoczekiwany błąd, spróbuj jeszcze raz.
-    </div>
-    }
+	<div class="mt-5">
+		<div>
+			@components.InputField("text", "thesisTitlePolish", "Polski Tytuł Pracy", vals.ThesisTitlePolish, true)
+			@components.ErrorMsg(errs.ThesisTitlePolish)
+		</div>
+		<div class="mt-5">
+			@components.InputField("text", "thesisTitleEnglish", "Angielski Tytuł Pracy", vals.ThesisTitleEnglish, false)
+			@components.ErrorMsg(errs.ThesisTitleEnglish)
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-full px-3 sm:w-1/2">
+				<div>
+					@components.InputField("text", "thesisNumber", "Numer Pracy", vals.ThesisNumber, true)
+					@components.ErrorMsg(errs.ThesisNumber)
+				</div>
+			</div>
+			<div class="w-full px-3 sm:w-1/2">
+				<div>
+					@components.InputField("text", "thesisLanguage", "Język Pracy", vals.ThesisLanguage, true)
+					@components.ErrorMsg(errs.ThesisLanguage)
+				</div>
+			</div>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-full px-3 sm:w-1/2">
+				<div>
+					@components.InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego",
+						vals.CompetencyExamGrade, false)
+					@components.ErrorMsg(errs.CompetencyExamGrade)
+				</div>
+			</div>
+			<div class="w-full px-3 sm:w-1/2">
+				<div>
+					@components.InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego",
+						vals.DiplomaExamGrade, false)
+					@components.ErrorMsg(errs.DiplomaExamGrade)
+				</div>
+			</div>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-4/12 px-2">
+				@components.InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade,
+					false)
+				@components.ErrorMsg(errs.AverageStudyGrade)
+			</div>
+			<div class="w-4/12 px-2">
+				@components.InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult,
+					false)
+				@components.ErrorMsg(errs.FinalStudyResult)
+			</div>
+			<div class="w-4/12 px-2">
+				@components.InputField("text", "finalStudyResultText", "Ostateczny wynik studiów słownie",
+					vals.FinalStudyResultText, false)
+				@components.ErrorMsg(errs.FinalStudyResultText)
+			</div>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-1/2 px-3">
+				@components.InputField("text", "library", "Biblioteka", vals.Library, false)
+				@components.ErrorMsg(errs.Library)
+			</div>
+			<div class="w-1/2 px-3">
+				@components.InputField("date", "examDate", "Data Egzaminu", vals.ExamDate, false)
+				@components.ErrorMsg(errs.ExamDate)
+			</div>
+		</div>
+	</div>
+	<div class="mt-5">
+		<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+			<h3 class="text-xl font-semibold text-center">Student</h3>
+		</div>
+		<div class="-mx-3 mt-5 flex flex-wrap">
+			<div class="px-2 w-5/12">
+				<div>
+					@components.InputField("text", "firstNameStudent", "Imię", vals.Student.FirstName, true)
+					@components.ErrorMsg(errs.Student.FirstName)
+				</div>
+			</div>
+			<div class="px-2 w-5/12">
+				<div>
+					@components.InputField("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, true)
+					@components.ErrorMsg(errs.Student.LastName)
+				</div>
+			</div>
+			<div class="px-2 w-2/12">
+				@components.InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
+				@components.ErrorMsg(errs.Student.StudentNumber)
+			</div>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="px-3 w-1/2">
+				<div>
+					@components.InputDropdownStudyType("text", "modeOfStudies", "Tryb Studiów", vals.Student.ModeOfStudies,
+						true)
+					@components.ErrorMsg(errs.Student.ModeOfStudies)
+				</div>
+			</div>
+			<div class="px-3 w-1/2">
+				<div>
+					@components.InputDropdownStudyDegree("text", "degree", "Poziom Studiów", vals.Student.Degree, true)
+					@components.ErrorMsg(errs.Student.Degree)
+				</div>
+			</div>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="px-3 w-1/2">
+				<div>
+					@components.InputFieldWithAutosuggestionsSmaller("text", "course", "Kierunek",
+						vals.Student.FieldOfStudy, true, fmt.Sprintf("/realized/autocompleteCourse"),
+						"suggestions-for-the-course", "input-form")
+					@components.ErrorMsg(errs.Student.FieldOfStudy)
+				</div>
+			</div>
+			<div class="px-3 w-1/2">
+				<div>
+					@components.InputField("text", "specialization", "Specjalizacja", vals.Student.Specialization, false)
+					@components.ErrorMsg(errs.Student.Specialization)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="relative mt-5">
+		<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+			<h3 class="text-xl font-semibold text-center">Promotor</h3>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-6/24 px-2">
+				<div class="mb-4">
+					@components.InputFieldWithAutosuggestions("text", "supervisorAcademicTitle", "Tytuł",
+						vals.SupervisorAcademicTitle, true, fmt.Sprintf("/realized/autocompleteSupervisorTitle"),
+						"suggestions-for-supervisor-title", "input-form")
+					@components.ErrorMsg(errs.Supervisor.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "firstNameSupervisor", "Imię",
+						vals.Supervisor.FirstName, true, fmt.Sprintf("/realized/autocompleteSupervisorName"),
+						"suggestions-for-supervisor-name", "input-form")
+					@components.ErrorMsg(errs.Supervisor.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "lastNameSupervisor", "Nazwisko",
+						vals.Supervisor.LastName, true, fmt.Sprintf("/realized/autocompleteSupervisorSurname"),
+						"suggestions-for-supervisor-surname", "input-form")
+					@components.ErrorMsg(errs.Supervisor.LastName)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="relative mt-5">
+		<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+			<h3 class="text-xl font-semibold text-center">Promotor Pomocniczy</h3>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-6/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "assistantSupervisorAcademicTitle", "Tytuł",
+						vals.AssistantSupervisorAcademicTitle, false,
+						fmt.Sprintf("/realized/autocompleteAssistantSupervisorTitle"),
+						"suggestions-for-assistant-supervisor-title", "input-form")
+					@components.ErrorMsg(errs.AssistantSupervisor.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "firstNameAssistantSupervisor", "Imię",
+						vals.AssistantSupervisor.FirstName, false, fmt.Sprintf("/realized/autocompleteAssistantSupervisorName"),
+						"suggestions-for-assistant-supervisor-name", "input-form")
+					@components.ErrorMsg(errs.AssistantSupervisor.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "lastNameAssistantSupervisor", "Nazwisko",
+						vals.AssistantSupervisor.LastName, false,
+						fmt.Sprintf("/realized/autocompleteAssistantSupervisorSurname"),
+						"suggestions-for-assistant-supervisor-surname", "input-form")
+					@components.ErrorMsg(errs.AssistantSupervisor.LastName)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="relative mt-5">
+		<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+			<h3 class="text-xl font-semibold text-center">Recenzent</h3>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-6/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "reviewerAcademicTitle", "Tytuł",
+						vals.ReviewerAcademicTitle, false, fmt.Sprintf("/realized/autocompleteReviewerTitle"),
+						"suggestions-for-reviewer-title", "input-form")
+					@components.ErrorMsg(errs.Reviewer.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "firstNameReviewer", "Imię", vals.Reviewer.FirstName,
+						false, fmt.Sprintf("/realized/autocompleteReviewerName"), "suggestions-for-reviewer-name", "input-form")
+					@components.ErrorMsg(errs.Reviewer.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "lastNameReviewer", "Nazwisko",
+						vals.Reviewer.LastName, false, fmt.Sprintf("/realized/autocompleteReviewerSurname"),
+						"suggestions-for-reviewer-surname", "input-form")
+					@components.ErrorMsg(errs.Reviewer.LastName)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="relative mt-5">
+		<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+			<h3 class="text-xl font-semibold text-center">Przewodniczący Komisji</h3>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-6/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "chairAcademicTitle", "Tytuł",
+						vals.ChairAcademicTitle, false, fmt.Sprintf("/realized/autocompleteChairTitle"),
+						"suggestions-for-chair-title", "input-form")
+					@components.ErrorMsg(errs.Chair.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "firstNameChair", "Imię", vals.Chair.FirstName, false,
+						fmt.Sprintf("/realized/autocompleteChairName"), "suggestions-for-chair-name", "input-form")
+					@components.ErrorMsg(errs.Chair.FirstName)
+				</div>
+			</div>
+			<div class="w-9/24 px-2">
+				<div>
+					@components.InputFieldWithAutosuggestions("text", "lastNameChair", "Nazwisko", vals.Chair.LastName,
+						false, fmt.Sprintf("/realized/autocompleteChairSurname"), "suggestions-for-chair-surname", "input-form")
+					@components.ErrorMsg(errs.Chair.LastName)
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="mt-5">
+		<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+			<h3 class="text-xl font-semibold text-center">Godziny Do Rozliczeń</h3>
+		</div>
+		<div class="mt-5 -mx-3 flex flex-wrap">
+			<div class="w-4/12 px-2">
+				<div>
+					@components.InputField("number", "supervisorHours", "Promotor", "10", false)
+					@components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
+				</div>
+			</div>
+			<div class="w-4/12 px-2">
+				<div>
+					@components.InputField("number", "AssistantSupervisorHours", "Promotor Pom.", "0", false)
+					@components.ErrorMsg(errs.HourlySettlement.AssistantSupervisorHours)
+				</div>
+			</div>
+			<div class="w-4/12 px-2">
+				<div>
+					@components.InputField("number", "reviewerHours", "Recenzent", "2", false)
+					@components.ErrorMsg(errs.HourlySettlement.SupervisorHours)
+				</div>
+			</div>
+			@components.ErrorMsg(errs.HourlySettlement.Total)
+		</div>
+	</div>
+	<!--place for displaying in case of any internal error with db -->
+	<!--Make it like a light red squere at the bottom-->
+	<!--for easier styling now set to true-->
+	<!--TODO: change true to errs.InternalError or smth. like that-->
+	if errs.InternalError {
+		<div>
+			Wystąpił nieoczekiwany błąd, spróbuj jeszcze raz.
+		</div>
+	}
 }
