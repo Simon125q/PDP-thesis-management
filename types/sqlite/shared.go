@@ -79,11 +79,11 @@ func (m *Model) GetConditionValuesFromStudent(value string, valueType string, co
 		str = str + " " + column + " = ? OR"
 		values = append(values, id)
 	}
-	if len(str) > 0 {
+	if len(str) > 1 {
 		str = str[0 : len(str)-3]
 		str = str + ")"
+		conditions = append(conditions, str)
 	}
-	conditions = append(conditions, str)
 	return conditions, values
 }
 
@@ -127,8 +127,24 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 		case "assistant_supervisor_name":
 			conditions, values = m.GetConditionValuesFromName(value[0], "University_Employee", "assistant_supervisor_id", conditions, values)
 			continue
+		case "reviewer_name":
+			conditions, values = m.GetConditionValuesFromName(value[0], "University_Employee", "reviewer_id", conditions, values)
+			continue
 		case "course":
 			conditions, values = m.GetConditionValuesFromStudent(value[0], "field_of_study", "student_id", conditions, values)
+			continue
+		case "mode_of_studies":
+			conditions, values = m.GetConditionValuesFromStudent(value[0], "mode_of_studies", "student_id", conditions, values)
+			continue
+		case "degree":
+			conditions, values = m.GetConditionValuesFromStudent(value[0], "degree", "student_id", conditions, values)
+			continue
+		case "are_hours_settled":
+			//TODO: after adding hours settled to db
+			// conditions = append(conditions, "(supervisor_hours_settled = ? OR assistant_supervisor_hours_settled = ? OR reviewer_hours_settled = ?)")
+			// for i := 0; i < 3; i++ {
+			// 	values = append(values, "false")
+			// }
 			continue
 		}
 		if strings.Contains(key, "[") {

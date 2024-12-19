@@ -636,7 +636,7 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 	desc := true
 	searchString := ""
 	for key, val := range q {
-		if val[0] == "" {
+		if val[0] == "" || val[0] == "all" {
 			q.Del(key)
 		}
 		if key == "SortBy" {
