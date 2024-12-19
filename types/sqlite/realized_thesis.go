@@ -67,6 +67,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
         s.first_name as student_first_name,
         s.last_name as student_last_name,
 		COALESCE(s.field_of_study, '') AS student_field_of_study,
+        COALESCE(s.degree, '') AS student_degree,
 		COALESCE(s.specialization, '') AS student_specialization,
 		COALESCE(s.mode_of_study, '') AS student_mode_of_study,
 		
@@ -126,7 +127,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 			&t.ThesisTitleEnglish, &t.ThesisLanguage, &t.Library,
 			&t.ChairAcademicTitle, &t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle, &t.ReviewerAcademicTitle,
 			&t.Student.Id, &t.Student.StudentNumber, &t.Student.FirstName, &t.Student.LastName,
-			&t.Student.FieldOfStudy, &t.Student.Specialization, &t.Student.ModeOfStudies,
+			&t.Student.FieldOfStudy, &t.Student.Degree, &t.Student.Specialization, &t.Student.ModeOfStudies,
 			&t.Chair.Id, &t.Chair.FirstName, &t.Chair.LastName, &t.Chair.CurrentAcademicTitle, &t.Chair.DepartmentUnit,
 			&t.Supervisor.Id, &t.Supervisor.FirstName, &t.Supervisor.LastName, &t.Supervisor.CurrentAcademicTitle, &t.Supervisor.DepartmentUnit,
 			&t.AssistantSupervisor.Id, &t.AssistantSupervisor.FirstName, &t.AssistantSupervisor.LastName, &t.AssistantSupervisor.CurrentAcademicTitle, &t.AssistantSupervisor.DepartmentUnit,
