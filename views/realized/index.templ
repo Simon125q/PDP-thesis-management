@@ -1,32 +1,33 @@
 package realized
 
 import (
-"thesis-management-app/types"
-"thesis-management-app/views/components"
-"thesis-management-app/views/layouts"
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
+	"thesis-management-app/views/layouts"
 )
 
 templ Index(thes_data []types.RealizedThesisEntry) {
-    @layouts.Base(true) {
-    <div class="flex flex-col items-center min-h-screen w-full">
-        <!-- Filters and Results Section -->
-        <div class="flex w-full max-w-7xl justify-center">
-            <!-- Filters on the Left -->
-            <div class="flex-shrink-0 w-4/12 mr-2">
-                <div class="w-full sticky top-0">
-                    @components.Filter(true)
-                </div>
-            </div>
-            <!-- Results on the Right -->
-            <div class="w-8/12 shadow border-l-3 border-tul-dark-red">
-                <div class="bg-white max-w-5xl p-4">
-                    <span id="new_entry"></span>
-                </div>
-                <div class="bg-white max-w-5xl p-4">
-                    @Results(thes_data)
-                </div>
-            </div>
-        </div>
-    </div>
-    }
+	@layouts.Base(true) {
+		<div class="flex flex-col items-center min-h-screen w-full">
+			<!-- Filters and Results Section -->
+			<div class="flex w-full max-w-7xl justify-center">
+				<!-- Filters on the Left -->
+				<div class="flex-shrink-0 w-4/12 mr-2">
+					<!-- removed sticky temporarly -->
+					<div class="w-full top-0">
+						@components.Filter(true)
+					</div>
+				</div>
+				<!-- Results on the Right -->
+				<div class="w-8/12 shadow border-l-3 border-tul-dark-red">
+					<div class="bg-white max-w-5xl p-4">
+						<span id="new_entry"></span>
+					</div>
+					<div class="bg-white max-w-5xl p-4">
+						@Results(thes_data)
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 }
