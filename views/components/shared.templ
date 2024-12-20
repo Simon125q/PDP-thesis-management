@@ -10,6 +10,11 @@ templ InputField(inputType, id, label, val string, req bool) {
 		name={ id }
 		value={ val }
 		placeholder={ label }
+        if inputType == "number" {
+            step="0.01"
+            min="0"
+            max="6"
+        }
 		if req {
 			required
 		}
