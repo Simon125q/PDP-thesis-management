@@ -96,9 +96,12 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		COALESCE(r.department_unit, '') AS reviewer_department_unit,
 		
 		COALESCE(h.id, '0') AS hourly_settlement_id,
-        COALESCE(h.supervisor_hours, '0'),
+        COALESCE(h.supervisor_hours, '10'),
         COALESCE(h.assistant_supervisor_hours, '0'),
-        COALESCE(h.reviewer_hours, '0')
+        COALESCE(h.reviewer_hours, '2'),
+        COALESCE(h.is_supervisor_settled, '0'),
+        COALESCE(h.is_assistant_supervisor_settled, '0'),
+        COALESCE(h.is_reviewer_settled, '0')
 		
 	FROM 
 	    Completed_Thesis ct
@@ -132,7 +135,8 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 			&t.Supervisor.Id, &t.Supervisor.FirstName, &t.Supervisor.LastName, &t.Supervisor.CurrentAcademicTitle, &t.Supervisor.DepartmentUnit,
 			&t.AssistantSupervisor.Id, &t.AssistantSupervisor.FirstName, &t.AssistantSupervisor.LastName, &t.AssistantSupervisor.CurrentAcademicTitle, &t.AssistantSupervisor.DepartmentUnit,
 			&t.Reviewer.Id, &t.Reviewer.FirstName, &t.Reviewer.LastName, &t.Reviewer.CurrentAcademicTitle, &t.Reviewer.DepartmentUnit,
-			&t.HourlySettlement.Id, &t.HourlySettlement.SupervisorHours, &t.HourlySettlement.AssistantSupervisorHours, &t.HourlySettlement.ReviewerHours)
+			&t.HourlySettlement.Id, &t.HourlySettlement.SupervisorHours, &t.HourlySettlement.AssistantSupervisorHours, &t.HourlySettlement.ReviewerHours,
+			&t.HourlySettlement.SupervisorHoursSettled, &t.HourlySettlement.AssistantSupervisorHoursSettled, &t.HourlySettlement.ReviewerHoursSettled)
 		if err != nil {
 			return nil, err
 		}
@@ -489,6 +493,19 @@ func (m *Model) RealizedThesisEntryByID(id string) (types.RealizedThesisEntry, e
 		HourlySettlement:                 hours,
 	}, nil
 
+}
+
+func (m *Model) GetHourlySettlementIdFromRealizedThesis(id int) (int, error) {
+	query := `SELECT COALESCE(hourly_settlement_id, '0') FROM Completed_Thesis WHERE id = ?`
+	rows, err := m.DB.Query(query, id)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	var hId int
+	rows.Next()
+	err = rows.Scan(hId)
+	return hId, nil
 }
 
 func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (int64, error) {

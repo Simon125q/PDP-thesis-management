@@ -1,10 +1,13 @@
 package types
 
 type HourlySettlement struct {
-	Id                       int
-	SupervisorHours          float64
-	AssistantSupervisorHours float64
-	ReviewerHours            float64
+	Id                              int
+	SupervisorHours                 int
+	SupervisorHoursSettled          int
+	AssistantSupervisorHours        int
+	AssistantSupervisorHoursSettled int
+	ReviewerHours                   int
+	ReviewerHoursSettled            int
 }
 
 type HourlySettlementErrors struct {

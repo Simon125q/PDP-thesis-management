@@ -714,6 +714,12 @@ func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
 }
 
 func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
+	supHours, _ := strconv.Atoi(r.FormValue("supervisorHours"))
+	assHours, _ := strconv.Atoi(r.FormValue("assistantSupervisorHours"))
+	revHours, _ := strconv.Atoi(r.FormValue("reviewerHours"))
+	supSettled, _ := strconv.Atoi(r.FormValue("supervisorSettled"))
+	assSettled, _ := strconv.Atoi(r.FormValue("assistantSupervisorSettled"))
+	revSettled, _ := strconv.Atoi(r.FormValue("reviewerSettled"))
 	return &types.RealizedThesisEntry{
 		ThesisNumber:         r.FormValue("thesisNumber"),
 		ExamDate:             r.FormValue("examDate"),
@@ -759,7 +765,14 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 			LastName:             r.FormValue("lastNameReviewer"),
 			CurrentAcademicTitle: r.FormValue("reviewerAcademicTitle"),
 		},
-		HourlySettlement: types.HourlySettlement{},
+		HourlySettlement: types.HourlySettlement{
+			SupervisorHours:                 supHours,
+			AssistantSupervisorHours:        assHours,
+			ReviewerHours:                   revHours,
+			SupervisorHoursSettled:          supSettled,
+			AssistantSupervisorHoursSettled: assSettled,
+			ReviewerHoursSettled:            revSettled,
+		},
 	}
 }
 
@@ -782,6 +795,31 @@ func getEmployeeId(emp types.UniversityEmployee) (int, error) {
 		}
 	}
 	return empId, err
+}
+
+func getHourlySettlementId(h types.HourlySettlement, thesis_id int) (int, error) {
+	hid, err := server.MyS.DB.GetHourlySettlementIdFromRealizedThesis(thesis_id)
+	if err != nil {
+		return 0, err
+	}
+	h.Id = hid
+	slog.Info("getHourlySettlementId", "hId", h.Id)
+	if h.Id == 0 {
+		id, err := server.MyS.DB.InsertHourlySettlement(h)
+		if err != nil {
+			slog.Error("getHourlySettlementId", "err", err)
+			return 0, err
+		}
+		slog.Info("getHourlySettlementId", "inserting new HourlySettlement, id", id)
+		hId := int(id)
+		return hId, nil
+	}
+	hId, err := server.MyS.DB.UpdateHourlySettlement(h)
+	if err != nil {
+		slog.Error("getHourlySettlementId", "err", err)
+		return 0, err
+	}
+	return hId, nil
 }
 
 func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
@@ -826,6 +864,13 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
 	}
 	t.Chair.Id = chId
+	hId, err := server.MyS.DB.InsertHourlySettlement(t.HourlySettlement)
+	if err != nil {
+		slog.Error("Insert HourlySettlement", "err", err)
+		errors.InternalError = true
+		return Render(w, r, realized.NewEntrySwap(types.RealizedThesisEntry{}, t, errors))
+	}
+	t.HourlySettlement.Id = int(hId)
 	tId, err := server.MyS.DB.InsertRealizedThesisByEntry(&t)
 	if err != nil {
 		slog.Error("InsertNew", "err", err)
@@ -903,6 +948,13 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 		return Render(w, r, realized.Details(t, errors))
 	}
 	t.Chair.Id = chId
+	hId, err := getHourlySettlementId(t.HourlySettlement, t.Id)
+	if err != nil {
+		slog.Error("update HourlySettlement", "err", err)
+		errors.InternalError = true
+		return Render(w, r, realized.Details(t, errors))
+	}
+	t.HourlySettlement.Id = hId
 	err = server.MyS.DB.UpdateRealizedThesisByEntry(&t)
 	if err != nil {
 		slog.Error("Update Thesis", "err", err)
