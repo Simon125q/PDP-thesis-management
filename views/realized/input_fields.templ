@@ -63,12 +63,16 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
     </div>
     <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-1/2 px-3">
+        <div class="w-4/12 px-3">
             @components.InputDropdownLibrary("library", "Biblioteka", vals.Library)
             @components.ErrorMsg(errs.Library)
         </div>
-        <div class="w-1/2 px-3">
+        <div class="w-4/12 px-3">
             @components.InputField("date", "examDate", "Data Egzaminu", vals.ExamDate, false)
+            @components.ErrorMsg(errs.ExamDate)
+        </div>
+        <div class="w-4/12 px-3">
+            @components.InputField("time", "examTime", "Godzina Egzaminu", vals.ExamTime, false)
             @components.ErrorMsg(errs.ExamDate)
         </div>
     </div>

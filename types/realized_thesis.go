@@ -29,6 +29,7 @@ type RealizedThesisEntry struct {
 	Id                               int
 	ThesisNumber                     string
 	ExamDate                         string
+	ExamTime                         string
 	AverageStudyGrade                string
 	CompetencyExamGrade              string
 	DiplomaExamGrade                 string
