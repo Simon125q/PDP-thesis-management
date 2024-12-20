@@ -102,8 +102,8 @@ templ InputDropdownStudyType(inputType, id, label, val string, req bool) {
         name={ id }
         value={ val }
         class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
-        <option value="stacjonarne">Stacjonarne</option>
-        <option value="niestacjonarne">Niestacjonarne</option>
+        <option value="stacjonarne" if val == "stacjonarne" { selected }>Stacjonarne</option>
+        <option value="niestacjonarne" if val == "niestacjonarne" { selected }>Niestacjonarne</option>
     </select>
 }
 
@@ -116,9 +116,9 @@ templ InputDropdownStudyDegree(inputType, id, label, val string, req bool) {
         name={ id }
         value={ val }
         class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
-        <option value="I stopień">I stopień</option>
-        <option value="II stopień">II stopień</option>
-		<option value="III stopień">III stopień</option>
+        <option value="I stopień"if val == "I stopień" { selected }>I stopień</option>
+        <option value="II stopień"if val == "II stopień" { selected }>II stopień</option>
+		<option value="III stopień"if val == "III stopień" { selected }>III stopień</option>
     </select>
 }
 
@@ -130,9 +130,9 @@ templ InputDropdownLibrary(id, label, val string) {
         id={ id }
         name={ id }
         class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
-        <option value="tak">Tak</option>
-        <option value="nie">Nie</option>
-		<option value="wypozyczone">Wypozyczone</option>
+        <option value="tak" if val == "tak" { selected }>Tak</option>
+        <option value="nie" if val == "nie" { selected }>Nie</option>
+		<option value="wypozyczone" if val == "wypozyczone" { selected }>Wypozyczone</option>
     </select>
 }
 
