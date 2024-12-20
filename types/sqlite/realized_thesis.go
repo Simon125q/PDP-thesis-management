@@ -504,7 +504,7 @@ func (m *Model) GetHourlySettlementIdFromRealizedThesis(id int) (int, error) {
 	defer rows.Close()
 	var hId int
 	rows.Next()
-	err = rows.Scan(hId)
+	err = rows.Scan(&hId)
 	return hId, nil
 }
 

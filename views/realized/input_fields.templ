@@ -265,12 +265,8 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             </div>
             <div class="mb-4 flex items-center space-x-2">
                 <!-- Checkbox -->
-                <input type="checkbox" id="supervisorSettled" name="supervisorSettled"
-                    class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                <!-- Label -->
-                <label for="supervisorSettled" class="text-sm font-medium text-gray-700">
-                    Rozliczone
-                </label>
+                @components.CheckBox("supervisorSettled", "Rozliczone",
+                vals.HourlySettlement.SupervisorHoursSettled == 1)
             </div>
         </div>
         <div class="w-4/12 px-2">
@@ -281,12 +277,8 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             </div>
             <div class="mb-4 flex items-center space-x-2">
                 <!-- Checkbox -->
-                <input type="checkbox" id="assistantSupervisorSettled" name="assistantSupervisorSettled"
-                    class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                <!-- Label -->
-                <label for="assistantSupervisorSettled" class="text-sm font-medium text-gray-700">
-                    Rozliczone
-                </label>
+                @components.CheckBox("assistantSupervisorSettled", "Rozliczone",
+                vals.HourlySettlement.AssistantSupervisorHoursSettled == 1)
             </div>
         </div>
         <div class="w-4/12 px-2">
@@ -298,12 +290,8 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             </div>
             <div class="mb-4 flex items-center space-x-2">
                 <!-- Checkbox -->
-                <input type="checkbox" id="reviewerSettled" name="reviewerSettled"
-                    class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                <!-- Label -->
-                <label for="reviewerSettled" class="text-sm font-medium text-gray-700">
-                    Rozliczone
-                </label>
+                @components.CheckBox("reviewerSettled", "Rozliczone",
+                vals.HourlySettlement.ReviewerHoursSettled == 1)
             </div>
         </div>
         @components.ErrorMsg(errs.HourlySettlement.Total)

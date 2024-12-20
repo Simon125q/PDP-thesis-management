@@ -720,6 +720,9 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 	supSettled, _ := strconv.Atoi(r.FormValue("supervisorSettled"))
 	assSettled, _ := strconv.Atoi(r.FormValue("assistantSupervisorSettled"))
 	revSettled, _ := strconv.Atoi(r.FormValue("reviewerSettled"))
+	slog.Info("extractRealizedThesisFromForm", "supSettled", supSettled)
+	slog.Info("extractRealizedThesisFromForm", "asSettled", assSettled)
+	slog.Info("extractRealizedThesisFromForm", "revSettled", revSettled)
 	return &types.RealizedThesisEntry{
 		ThesisNumber:         r.FormValue("thesisNumber"),
 		ExamDate:             r.FormValue("examDate"),
