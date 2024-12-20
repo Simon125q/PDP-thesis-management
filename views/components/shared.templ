@@ -10,11 +10,30 @@ templ InputField(inputType, id, label, val string, req bool) {
 		name={ id }
 		value={ val }
 		placeholder={ label }
-        if inputType == "number" {
+		if req {
+			required
+		}
+	class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
+    />
+}
+
+templ InputFieldGrade(id, label, val string, req bool) {
+	<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+		{ label }
+	</label>
+	<input
+		type="number"
+		id={ id }
+		name={ id }
+		value={ val }
+		placeholder={ label }
+        if id == "averageStudyGrade" {
             step="0.01"
-            min="0"
-            max="6"
+        } else {
+            step="0.05"
         }
+        min="0"
+        max="6"
 		if req {
 			required
 		}
@@ -133,6 +152,19 @@ templ InputDropdownLibrary(id, label, val string) {
         <option value="tak" if val == "tak" { selected }>Tak</option>
         <option value="nie" if val == "nie" { selected }>Nie</option>
 		<option value="wypozyczone" if val == "wypozyczone" { selected }>Wypozyczone</option>
+    </select>
+}
+
+templ InputDropdownLanguage(id, label, val string) {
+    <label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+        { label }
+    </label>
+    <select
+        id={ id }
+        name={ id }
+        class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
+        <option value="polski" if val == "polski" { selected }>Polski</option>
+        <option value="angielski" if val == "angielski" { selected }>Angielski</option>
     </select>
 }
 

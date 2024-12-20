@@ -26,7 +26,7 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
         <div class="w-full px-3 sm:w-1/2">
             <div>
-                @components.InputField("text", "thesisLanguage", "Język Pracy", vals.ThesisLanguage, true)
+                @components.InputDropdownLanguage("thesisLanguage", "Język Pracy", vals.ThesisLanguage)
                 @components.ErrorMsg(errs.ThesisLanguage)
             </div>
         </div>
@@ -34,28 +34,26 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="mt-5 -mx-3 flex flex-wrap">
         <div class="w-full px-3 sm:w-1/2">
             <div>
-                @components.InputField("number", "competencyExamGrade", "Ocena z egzaminu kompetencyjnego",
+                @components.InputFieldGrade("competencyExamGrade", "Ocena z egzaminu kompetencyjnego",
                 vals.CompetencyExamGrade, false)
                 @components.ErrorMsg(errs.CompetencyExamGrade)
             </div>
         </div>
         <div class="w-full px-3 sm:w-1/2">
             <div>
-                @components.InputField("number", "diplomaExamGrade", "Ocena z egzaminu dyplomowego",
-                vals.DiplomaExamGrade, false)
+                @components.InputFieldGrade("diplomaExamGrade", "Ocena z egzaminu dyplomowego", vals.DiplomaExamGrade,
+                false)
                 @components.ErrorMsg(errs.DiplomaExamGrade)
             </div>
         </div>
     </div>
     <div class="mt-5 -mx-3 flex flex-wrap">
         <div class="w-4/12 px-2">
-            @components.InputField("number", "averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade,
-            false)
+            @components.InputFieldGrade("averageStudyGrade", "Średnia ocena ze studiów", vals.AverageStudyGrade, false)
             @components.ErrorMsg(errs.AverageStudyGrade)
         </div>
         <div class="w-4/12 px-2">
-            @components.InputField("number", "finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult,
-            false)
+            @components.InputFieldGrade("finalStudyResult", "Ostateczny wynik studiów", vals.FinalStudyResult, false)
             @components.ErrorMsg(errs.FinalStudyResult)
         </div>
         <div class="w-4/12 px-2">

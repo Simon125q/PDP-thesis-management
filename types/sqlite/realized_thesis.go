@@ -142,7 +142,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
 		}
 		thesis = append(thesis, t)
 	}
-	slog.Info("AllRealizedThesisEntries", "first record", thesis[0])
+	//slog.Info("AllRealizedThesisEntries", "first record", thesis[0])
 	err = rows.Err()
 	if err != nil {
 		return nil, err

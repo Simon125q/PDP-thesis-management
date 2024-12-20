@@ -140,11 +140,10 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 			conditions, values = m.GetConditionValuesFromStudent(value[0], "degree", "student_id", conditions, values)
 			continue
 		case "are_hours_settled":
-			//TODO: after adding hours settled to db
-			// conditions = append(conditions, "(supervisor_hours_settled = ? OR assistant_supervisor_hours_settled = ? OR reviewer_hours_settled = ?)")
-			// for i := 0; i < 3; i++ {
-			// 	values = append(values, "false")
-			// }
+			conditions = append(conditions, "(is_supervisor_settled = ? OR is_assistant_supervisor_settled = ? OR is_reviewer_settled = ?)")
+			for i := 0; i < 3; i++ {
+				values = append(values, "0")
+			}
 			continue
 		}
 		if strings.Contains(key, "[") {
