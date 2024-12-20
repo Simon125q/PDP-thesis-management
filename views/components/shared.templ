@@ -122,6 +122,20 @@ templ InputDropdownStudyDegree(inputType, id, label, val string, req bool) {
     </select>
 }
 
+templ InputDropdownLibrary(id, label, val string) {
+    <label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+        { label }
+    </label>
+    <select
+        id={ id }
+        name={ id }
+        class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md">
+        <option value="tak">Tak</option>
+        <option value="nie">Nie</option>
+		<option value="wypozyczone">Wypozyczone</option>
+    </select>
+}
+
 templ ErrorMsg(msg string) {
 	if msg != "" {
 		<span class="w-full text-tul-medium-red">{ msg }</span>
