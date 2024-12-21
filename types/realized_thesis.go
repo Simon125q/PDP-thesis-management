@@ -49,6 +49,7 @@ type RealizedThesisEntry struct {
 	ReviewerAcademicTitle            string
 	Reviewer                         UniversityEmployee
 	HourlySettlement                 HourlySettlement
+	Note                             Note
 }
 
 type RealizedThesisEntryErrors struct {

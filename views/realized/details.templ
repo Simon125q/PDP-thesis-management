@@ -3,6 +3,7 @@ package realized
 import (
 "fmt"
 "thesis-management-app/types"
+"thesis-management-app/views"
 )
 
 templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryErrors) {
@@ -15,13 +16,15 @@ templ Details(thesis types.RealizedThesisEntry, errs types.RealizedThesisEntryEr
             </div>
             @InputFields(thesis, errs)
             <div>
-                <label for="product-details" class="mt-4 text-sm font-medium text-gray-900 block mb-2">
+                <label for="thesis_note" class="mt-4 text-sm font-medium text-gray-900 block mb-2">
                     Notatka do
                     Pracy
                 </label>
-                <textarea id="product-details" rows="6"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-cyan-600 focus:border-cyan-600 block w-full p-4"
-                    placeholder="Notatka"></textarea>
+                <div hx-get={ fmt.Sprintf("/note/%v&%v&%v", thesis.Id, 0, views.AuthenticatedUser(ctx).Id) }
+                    hx-trigger="load">
+                    <img alt="Result loading..." class="htmx-indicator" width="150"
+                        src="/public/imgs/brobser_icon.png" />
+                </div>
             </div>
             <div class="flex flex-row items-center justify-between">
                 <div hx-get={ fmt.Sprintf("/realized/%v", thesis.Id) } hx-target={ fmt.Sprintf("#details-%v", thesis.Id)

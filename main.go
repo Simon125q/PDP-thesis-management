@@ -88,6 +88,7 @@ func main() {
 		r.Get("/realized/autocompleteChairTitle", handlers.Make(handlers.HandleAutocompleteChairTitle))
 		r.Get("/realized/autocompleteCourse", handlers.Make(handlers.HandleAutocompleteCourse))
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
+		r.Get("/note/{realized_id}&{ongoing_id}&{user_id}", handlers.Make(handlers.HandleNote))
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {

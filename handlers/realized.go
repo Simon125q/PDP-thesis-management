@@ -776,6 +776,9 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 			AssistantSupervisorHoursSettled: assSettled,
 			ReviewerHoursSettled:            revSettled,
 		},
+		Note: types.Note{
+			Content: r.FormValue("thesis_note"),
+		},
 	}
 }
 
@@ -964,10 +967,43 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
+	user, ok := r.Context().Value(types.UserContextKey).(types.AuthenticatedUser)
+	if !ok {
+		slog.Error("UpdateRealized-Note", "Failed To retrieve user", user)
+	}
+	err = updateNoteRealized(t.Note.Content, t.Id, user.Id)
+	if err != nil {
+		slog.Error("update note", "err", err)
+		errors.InternalError = true
+		return Render(w, r, realized.Details(t, errors))
+	}
 	slog.Info("update thesis", "correct", true)
 	errors.Correct = true
 	slog.Info("UpdateRealizedThesis", "t after", t)
 	return Render(w, r, realized.Entry(t))
+}
+
+func updateNoteRealized(newContent string, thesisId int, userId int) error {
+	note, err := server.MyS.DB.GetNote(thesisId, 0, userId)
+	if err != nil {
+		slog.Error("updateNoteRealized", "err", err)
+		return fmt.Errorf("updateNoteRealized occured error while retrieving note: %v", err)
+	}
+	if note.Id == 0 {
+		_, err := server.MyS.DB.InsertNote(types.Note{Content: newContent, RealizedThesisID: thesisId, UniversityEmployeeID: userId})
+		if err != nil {
+			slog.Error("updateNoteRealized", "err", err)
+			return fmt.Errorf("updateNoteRealized occured error while inserting note: %v", err)
+		}
+		return nil
+	}
+	note.Content = newContent
+	err = server.MyS.DB.UpdateNote(note)
+	if err != nil {
+		slog.Error("updateNoteRealized", "err", err)
+		return fmt.Errorf("updateNoteRealized occured error while updating note: %v", err)
+	}
+	return nil
 }
 
 func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
