@@ -893,83 +893,85 @@ func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("UPDATE", "id_param", id_param)
+	user, ok := r.Context().Value(types.UserContextKey).(types.AuthenticatedUser)
+	if !ok {
+		slog.Error("UpdateRealized", "Failed To retrieve user", user)
+	}
 	t := *extractRealizedThesisFromForm(r)
 	var err error
 	t.Id, err = strconv.Atoi(id_param)
 	slog.Info("UpdateRealizedThesis", "t before", t)
 	errors, ok := validators.ValidateRealizedThesis(t)
-	if !ok {
-		errors.Correct = false
-		return Render(w, r, realized.Details(t, errors))
-	}
-	if err != nil {
-		slog.Error("Update", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.Student.Id, err = server.MyS.DB.GetStudentIdFromThesisEntry(t.Id)
-	slog.Info("UpdateRealizedThesis", "student_id", t.Student.Id)
-	if err != nil {
-		slog.Error("Update get stud id", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	sId, err := server.MyS.DB.UpdateStudent(t.Student)
-	if err != nil {
-		slog.Error("Update stud", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.Student.Id = int(sId)
-	supId, err := getEmployeeId(t.Supervisor)
-	slog.Info("UpdateRealizedThesis", "supervisor", t.Supervisor)
-	slog.Info("UpdateRealizedThesis", "supervisor_id", supId)
-	if err != nil {
-		slog.Error("Update emp", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.Supervisor.Id = supId
-	asId, err := getEmployeeId(t.AssistantSupervisor)
-	slog.Info("UpdateRealizedThesis", "assistant_supervisor", t.AssistantSupervisor)
-	slog.Info("UpdateRealizedThesis", "assistant_supervisor_id", asId)
-	if err != nil {
-		slog.Error("Update emp", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.AssistantSupervisor.Id = asId
-	reId, err := getEmployeeId(t.Reviewer)
-	slog.Info("UpdateRealizedThesis", "Reviewer_id", reId)
-	if err != nil {
-		slog.Error("update emp", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.Reviewer.Id = reId
-	chId, err := getEmployeeId(t.Chair)
-	if err != nil {
-		slog.Error("update emp", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.Chair.Id = chId
-	hId, err := getHourlySettlementId(t.HourlySettlement, t.Id)
-	if err != nil {
-		slog.Error("update HourlySettlement", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	t.HourlySettlement.Id = hId
-	err = server.MyS.DB.UpdateRealizedThesisByEntry(&t)
-	if err != nil {
-		slog.Error("Update Thesis", "err", err)
-		errors.InternalError = true
-		return Render(w, r, realized.Details(t, errors))
-	}
-	user, ok := r.Context().Value(types.UserContextKey).(types.AuthenticatedUser)
-	if !ok {
-		slog.Error("UpdateRealized-Note", "Failed To retrieve user", user)
+	if user.IsAdmin {
+		if !ok {
+			errors.Correct = false
+			return Render(w, r, realized.Details(t, errors))
+		}
+		if err != nil {
+			slog.Error("Update", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.Student.Id, err = server.MyS.DB.GetStudentIdFromThesisEntry(t.Id)
+		slog.Info("UpdateRealizedThesis", "student_id", t.Student.Id)
+		if err != nil {
+			slog.Error("Update get stud id", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		sId, err := server.MyS.DB.UpdateStudent(t.Student)
+		if err != nil {
+			slog.Error("Update stud", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.Student.Id = int(sId)
+		supId, err := getEmployeeId(t.Supervisor)
+		slog.Info("UpdateRealizedThesis", "supervisor", t.Supervisor)
+		slog.Info("UpdateRealizedThesis", "supervisor_id", supId)
+		if err != nil {
+			slog.Error("Update emp", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.Supervisor.Id = supId
+		asId, err := getEmployeeId(t.AssistantSupervisor)
+		slog.Info("UpdateRealizedThesis", "assistant_supervisor", t.AssistantSupervisor)
+		slog.Info("UpdateRealizedThesis", "assistant_supervisor_id", asId)
+		if err != nil {
+			slog.Error("Update emp", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.AssistantSupervisor.Id = asId
+		reId, err := getEmployeeId(t.Reviewer)
+		slog.Info("UpdateRealizedThesis", "Reviewer_id", reId)
+		if err != nil {
+			slog.Error("update emp", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.Reviewer.Id = reId
+		chId, err := getEmployeeId(t.Chair)
+		if err != nil {
+			slog.Error("update emp", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.Chair.Id = chId
+		hId, err := getHourlySettlementId(t.HourlySettlement, t.Id)
+		if err != nil {
+			slog.Error("update HourlySettlement", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
+		t.HourlySettlement.Id = hId
+		err = server.MyS.DB.UpdateRealizedThesisByEntry(&t)
+		if err != nil {
+			slog.Error("Update Thesis", "err", err)
+			errors.InternalError = true
+			return Render(w, r, realized.Details(t, errors))
+		}
 	}
 	err = updateNoteRealized(t.Note.Content, t.Id, user.Id)
 	if err != nil {

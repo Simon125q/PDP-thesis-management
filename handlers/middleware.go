@@ -27,8 +27,14 @@ func WithUser(next http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 			return
 		}
+		var uId int
+		if currentSession.Username == "tesla" {
+			uId = 2
+		} else {
+			uId = 3
+		}
 		user := types.AuthenticatedUser{
-			Id:       2, //TODO: add id from db
+			Id:       uId, //TODO: add id from db
 			Login:    currentSession.Username,
 			IsAdmin:  currentSession.IsAdmin,
 			LoggedIn: true,

@@ -33,7 +33,7 @@ func HandleLoginPost(w http.ResponseWriter, r *http.Request) error {
 		}
 		return Render(w, r, auth.LoginForm(credentials, loginErrs))
 	}
-	slog.Info("Authenticated", "user", user.UserName())
+	slog.Info("Authenticated", "user", user)
 
 	sessionToken := uuid.NewString()
 	newSession := sessions.Session{
