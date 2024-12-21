@@ -58,9 +58,9 @@ func ValidateStudent(s types.Student) (types.StudentErrors, bool) {
 }
 
 func ValidateIndex(index string) (string, bool) {
-	if len(index) != 6 {
+	if len(index) != 6 && len(index) != 7 {
 		slog.Info("valid index", "len", len(index))
-		return "Indeks musi mieć długość 6", false
+		return "Indeks musi mieć długość 6 lub 7", false
 	}
 	for _, char := range index {
 		if !unicode.IsDigit(char) {
@@ -80,17 +80,17 @@ func ValidateName(name string) (string, bool) {
 }
 
 func ValidateHourlySettlement(hours types.HourlySettlement, studyLevel string) (types.HourlySettlementErrors, bool) {
-	hSum := hours.ReviewerHours + hours.SupervisorHours + hours.AssistantSupervisorHours
+	hSum := hours.SupervisorHours + hours.AssistantSupervisorHours
 	slog.Info("ValidateHourlySettlement", "hours sum", hSum)
-	// if studyLevel == "inz" {
-	// 	if hSum != 12 {
-	// 		return types.HourlySettlementErrors{Total: "Godziny w pracy inzynierskiej musza sumowac sie do 12"}, false
-	// 	}
-	// } else if studyLevel == "mgr" {
-	// 	if hSum != 15 {
-	// 		return types.HourlySettlementErrors{Total: "Godziny w pracy magisterskiej musza sumowac sie do 15"}, false
-	// 	}
-	// }
+	if studyLevel == "I stopień" {
+		if hSum != 10 {
+			return types.HourlySettlementErrors{Total: "Godziny promotorów w pracy inżynierskiej muszą sumowac sie do 10"}, false
+		}
+	} else if studyLevel == "II stopień" {
+		if hSum != 15 {
+			return types.HourlySettlementErrors{Total: "Godziny promotorów pracy magisterskiej muszą sumowac sie do 15"}, false
+		}
+	}
 	return types.HourlySettlementErrors{}, true
 }
 
