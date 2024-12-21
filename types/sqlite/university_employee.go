@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log/slog"
+	"net/url"
 	"thesis-management-app/types"
 )
 
@@ -34,27 +35,70 @@ func (m *Model) AllUniversityEmployee() ([]types.UniversityEmployee, error) {
 	return employee, nil
 }
 
-func (m *Model) EmployeeById(id string) (types.UniversityEmployee, error) {
+func (m *Model) AllUniversityEmployeeEntries(sort_by string, desc_order bool, queryParams url.Values) ([]types.UniversityEmployeeEntry, error) {
+	query := fmt.Sprintf(`
+        SELECT 
+            e.id AS employee_id,
+            COALESCE(e.first_name, '') AS first_name,
+            COALESCE(e.last_name, '') AS last_name,
+            COALESCE(e.current_academic_title, '') AS current_academic_title,
+            COALESCE(e.department_unit, '') AS department_unit
+        FROM 
+            University_Employee e
+    `)
+
+	query, params := m.AddSQLQueryParameters(query, queryParams)
+	query = AddSQLOrder(query, sort_by, desc_order)
+
+	slog.Info("AllUniversityEmployeeEntries", "query", query)
+	slog.Info("AllUniversityEmployeeEntries", "params", params)
+
+	rows, err := m.DB.Query(query, params...)
+	if err != nil {
+		slog.Error("AllUniversityEmployeeEntries", "err", err)
+		return nil, err
+	}
+	defer rows.Close()
+
+	employees := []types.UniversityEmployeeEntry{}
+	for rows.Next() {
+		e := types.UniversityEmployeeEntry{}
+		err := rows.Scan(&e.Id, &e.FirstName, &e.LastName, &e.CurrentAcademicTitle, &e.DepartmentUnit)
+		if err != nil {
+			return nil, err
+		}
+		employees = append(employees, e)
+	}
+
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return employees, nil
+}
+
+func (m *Model) EmployeeById(id string) (types.UniversityEmployeeEntry, error) {
 	if id == "0" {
-		return types.UniversityEmployee{}, nil
+		return types.UniversityEmployeeEntry{}, nil
 	}
 	query := fmt.Sprintf(`SELECT id, first_name, last_name,
     COALESCE(current_academic_title, ''), COALESCE(department_unit, '')
     FROM University_Employee WHERE id = ?`)
 	rows, err := m.DB.Query(query, id)
 	if err != nil {
-		return types.UniversityEmployee{}, err
+		return types.UniversityEmployeeEntry{}, err
 	}
 	defer rows.Close()
-	e := types.UniversityEmployee{}
+	e := types.UniversityEmployeeEntry{}
 	rows.Next()
 	err = rows.Scan(&e.Id, &e.FirstName, &e.LastName, &e.CurrentAcademicTitle, &e.DepartmentUnit)
 	if err != nil {
-		return types.UniversityEmployee{}, err
+		return types.UniversityEmployeeEntry{}, err
 	}
 	err = rows.Err()
 	if err != nil {
-		return types.UniversityEmployee{}, err
+		return types.UniversityEmployeeEntry{}, err
 	}
 	return e, nil
 }
@@ -87,7 +131,7 @@ func (m *Model) EmployeeIdByName(name string) (int, error) {
 	return id, nil
 }
 
-func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployee) (int64, error) {
+func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployeeEntry) (int64, error) {
 	query := `
         INSERT INTO University_Employee (first_name, last_name, current_academic_title, department_unit)
         VALUES (?, ?, ?, ?)`
@@ -98,7 +142,7 @@ func (m *Model) InsertUniversityEmployee(employee types.UniversityEmployee) (int
 	return result.LastInsertId()
 }
 
-func (m *Model) UpdateEmployee(empl *types.UniversityEmployee) error {
+func (m *Model) UpdateEmployee(empl *types.UniversityEmployeeEntry) error {
 	query := `
         UPDATE University_Employee
         SET 
@@ -126,10 +170,10 @@ func (m *Model) UpdateEmployee(empl *types.UniversityEmployee) error {
 	return nil
 }
 
-func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployee, error) {
+func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployeeEntry, error) {
 	empl, err := m.EmployeeById(id)
 	if err != nil {
-		return types.UniversityEmployee{}, err
+		return types.UniversityEmployeeEntry{}, err
 	}
 
 	var thesisCount int
@@ -138,12 +182,12 @@ func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployee, error) {
     FROM Completed_Thesis
     WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
 	if err != nil {
-		return types.UniversityEmployee{}, err
+		return types.UniversityEmployeeEntry{}, err
 	}
 
 	thesisCount = 1
 
-	return types.UniversityEmployee{
+	return types.UniversityEmployeeEntry{
 		Id:                   empl.Id,
 		FirstName:            empl.FirstName,
 		LastName:             empl.LastName,

@@ -5,7 +5,7 @@ import (
 	"thesis-management-app/views/components"
 )
 
-templ InputFields(vals types.UniversityEmployee, errs types.UniversityEmployeeErrors) {
+templ InputFields_Empl(vals types.UniversityEmployeeEntry, errs types.UniversityEmployeeEntryErrors) {
 	<div>
 		@components.InputField("text", "first_name", "Imię", vals.FirstName, true)
 		@components.ErrorMsg(errs.FirstName)

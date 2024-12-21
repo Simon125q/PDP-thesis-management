@@ -94,13 +94,33 @@ func main() {
 
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Use(handlers.WithAdminRights)
-		r.Get("/settings", handlers.Make(handlers.HandleSettings))
-		r.Get("/settings/clear-new", handlers.Make(handlers.HandleSettingsClearNew))
-		r.Get("/settings/{id}", handlers.Make(handlers.HandleSettingsEntry))
-		r.Post("/settings", handlers.Make(handlers.HandleSettingsNew))
-		r.Get("/settings/new", handlers.Make(handlers.HandleSettingsGetNew))
-		r.Get("/settings/details/{id}", handlers.Make(handlers.HandleSettingsDetails))
-		r.Put("/settings/{id}", handlers.Make(handlers.HandleSettingsUpdate))
+		r.Get("/settings", handlers.Make(handlers.HandleSettingsIndex))
+
+		r.Get("/settings/employees", handlers.Make(handlers.HandleEmployees))
+		r.Get("/settings/employees/new", handlers.Make(handlers.HandleEmployeesGetNew))
+		r.Post("/settings/employees", handlers.Make(handlers.HandleEmployeesNew))
+		r.Get("/settings/employees/{id}", handlers.Make(handlers.HandleEmployeesEntry))
+		r.Get("/settings/employees/details/{id}", handlers.Make(handlers.HandleEmployeesDetails))
+		r.Put("/settings/employees/{id}", handlers.Make(handlers.HandleEmployeesUpdate))
+		r.Get("/settings/employees/clear-new", handlers.Make(handlers.HandleEmployeesClearNew))
+
+		r.Get("/settings/courses", handlers.Make(handlers.HandleCourses))
+		r.Get("/settings/courses/new", handlers.Make(handlers.HandleCoursesGetNew))
+		r.Post("/settings/courses", handlers.Make(handlers.HandleCoursesNew))
+		r.Get("/settings/courses/{id}", handlers.Make(handlers.HandleCoursesEntry))
+		r.Get("/settings/courses/details/{id}", handlers.Make(handlers.HandleCoursesDetails))
+		r.Put("/settings/courses/{id}", handlers.Make(handlers.HandleCoursesUpdate))
+		r.Get("/settings/courses/clear-new", handlers.Make(handlers.HandleCoursesClearNew))
+
+		// Routes for specializations
+		r.Get("/settings/specs", handlers.Make(handlers.HandleSpecializations))
+		r.Get("/settings/specs/new", handlers.Make(handlers.HandleSpecializationsGetNew))
+		r.Post("/settings/specs", handlers.Make(handlers.HandleSpecializationsNew))
+		r.Get("/settings/specs/{id}", handlers.Make(handlers.HandleSpecializationsEntry))
+		r.Get("/settings/specs/details/{id}", handlers.Make(handlers.HandleSpecializationsDetails))
+		r.Put("/settings/specs/{id}", handlers.Make(handlers.HandleSpecializationsUpdate))
+		r.Get("/settings/specs/clear-new", handlers.Make(handlers.HandleSpecializationsClearNew))
+
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
 	})

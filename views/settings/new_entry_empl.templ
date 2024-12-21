@@ -1,0 +1,35 @@
+package settings
+
+import "thesis-management-app/types"
+
+
+templ NewEntry_Empl(vals types.UniversityEmployeeEntry, errs types.UniversityEmployeeEntryErrors) {
+<span id="newEntryForm">
+    <div class="w-full mt-5 p-4 border-3 border-tul-dark-red rounded-2xl bg-white">
+        <form id="new" hx-post="/settings/employees" hx-disabled-elt="#add-btn" hx-target="#results" hx-swap="afterbegin"
+            class="text-black font-normal">
+            <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+                <h2 class="text-2xl font-semibold text-center text-tul-dark-gray">Dodaj Nowego Pracownika</h2>
+            </div>
+            @InputFields_Empl(vals, errs)
+            <div class="mt-5 flex flex-row items-center justify-between">
+                <div hx-get="settings/employees/clear-new" hx-target="#newEntryForm" hx-trigger="click" hx-swap="outerHTML">
+                    <button
+                        class="text-white bg-tul-dark-red hover:bg-tul-medium-red focus:ring-4 focus:ring-tul-light-red font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Anuluj
+                    </button>
+                </div>
+                <button
+                    class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    id="add-btn">
+                    Dodaj
+                </button>
+            </div>
+        </form>
+    </div>
+</span>
+}
+
+templ EmptySpace_Empl() {
+<span id="new_entry"></span>
+}

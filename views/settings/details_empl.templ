@@ -5,13 +5,13 @@ import (
 	"thesis-management-app/types"
 )
 
-templ Details(empl types.UniversityEmployee, errs types.UniversityEmployeeErrors) {
+templ Details_Empl(empl types.UniversityEmployeeEntry, errs types.UniversityEmployeeEntryErrors) {
 <div style="border-width: 3px;" class="p-4 border-red-800 rounded-2xl" id={ fmt.Sprintf("details-%v", empl.Id) }>
     <form>
         <div class="bg-gray-100 px-4 py-2">
             <h2 class="text-lg font-medium text-gray-800">Szczegóły Pracownika</h2>
         </div>
-        @InputFields(empl, errs)
+        @InputFields_Empl(empl, errs)
          <div>
              <label class="text-lg font-medium text-gray-800 block mb-2">Liczba powiązanych prac</label>
              <span class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none">
@@ -20,7 +20,7 @@ templ Details(empl types.UniversityEmployee, errs types.UniversityEmployeeErrors
          </div>
           <br/>
         <div class="flex flex-row items-center justify-between">
-            <div hx-get={ fmt.Sprintf("/settings/%v", empl.Id) }
+            <div hx-get={ fmt.Sprintf("/settings/employees/%v", empl.Id) }
                  hx-target={ fmt.Sprintf("#details-%v", empl.Id) }
                  hx-trigger="click"
                  hx-swap="outerHTML"
@@ -33,7 +33,7 @@ templ Details(empl types.UniversityEmployee, errs types.UniversityEmployeeErrors
             <button
                 class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
                 type="submit"
-                hx-put={ fmt.Sprintf("/settings/%v", empl.Id) }
+                hx-put={ fmt.Sprintf("/settings/employees/%v", empl.Id) }
                 hx-target={ fmt.Sprintf("#details-%v", empl.Id) }
                 hx-swap="outerHTML">
                 Zapisz

@@ -41,13 +41,13 @@ type RealizedThesisEntry struct {
 	Library                          string
 	Student                          Student
 	ChairAcademicTitle               string
-	Chair                            UniversityEmployee
+	Chair                            UniversityEmployeeEntry
 	SupervisorAcademicTitle          string
-	Supervisor                       UniversityEmployee
+	Supervisor                       UniversityEmployeeEntry
 	AssistantSupervisorAcademicTitle string
-	AssistantSupervisor              UniversityEmployee
+	AssistantSupervisor              UniversityEmployeeEntry
 	ReviewerAcademicTitle            string
-	Reviewer                         UniversityEmployee
+	Reviewer                         UniversityEmployeeEntry
 	HourlySettlement                 HourlySettlement
 	Note                             Note
 }
@@ -66,13 +66,13 @@ type RealizedThesisEntryErrors struct {
 	Library                          string
 	Student                          StudentErrors
 	ChairAcademicTitle               string
-	Chair                            UniversityEmployeeErrors
+	Chair                            UniversityEmployeeEntryErrors
 	SupervisorAcademicTitle          string
-	Supervisor                       UniversityEmployeeErrors
+	Supervisor                       UniversityEmployeeEntryErrors
 	AssistantSupervisorAcademicTitle string
-	AssistantSupervisor              UniversityEmployeeErrors
+	AssistantSupervisor              UniversityEmployeeEntryErrors
 	ReviewerAcademicTitle            string
-	Reviewer                         UniversityEmployeeErrors
+	Reviewer                         UniversityEmployeeEntryErrors
 	HourlySettlement                 HourlySettlementErrors
 	Correct                          bool
 	InternalError                    bool

@@ -1,0 +1,13 @@
+package settings
+
+import (
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
+)
+
+templ InputFields_Course(vals types.Course, errs types.CourseErrors) {
+	<div>
+		@components.InputField("text", "name", "Nazwa", vals.Name, true)
+		@components.ErrorMsg(errs.Name)
+	</div>
+}

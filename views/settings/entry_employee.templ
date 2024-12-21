@@ -5,23 +5,23 @@ import (
 "thesis-management-app/types"
 )
 
-templ Entry(empl types.UniversityEmployee) {
+templ Entry_Empl(empl types.UniversityEmployeeEntry) {
 <div style="border-width: 3px;" class="w-3/4 max-w-md px-6 py-4 border-red-800 rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
-    hx-get={ fmt.Sprintf("/settings/details/%v", empl.Id) } hx-trigger="click" hx-swap="outerHTML">
+    hx-get={ fmt.Sprintf("/settings/employees/details/%v", empl.Id) } hx-trigger="click" hx-swap="outerHTML">
     <h3 class="font-bold text-2xl text-center text-gray-900 mt-2 mb-4">
         "{empl.CurrentAcademicTitle} { empl.LastName }"
     </h3>
 </div>
 }
 
-templ NewEntrySwap(empl, vals types.UniversityEmployee, errs types.UniversityEmployeeErrors) {
+templ NewEntrySwap_Empl(empl, vals types.UniversityEmployeeEntry, errs types.UniversityEmployeeEntryErrors) {
 if errs.Correct {
     <span>
-        @Entry(empl)
+        @Entry_Empl(empl)
         <br />
     </span>
     }
 <span id="newEntryForm" hx-swap-oob="true">
-    @NewEntry(vals, errs)
+    @NewEntry_Empl(vals, errs)
 </span>
 }

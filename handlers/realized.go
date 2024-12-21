@@ -745,25 +745,25 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 			Degree:         r.FormValue("degree"),
 		},
 		ChairAcademicTitle: r.FormValue("chairAcademicTitle"),
-		Chair: types.UniversityEmployee{
+		Chair: types.UniversityEmployeeEntry{
 			FirstName:            r.FormValue("firstNameChair"),
 			LastName:             r.FormValue("lastNameChair"),
 			CurrentAcademicTitle: r.FormValue("chairAcademicTitle"),
 		},
 		SupervisorAcademicTitle: r.FormValue("supervisorAcademicTitle"),
-		Supervisor: types.UniversityEmployee{
+		Supervisor: types.UniversityEmployeeEntry{
 			FirstName:            r.FormValue("firstNameSupervisor"),
 			LastName:             r.FormValue("lastNameSupervisor"),
 			CurrentAcademicTitle: r.FormValue("supervisorAcademicTitle"),
 		},
 		AssistantSupervisorAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
-		AssistantSupervisor: types.UniversityEmployee{
+		AssistantSupervisor: types.UniversityEmployeeEntry{
 			FirstName:            r.FormValue("firstNameAssistantSupervisor"),
 			LastName:             r.FormValue("lastNameAssistantSupervisor"),
 			CurrentAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
 		},
 		ReviewerAcademicTitle: r.FormValue("reviewerAcademicTitle"),
-		Reviewer: types.UniversityEmployee{
+		Reviewer: types.UniversityEmployeeEntry{
 			FirstName:            r.FormValue("firstNameReviewer"),
 			LastName:             r.FormValue("lastNameReviewer"),
 			CurrentAcademicTitle: r.FormValue("reviewerAcademicTitle"),
@@ -782,7 +782,7 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 	}
 }
 
-func getEmployeeId(emp types.UniversityEmployee) (int, error) {
+func getEmployeeId(emp types.UniversityEmployeeEntry) (int, error) {
 	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
 	slog.Info("getEmployeeId", "empName", emp.FirstName+" "+emp.LastName)
 	slog.Info("getEmployeeId", "empId", empId)

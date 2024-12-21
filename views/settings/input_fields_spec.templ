@@ -1,0 +1,13 @@
+package settings
+
+import (
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
+)
+
+templ InputFields_Spec(vals types.Specialization, errs types.SpecializationErrors) {
+	<div>
+		@components.InputField("text", "name", "nazwa", vals.Name, true)
+		@components.ErrorMsg(errs.Name)
+	</div>
+}

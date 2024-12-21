@@ -29,14 +29,14 @@ func ValidateRealizedThesis(t types.RealizedThesisEntry) (types.RealizedThesisEn
 	return types.RealizedThesisEntryErrors{}, true
 }
 
-func ValidateEmployee(e types.UniversityEmployee) (types.UniversityEmployeeErrors, bool) {
+func ValidateEmployee(e types.UniversityEmployeeEntry) (types.UniversityEmployeeEntryErrors, bool) {
 	ok := true
 	fErr, fOk := ValidateName(e.FirstName)
 	lErr, lOk := ValidateName(e.LastName)
 	if !fOk || !lOk {
 		ok = false
 	}
-	return types.UniversityEmployeeErrors{
+	return types.UniversityEmployeeEntryErrors{
 		FirstName: fErr,
 		LastName:  lErr,
 	}, ok
