@@ -1,6 +1,7 @@
 package sqlite
 
 import (
+	"fmt"
 	"log/slog"
 	"thesis-management-app/types"
 )
@@ -53,6 +54,27 @@ func (m *Model) InsertNote(note types.Note) (int64, error) {
 	return result.LastInsertId()
 }
 
-func UpdateNote() (types.Note, error) {
-	return types.Note{}, nil
+func (m *Model) UpdateNote(note types.Note) error {
+	query := `
+        UPDATE Note
+        SET 
+            content = ?,
+            completed_thesis_id = ?,
+            thesis_to_be_completed_id = ?,
+            university_employee_id = ?
+        WHERE id = ?
+    `
+	slog.Info("UpdateNote", "note", note)
+
+	_, err := m.DB.Exec(query,
+		note.Content,
+		note.RealizedThesisID,
+		note.OngoingThesisID,
+		note.UniversityEmployeeID,
+		note.Id,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update university_employee: %w", err)
+	}
+	return nil
 }
