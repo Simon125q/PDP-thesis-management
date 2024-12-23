@@ -1,0 +1,20 @@
+package components
+
+import "strconv"
+
+templ PageSwitcher(pageNum int) {
+<div class="flex items-center justify-center space-x-2 mt-4">
+    <button
+        class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        if pageNum==1 {
+            disabled 
+        }>
+        <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <div class="px-4 py-2 text-white bg-red-700 rounded hover:bg-red-600">{ strconv.Itoa(pageNum) }</div>
+    <button
+        class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">
+        <i class="fa-solid fa-arrow-right"></i>
+    </button>
+</div>
+}

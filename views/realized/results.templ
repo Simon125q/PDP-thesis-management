@@ -1,6 +1,9 @@
 package realized
 
-import "thesis-management-app/types"
+import (
+"thesis-management-app/types"
+"thesis-management-app/views/components"
+)
 
 templ Results(thes_data []types.RealizedThesisEntry) {
 <div id="results">
@@ -9,4 +12,5 @@ templ Results(thes_data []types.RealizedThesisEntry) {
     @Entry(t)
     }
 </div>
+@components.PageSwitcher(1)
 }
