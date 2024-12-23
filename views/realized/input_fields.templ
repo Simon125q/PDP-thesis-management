@@ -304,8 +304,6 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
 <!--for easier styling now set to true-->
 <!--TODO: change true to errs.InternalError or smth. like that-->
 if errs.InternalError {
-<div>
-    Wystąpił nieoczekiwany błąd, spróbuj jeszcze raz.
-</div>
+    @components.BoxErrorMsg("Wystąpił nieoczekiwany błąd, spróbuj jeszcze raz. \nJeśli błąd będzie dalej występował skontaktuj się z administratorem systemu.")
 }
 }
