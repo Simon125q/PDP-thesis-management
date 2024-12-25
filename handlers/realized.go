@@ -32,6 +32,8 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	queryParams := r.URL.Query()
+	queryParams.Set("page_number", "-1")
+	r.URL.RawQuery = queryParams.Encode()
 	filePath := "/realized/generate_excel"
 	redirectURL := filePath + "?" + queryParams.Encode()
 
