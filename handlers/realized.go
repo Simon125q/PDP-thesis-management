@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"log/slog"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -687,7 +688,24 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 			results = append(results, t)
 		}
 	}
-	return results, nil
+	paginated_res, _ := paginate(results, page_num, PageLimit)
+	return paginated_res, nil
+}
+
+func paginate(data []types.RealizedThesisEntry, page, pageSize int) ([]types.RealizedThesisEntry, int) {
+	totalItems := len(data)
+	totalPages := int(math.Ceil(float64(totalItems) / float64(pageSize)))
+	if page > totalPages {
+		page = totalPages
+	}
+
+	start := (page - 1) * pageSize
+	end := start + pageSize
+
+	if end > totalItems {
+		end = totalItems
+	}
+	return data[start:end], totalPages
 }
 
 func HandleRealizedNext(w http.ResponseWriter, r *http.Request) error {
