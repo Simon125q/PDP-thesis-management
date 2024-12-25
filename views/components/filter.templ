@@ -3,7 +3,7 @@ package components
 import "fmt"
 
 templ Filter(all bool) {
-	<form id="filterForm" hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" class="space-y-4">
+	<form id="filterForm" hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" hx-include="#page_number" class="space-y-4">
 		@SearchBar(all)
 		<div class="relative w-full bg-white border border-gray-200 rounded-lg p-4 shadow">
 			<!-- Input Field: Date Range -->

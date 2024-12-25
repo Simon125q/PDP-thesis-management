@@ -11,6 +11,7 @@ import (
 )
 
 func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams url.Values) ([]types.RealizedThesis, error) {
+	//TODO: This is probably unused and I dont think it will have a usecase
 	query := fmt.Sprintf(`SELECT id, COALESCE(thesis_number, '0'), COALESCE(exam_date, '01.01.0001'), COALESCE(average_study_grade, 0), COALESCE(competency_exam_grade, 0),
     COALESCE(diploma_exam_grade, 0), COALESCE(final_study_result, ''), COALESCE(final_study_result_text, ''),
     COALESCE(thesis_title_polish, ''), COALESCE(thesis_title_english, ''), COALESCE(thesis_language, ''), COALESCE(library, ''),
@@ -42,7 +43,7 @@ func (m *Model) AllRealizedThesis(sort_by string, desc_order bool, queryParams u
 	return thesis, nil
 }
 
-func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryParams url.Values) ([]types.RealizedThesisEntry, error) {
+func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, page_num, page_limit int, queryParams url.Values) ([]types.RealizedThesisEntry, error) {
 	query := fmt.Sprintf(`
         SELECT 
 		ct.id as thesis_id,
@@ -114,6 +115,7 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, queryP
     `)
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
+	query = AddSQLPagination(query, page_num, page_limit)
 	slog.Info("AllRealizedThesisEntries", "query", query)
 	slog.Info("AllRealizedThesisEntries", "params", params)
 	rows, err := m.DB.Query(query, params...)

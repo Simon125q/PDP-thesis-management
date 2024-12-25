@@ -1,20 +1,35 @@
 package components
 
 import "strconv"
+import "fmt"
 
-templ PageSwitcher(pageNum int) {
-<div class="flex items-center justify-center space-x-2 mt-4">
-    <button
-        class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
-        if pageNum==1 {
-            disabled 
-        }>
-        <i class="fa-solid fa-arrow-left"></i>
-    </button>
-    <div class="px-4 py-2 text-white bg-red-700 rounded hover:bg-red-600">{ strconv.Itoa(pageNum) }</div>
-    <button
-        class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">
-        <i class="fa-solid fa-arrow-right"></i>
-    </button>
-</div>
+templ PageSwitcher(pageNum int, tab string) {
+    <div class="flex items-center justify-center space-x-2 mt-4">
+        <!-- Left Arrow Button -->
+        <button
+            hx-get={fmt.Sprintf("%v/previous_page", tab)}
+            hx-target="#results"
+            hx-include="#filterForm, #page_number"
+            class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            if pageNum == 1 {
+                disabled
+            }>
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+
+        <!-- Page Number Input -->
+        <input id="page_number" name="page_number" type="number" min="1" 
+            value={strconv.Itoa(pageNum)} 
+            class="w-28 text-center appearance-none px-4 py-2 text-white bg-red-700 rounded hover:bg-red-600">
+        
+        <!-- Right Arrow Button -->
+        <button
+            hx-get={fmt.Sprintf("%v/next_page", tab)}
+            hx-target="#results"
+            hx-include="#filterForm, #page_number"
+            class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
 }
+

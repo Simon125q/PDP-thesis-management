@@ -17,9 +17,11 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+const PageLimit = 20
+
 func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HandleRealized", "entered", true)
-	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, r.URL.Query())
+	thes_data, err := server.MyS.DB.AllRealizedThesisEntries("thesis_id", true, 1, PageLimit, r.URL.Query())
 	if err != nil {
 		slog.Error("HandleRealized", "err", err)
 		return err
@@ -635,6 +637,7 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 	sortBy := "thesis_id"
 	desc := true
 	searchString := ""
+	page_num := 1
 	for key, val := range q {
 		if val[0] == "" || val[0] == "all" {
 			q.Del(key)
@@ -642,26 +645,32 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 		if key == "SortBy" {
 			sortBy = val[0]
 			q.Del(key)
-		}
-		if key == "Order" {
+		} else if key == "Order" {
 			if val[0] == "ASC" {
 				desc = false
 			}
 			q.Del(key)
-		}
-		if key == "Search" {
+		} else if key == "page_number" {
+			page_num, _ = strconv.Atoi(val[0])
+			slog.Info("filterRealizedThesisEntries", "page_number", page_num)
+			q.Del(key)
+		} else if key == "Search" {
 			searchString = val[0]
 			q.Del(key)
 		}
 	}
 	slog.Info("filterRealizedThesisEntries", "searchString", searchString)
 	r.URL.RawQuery = q.Encode()
-	thes_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, r.URL.Query())
+	if searchString == "" {
+		thes_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, page_num, PageLimit, r.URL.Query())
+		if err != nil {
+			return nil, err
+		}
+		return thes_data, nil
+	}
+	thes_data, err := server.MyS.DB.AllRealizedThesisEntries(sortBy, desc, -1, PageLimit, r.URL.Query())
 	if err != nil {
 		return nil, err
-	}
-	if searchString == "" {
-		return thes_data, err
 	}
 	results := []types.RealizedThesisEntry{}
 	for _, t := range thes_data {
@@ -681,12 +690,55 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 	return results, nil
 }
 
+func HandleRealizedNext(w http.ResponseWriter, r *http.Request) error {
+	query := r.URL.Query()
+	num := query.Get("page_number")
+	slog.Info("HandleRealizedNext", "page", num)
+	slog.Info("HandleRealizedNext", "query", r.URL.Query())
+	page, err := strconv.Atoi(num)
+	if err != nil {
+		slog.Error("HandleRealizedNext", "err", err)
+	}
+	query.Set("page_number", strconv.Itoa(page+1))
+	query.Set("reset_page", "false")
+	r.URL.RawQuery = query.Encode()
+	return HandleRealizedFiltered(w, r)
+}
+
+func HandleRealizedPrev(w http.ResponseWriter, r *http.Request) error {
+	query := r.URL.Query()
+	num := query.Get("page_number")
+	slog.Info("HandleRealizedNext", "page", num)
+	slog.Info("HandleRealizedNext", "query", r.URL.Query())
+	page, err := strconv.Atoi(num)
+	if err != nil {
+		slog.Error("HandleRealizedNext", "err", err)
+	}
+	query.Set("page_number", strconv.Itoa(page-1))
+	query.Set("reset_page", "false")
+	r.URL.RawQuery = query.Encode()
+	return HandleRealizedFiltered(w, r)
+}
+
 func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("HandleRealizedFiltered", "query", r.URL.Query())
+	q := r.URL.Query()
+	page, err := strconv.Atoi(q.Get("page_number"))
+	if q.Get("reset_page") != "false" {
+		q.Set("page_number", strconv.Itoa(1))
+		page = 1
+	}
+	q.Del("reset_page")
+	r.URL.RawQuery = q.Encode()
+	if err != nil {
+		slog.Info("HandleRealizedFiltered", "err", err)
+		return err
+	}
 	results, err := filterRealizedThesisEntries(r)
 	if err != nil {
 		return err
 	}
-	return Render(w, r, realized.Results(results))
+	return Render(w, r, realized.SwapResults(results, page))
 }
 
 func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {

@@ -9,6 +9,9 @@ import (
 templ Index() {
 @layouts.Base(true) {
 <div class="flex justify-center items-start">
+    <div class="w-1/5">
+        @components.Filter(false)
+    </div>
     <div class="text-xl text-tul-dark-red font-bold">
         { views.AuthenticatedUser(ctx).Login }, witaj na stronie z pracami będącymi w trakcie przygotowania.
         <br />
@@ -18,10 +21,7 @@ templ Index() {
         Jesteś zalogowany jako użytkownik
         }
     </div>
-    @components.SearchBar(false)
-    <div class="w-1/5">
-        @components.Filter(false)
-    </div>
+    @components.PageSwitcher(1, "ongoing")
 </div>
 }
 }

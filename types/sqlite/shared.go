@@ -182,6 +182,13 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 	}
 	return baseQuery, values
 }
+func AddSQLPagination(baseQuery string, page_num, page_limit int) string {
+	if page_num == -1 {
+		return baseQuery
+	}
+	offset := (page_num - 1) * page_limit
+	return baseQuery + fmt.Sprintf(" LIMIT %v OFFSET %v", page_limit, offset)
+}
 
 func AddSQLOrder(baseQuery, sort_by string, desc_order bool) string {
 	order := "DESC"
