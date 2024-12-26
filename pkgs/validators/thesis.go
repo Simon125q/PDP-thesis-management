@@ -3,6 +3,9 @@ package validators
 import (
 	"log/slog"
 	"regexp"
+	"strconv"
+	"strings"
+	"thesis-management-app/pkgs/server"
 	"thesis-management-app/types"
 	"unicode"
 )
@@ -95,10 +98,33 @@ func ValidateHourlySettlement(hours types.HourlySettlement, studyLevel string) (
 }
 
 func ValidateThesisNumber(num string) (string, bool) {
-	pattern := `^[A-Za-z]\d+\/[A-Za-z]{3}\/\d+\/\d{4}$`
+	pattern := `^[A-Za-z]\d+\/[A-Za-ż]{3}\/\d+\/\d{4}$`
 	re := regexp.MustCompile(pattern)
 	if re.MatchString(num) {
 		return "", true
 	}
 	return "Numer pracy musi miec odpowiedni format: Number jednostki/stopien/numer pracy/rok", false
+}
+
+func CheckThesisNumber(thesNumber, degree string) string {
+	slog.Info("CheckThesisNumber", "thesNumber", thesNumber)
+	pattern := `^[A-Za-z]\d+\/stopien\/num\/\d{4}$`
+	re := regexp.MustCompile(pattern)
+	if re.MatchString(thesNumber) {
+		slog.Info("CheckThesisNumber", "MatchedthesNumber", thesNumber)
+		if degree == "I stopień" {
+			thesNumber = strings.Replace(thesNumber, "stopien", "inż", -1)
+		} else if degree == "II stopień" {
+			thesNumber = strings.Replace(thesNumber, "stopien", "mgr", -1)
+		}
+		parts := strings.Split(thesNumber, "/")
+		nextNum, err := server.MyS.DB.GetNextThesisNumber(parts[0], parts[1], parts[3])
+		if err != nil {
+			slog.Error("CheckThesisNumber", "err", err)
+			return thesNumber
+		}
+		thesNumber = strings.Replace(thesNumber, "num", strconv.Itoa(nextNum), -1)
+		return thesNumber
+	}
+	return thesNumber
 }

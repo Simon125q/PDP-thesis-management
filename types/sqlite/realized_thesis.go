@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"net/url"
 	"strconv"
+	"strings"
 	"thesis-management-app/types"
 )
 
@@ -647,4 +648,37 @@ func (m *Model) GetStudentIdFromThesisEntry(thesisId int) (int, error) {
 		return 0, err
 	}
 	return studentId, nil
+}
+
+func (m *Model) GetNextThesisNumber(department, degree, year string) (int, error) {
+	query := `SELECT thesis_number FROM Completed_Thesis WHERE thesis_number LIKE ?`
+	param := fmt.Sprintf("%s/%s/%%/%s", department, degree, year)
+	slog.Info("GetNextThesisNumber", "param", param)
+	rows, err := m.DB.Query(query, param)
+	if err != nil {
+		slog.Error("GetNextThesisNumber", "err", err)
+		return 0, err
+	}
+	defer rows.Close()
+	var maxNum int = 0
+	for rows.Next() {
+		var num string
+		err := rows.Scan(&num)
+		if err != nil {
+			return 0, err
+		}
+		int_num, err := strconv.Atoi(strings.Split(num, "/")[2])
+		if err != nil {
+			return 0, err
+		}
+		if int_num > maxNum {
+			maxNum = int_num
+		}
+	}
+	err = rows.Err()
+	if err != nil {
+		return 0, err
+	}
+	slog.Info("GetNextThesisNumber", "num", maxNum)
+	return maxNum + 1, nil
 }

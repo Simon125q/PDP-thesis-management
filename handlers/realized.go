@@ -902,6 +902,7 @@ func getHourlySettlementId(h types.HourlySettlement, thesis_id int) (int, error)
 
 func HandleRealizedNew(w http.ResponseWriter, r *http.Request) error {
 	t := *extractRealizedThesisFromForm(r)
+	t.ThesisNumber = validators.CheckThesisNumber(t.ThesisNumber, t.Student.Degree)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if !ok {
 		errors.Correct = false
@@ -1081,7 +1082,11 @@ func updateNoteRealized(newContent string, thesisId int, userId int) error {
 }
 
 func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, realized.NewEntry(types.RealizedThesisEntry{}, types.RealizedThesisEntryErrors{}))
+	return Render(w, r, realized.NewEntry(types.RealizedThesisEntry{
+		HourlySettlement: types.HourlySettlement{
+			SupervisorHours: 10,
+			ReviewerHours:   2,
+		}}, types.RealizedThesisEntryErrors{}))
 }
 
 func HandleRealizedClearNew(w http.ResponseWriter, r *http.Request) error {

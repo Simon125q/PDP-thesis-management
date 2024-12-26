@@ -19,7 +19,7 @@ templ InputField(inputType, id, label, val string, req bool) {
 		id={ id }
 		name={ id }
         if id == "thesisNumber" && val == "" {
-            value={fmt.Sprintf("k22/inz/num/%v", time.Now().Year())}
+            value={fmt.Sprintf("k22/stopien/num/%v", time.Now().Year())}
         } else {
             value={ val }
         }
