@@ -10,6 +10,12 @@ templ BoxErrorMsg(msg string) {
 </div>
 }
 
+templ BoxMsg(msg string) {
+<div class="bg-gray-100 border border-red-700 px-4 py-3 rounded relative" role="alert">
+    <span class="block sm:inline">{msg}</span>
+</div>
+}
+
 templ InputField(inputType, id, label, val string, req bool) {
 	<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
 		{ label }

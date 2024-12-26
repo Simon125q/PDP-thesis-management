@@ -7,6 +7,9 @@ import (
 
 templ Results(thes_data []types.RealizedThesisEntry) {
 	<div id="results">
+        if len(thes_data) == 0 {
+            @components.BoxMsg("Brak Wyników")
+        }
 		for _, t := range thes_data {
 			<br/>
 			@Entry(t)
