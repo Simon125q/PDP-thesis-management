@@ -19,10 +19,21 @@ def parse_names(df, name, index):
 def standardise_degree(degree_str):
     if pd.notna(degree_str):
         degrees = {
-            'inżynierskiego': 'inż.', 'magisterskiego': 'mgr', 'magisterskiego ': 'mgr',
-            'magisterskiego uzupełniającego': 'mgr', 'inżynierskiego ': 'inż.', 'mgr uzup.': 'mgr',
-            'magisterskiego uzup.': 'mgr', 'mgr': 'mgr', 'inż.': 'inż.', 'inż..': 'inż.',
-            'inż. 1o': 'inż.', 'mgr ': 'mgr', 'mg': 'mgr', 'inż. ': 'inż.', '-': None, 'mgr.': 'mgr'
+            'inżynierskiego': 'I stopień',
+            'magisterskiego': 'II stopień',
+            'magisterskiego ': 'II stopień',
+            'magisterskiego uzupełniającego': 'II stopień',
+            'inżynierskiego ': 'I stopień',
+            'mgr uzup.': 'II stopień',
+            'magisterskiego uzup.': 'II stopień',
+            'mgr': 'II stopień',
+            'inż.': 'I stopień',
+            'inż..': 'I stopień',
+            'inż. 1o': 'I stopień',
+            'mgr ': 'II stopień',
+            'mg': 'II stopień',
+            'inż. ': 'I stopień',
+            '-': None, 'mgr.': 'II stopień'
         }
 
         degree_str = degree_str.lower()
@@ -37,30 +48,30 @@ def standardise_degree(degree_str):
 def standardize_title(title_str):
     if pd.notna(title_str):
         titles = {
-            'dr hab inż': 'Dr hab. inż.',
-            'dr inż': 'Dr inż.',
-            'dr hab inz - prof pł': 'Dr hab. inż. - prof. PŁ',
-            'prof dr hab inż': 'Prof. Dr hab. inż.',
-            'dr hab inż - prof pł': 'Dr hab. inż. - Prof. PŁ',
-            'mgr inż': 'Mgr inż.',
-            'dr inż + mgr inż': 'Dr inż. + Mgr inż.',
-            'prof dr hab inż + mgr': 'Prof. dr hab. inż. + Mgr',
-            'dr inz': 'Dr inż.',
+            'dr hab inż': 'dr hab. inż.',
+            'dr inż': 'dr inż.',
+            'dr hab inz - prof pł': 'dr hab. inż.',
+            'prof dr hab inż': 'prof. dr hab. inż.',
+            'dr hab inż - prof pł': 'dr hab. inż.',
+            'mgr inż': 'mgr inż.',
+            'dr inż + mgr inż': 'dr inż. + mgr inż.',  # ?
+            'prof dr hab inż + mgr': 'prof. dr hab. inż. + mgr',  # ?
+            'dr inz': 'dr inż.',
             'x': None,
-            'prof dr hab inż i mgr inż': 'Prof. dr hab. inż. + Mgr inż.',
-            'dr hab inz': 'Dr hab. inż.',
+            'prof dr hab inż i mgr inż': 'prof. dr hab. inż. + mgr inż.',  # ?
+            'dr hab inz': 'dr hab. inż.',
             'bez udz dypl': None,
-            'dr inż szczepaniak jakub': 'Dr inż.',
-            'dr': 'Dr',
-            'dr hab': 'Dr hab.',
-            'mg inż': 'Mgr inż.',
-            'prof': 'Prof.',
+            'dr inż szczepaniak jakub': 'dr inż.',
+            'dr': 'dr',
+            'dr hab': 'dr hab.',
+            'mg inż': 'mgr inż.',
+            'prof': 'prof.',
             '-': None,
-            'dr hab - prof pł': 'Dr hab. - prof. PŁ',
-            'd inż': 'Dr inż.',
-            'mgr': 'Mgr',
+            'dr hab - prof pł': 'dr hab.',
+            'd inż': 'dr inż.',
+            'mgr': 'mgr',
             '- - -': None,
-            'prof dr hab': 'Prof. dr hab.'
+            'prof dr hab': 'prof. dr hab.'
         }
         title_str = title_str.lower().replace(' -', ' - ') \
             .replace('-', ' - ') \
