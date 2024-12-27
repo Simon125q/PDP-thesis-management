@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
+	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -10,6 +11,12 @@ import (
 	"thesis-management-app/types"
 	"thesis-management-app/views/settings"
 )
+
+type SpecFilter struct {
+	Search string
+	Order  string
+	SortBy string
+}
 
 func HandleSpecializations(w http.ResponseWriter, r *http.Request) error {
 	specializations, err := server.MyS.DB.AllSpecializations()
@@ -43,6 +50,38 @@ func HandleSpecializationsDetails(w http.ResponseWriter, r *http.Request) error 
 	}
 	slog.Info("HSettingsSpecDetails", "spec", spec_data)
 	return Render(w, r, settings.Details_Spec(spec_data, types.SpecializationErrors{}))
+}
+
+func extractSpecsSortsFromForm(r *http.Request) *SpecFilter {
+	return &SpecFilter{
+		Search: r.FormValue("Search"),
+		Order:  r.FormValue("Order"),
+		SortBy: r.FormValue("SortBy"),
+	}
+}
+
+func HandleSortingSpecs(w http.ResponseWriter, r *http.Request) error {
+	log.Printf("All query parameters: %v", r.URL.Query()) //log do wywalenia
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		return err
+	}
+
+	filter := *extractSpecsSortsFromForm(r)
+
+	sortBy := filter.SortBy
+	order := filter.Order
+	search := filter.Search
+
+	specs, err := server.MyS.DB.GetSortedSpecs(sortBy, order, search)
+	if err != nil {
+		http.Error(w, "Failed to fetch courses", http.StatusInternalServerError)
+		return err
+	}
+
+	return Render(w, r, settings.EntrySpecsOnly(specs))
 }
 
 func HandleSpecializationsNew(w http.ResponseWriter, r *http.Request) error {

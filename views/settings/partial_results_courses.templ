@@ -1,0 +1,13 @@
+package settings
+
+import "thesis-management-app/types"
+
+templ EntryCoursesOnly(course_data []types.Course) {
+    <div>
+        for _, course := range course_data {
+            @Entry_Course(course)
+            <br />
+        }
+    </div>
+}
+

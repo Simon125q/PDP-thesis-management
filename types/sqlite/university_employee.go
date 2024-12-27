@@ -35,6 +35,41 @@ func (m *Model) AllUniversityEmployee() ([]types.UniversityEmployee, error) {
 	return employee, nil
 }
 
+func (m *Model) GetSortedEmps(sortBy string, order string, searchTerm string) ([]types.UniversityEmployeeEntry, error) {
+	if sortBy == "" {
+		sortBy = "name"
+	}
+	if order == "" {
+		order = "DESC"
+	}
+	if searchTerm == "" {
+		searchTerm = "%"
+	}
+
+	q := fmt.Sprintf("SELECT id, first_name, last_name, COALESCE(current_academic_title, '') as current_academic_title, COALESCE(department_unit, '') AS department_unit FROM University_Employee WHERE last_name LIKE '%%%s%%' ORDER BY %s %s", searchTerm, sortBy, order)
+
+	rows, err := m.DB.Query(q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	emps := []types.UniversityEmployeeEntry{}
+	for rows.Next() {
+		emp := types.UniversityEmployeeEntry{}
+		err := rows.Scan(&emp.Id, &emp.FirstName, &emp.LastName, &emp.CurrentAcademicTitle, &emp.DepartmentUnit)
+		if err != nil {
+			return nil, err
+		}
+		emps = append(emps, emp)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return emps, nil
+}
+
 func (m *Model) AllUniversityEmployeeEntries(sort_by string, desc_order bool, queryParams url.Values) ([]types.UniversityEmployeeEntry, error) {
 	query := fmt.Sprintf(`
         SELECT 
@@ -112,7 +147,7 @@ func (m *Model) ThesisCountByEmpId(id string) (string, error) {
 	if err != nil {
 		return "error", err
 	}
-	return thesisCount, nil
+	return thesisCount, nil //id add the counting here, or do a similar function
 }
 
 func (m *Model) EmployeeIdByName(name string) (int, error) {

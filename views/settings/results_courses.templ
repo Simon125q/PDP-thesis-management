@@ -6,19 +6,22 @@ import "thesis-management-app/views/components"
 templ ResultsCourses(course_data []types.Course) {
     <div class="w-full p-4">
          <!-- Search Bar Component -->
-        @components.SearchBarCourse(true)
-        <br/>
+         <div id="search-bar" class="max-w-4xl mx-auto">
+            @components.SearchBarCourse(true)
+         </div>
+
+         <br/>
 
         <div class="bg-white max-w-5xl p-4">
             <span id="new_entry"></span>
         </div>
 
         <!-- List of Courses -->
-        <div id="results">
-        for _, course := range course_data {
+        <div id="results" class="max-w-4xl mx-auto px-4 mt-4">
+            for _, course := range course_data {
                 @Entry_Course(course)
             <br />
-        }
+            }
         </div>
     </div>
 }

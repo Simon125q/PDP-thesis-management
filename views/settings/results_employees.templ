@@ -3,18 +3,21 @@ package settings
 import "thesis-management-app/types"
 import "thesis-management-app/views/components"
 
-
 templ ResultsUsers(empl_data []types.UniversityEmployeeEntry) {
     <div class="w-full p-4">
          <!-- Search Bar Component -->
-        @components.SearchBarEmpl(true)
+         <div id="search-bar" class="max-w-4xl mx-auto">
+            @components.SearchBarEmpl(true)
+        </div>
+
         <br/>
+
         <div class="bg-white max-w-5xl p-4">
             <span id="new_entry"></span>
         </div>
 
         <!-- List of Courses -->
-        <div id="results">
+        <div id="results" class="max-w-4xl mx-auto px-4 mt-4">
         for _, empl := range empl_data {
                 @Entry_Empl(empl)
             <br />

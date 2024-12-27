@@ -105,6 +105,7 @@ func main() {
 		r.Get("/settings/employees/details/{id}", handlers.Make(handlers.HandleEmployeesDetails))
 		r.Put("/settings/employees/{id}", handlers.Make(handlers.HandleEmployeesUpdate))
 		r.Get("/settings/employees/clear-new", handlers.Make(handlers.HandleEmployeesClearNew))
+		r.Get("/settings/employees/sorted", handlers.Make(handlers.HandleSortingEmps))
 
 		r.Get("/settings/courses", handlers.Make(handlers.HandleCourses))
 		r.Get("/settings/courses/new", handlers.Make(handlers.HandleCoursesGetNew))
@@ -113,6 +114,7 @@ func main() {
 		r.Get("/settings/courses/details/{id}", handlers.Make(handlers.HandleCoursesDetails))
 		r.Put("/settings/courses/{id}", handlers.Make(handlers.HandleCoursesUpdate))
 		r.Get("/settings/courses/clear-new", handlers.Make(handlers.HandleCoursesClearNew))
+		r.Get("/settings/courses/sorted", handlers.Make(handlers.HandleSortingCourses))
 
 		// Routes for specializations
 		r.Get("/settings/specs", handlers.Make(handlers.HandleSpecializations))
@@ -122,6 +124,7 @@ func main() {
 		r.Get("/settings/specs/details/{id}", handlers.Make(handlers.HandleSpecializationsDetails))
 		r.Put("/settings/specs/{id}", handlers.Make(handlers.HandleSpecializationsUpdate))
 		r.Get("/settings/specs/clear-new", handlers.Make(handlers.HandleSpecializationsClearNew))
+		r.Get("/settings/specs/sorted", handlers.Make(handlers.HandleSortingSpecs))
 
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))

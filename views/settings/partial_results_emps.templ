@@ -1,0 +1,13 @@
+package settings
+
+import "thesis-management-app/types"
+
+templ EntryEmpsOnly(emp_data []types.UniversityEmployeeEntry) {
+    <div>
+        for _, emp := range emp_data {
+            @Entry_Empl(emp)
+            <br />
+        }
+    </div>
+}
+

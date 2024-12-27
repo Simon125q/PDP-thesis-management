@@ -1,0 +1,13 @@
+package settings
+
+import "thesis-management-app/types"
+
+templ EntrySpecsOnly(spec_data []types.Specialization) {
+    <div>
+        for _, spec := range spec_data {
+            @Entry_Spec(spec)
+            <br />
+        }
+    </div>
+}
+

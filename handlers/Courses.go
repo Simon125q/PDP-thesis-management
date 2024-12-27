@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
+	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -10,6 +11,12 @@ import (
 	"thesis-management-app/types"
 	"thesis-management-app/views/settings"
 )
+
+type CourseFilter struct {
+	Search string
+	Order  string
+	SortBy string
+}
 
 func HandleCourses(w http.ResponseWriter, r *http.Request) error {
 	courses, err := server.MyS.DB.AllCourses()
@@ -62,6 +69,38 @@ func extractCourseFromForm(r *http.Request) *types.Course {
 	return &types.Course{
 		Name: r.FormValue("name"),
 	}
+}
+
+func extractSortsCoursesFromForm(r *http.Request) *CourseFilter {
+	return &CourseFilter{
+		Search: r.FormValue("Search"),
+		Order:  r.FormValue("Order"),
+		SortBy: r.FormValue("SortBy"),
+	}
+}
+
+func HandleSortingCourses(w http.ResponseWriter, r *http.Request) error {
+	log.Printf("All query parameters: %v", r.URL.Query()) //log do wywalenia
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		return err
+	}
+
+	filter := *extractSortsCoursesFromForm(r)
+
+	sortBy := filter.SortBy
+	order := filter.Order
+	search := filter.Search
+
+	courses, err := server.MyS.DB.GetSortedCourses(sortBy, order, search)
+	if err != nil {
+		http.Error(w, "Failed to fetch courses", http.StatusInternalServerError)
+		return err
+	}
+
+	return Render(w, r, settings.EntryCoursesOnly(courses))
 }
 
 func HandleCoursesDetails(w http.ResponseWriter, r *http.Request) error {

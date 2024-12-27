@@ -3,11 +3,12 @@ package settings
 import "thesis-management-app/types"
 import "thesis-management-app/views/components"
 
-
 templ ResultsSpecs(spec_data []types.Specialization) {
     <div class="w-full p-4">
          <!-- Search Bar Component -->
-        @components.SearchBarSpec(true)
+        <div id="search-bar" class="max-w-4xl mx-auto">
+            @components.SearchBarSpec(true)
+        </div>
         <br/>
 
         <div class="bg-white max-w-5xl p-4">
@@ -15,7 +16,7 @@ templ ResultsSpecs(spec_data []types.Specialization) {
         </div>
 
         <!-- List of Courses -->
-        <div id="results">
+        <div id="results" class="max-w-4xl mx-auto px-4 mt-4">
         for _, spec := range spec_data {
                 @Entry_Spec(spec)
             <br />

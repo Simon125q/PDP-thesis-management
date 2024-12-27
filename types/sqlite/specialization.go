@@ -29,6 +29,41 @@ func (m *Model) AllSpecializations() ([]types.Specialization, error) {
 	return specs, nil
 }
 
+func (m *Model) GetSortedSpecs(sortBy string, order string, searchTerm string) ([]types.Specialization, error) {
+	if sortBy == "" {
+		sortBy = "name"
+	}
+	if order == "" {
+		order = "DESC"
+	}
+	if searchTerm == "" {
+		searchTerm = "%"
+	}
+
+	q := fmt.Sprintf("SELECT id, name FROM specializations WHERE name LIKE '%%%s%%' ORDER BY %s %s", searchTerm, sortBy, order)
+
+	rows, err := m.DB.Query(q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	specs := []types.Specialization{}
+	for rows.Next() {
+		c := types.Specialization{}
+		err := rows.Scan(&c.Id, &c.Name)
+		if err != nil {
+			return nil, err
+		}
+		specs = append(specs, c)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return specs, nil
+}
+
 func (m *Model) SpecializationById(id string) (types.Specialization, error) {
 	if id == "0" {
 		return types.Specialization{}, nil

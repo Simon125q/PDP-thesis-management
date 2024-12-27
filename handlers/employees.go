@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -11,6 +12,12 @@ import (
 
 	"github.com/go-chi/chi/v5"
 )
+
+type EmpsFilter struct {
+	Search string
+	Order  string
+	SortBy string
+}
 
 func HandleEmployees(w http.ResponseWriter, r *http.Request) error {
 	empl_data, err := server.MyS.DB.AllUniversityEmployeeEntries("employee_id", true, r.URL.Query())
@@ -45,6 +52,38 @@ func HandleEmployeesDetails(w http.ResponseWriter, r *http.Request) error {
 	}
 	slog.Info("HSettingsDetails", "empl", empl_data)
 	return Render(w, r, settings.Details_Empl(empl_data, types.UniversityEmployeeEntryErrors{}))
+}
+
+func extractSortsEmpsFromForm(r *http.Request) *EmpsFilter {
+	return &EmpsFilter{
+		Search: r.FormValue("Search"),
+		Order:  r.FormValue("Order"),
+		SortBy: r.FormValue("SortBy"),
+	}
+}
+
+func HandleSortingEmps(w http.ResponseWriter, r *http.Request) error {
+	log.Printf("All query parameters: %v", r.URL.Query()) //log do wywalenia
+
+	err := r.ParseForm()
+	if err != nil {
+		http.Error(w, "Failed to parse form", http.StatusBadRequest)
+		return err
+	}
+
+	filter := *extractSortsEmpsFromForm(r)
+
+	sortBy := filter.SortBy
+	order := filter.Order
+	search := filter.Search
+
+	emps, err := server.MyS.DB.GetSortedEmps(sortBy, order, search)
+	if err != nil {
+		http.Error(w, "Failed to fetch courses", http.StatusInternalServerError)
+		return err
+	}
+
+	return Render(w, r, settings.EntryEmpsOnly(emps))
 }
 
 func extractEmployeeFromForm(r *http.Request) *types.UniversityEmployeeEntry {

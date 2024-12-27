@@ -12,13 +12,24 @@ templ Details_Empl(empl types.UniversityEmployeeEntry, errs types.UniversityEmpl
             <h2 class="text-lg font-medium text-gray-800">Szczegóły Pracownika</h2>
         </div>
         @InputFields_Empl(empl, errs)
-         <div>
-             <label class="text-lg font-medium text-gray-800 block mb-2">Liczba powiązanych prac</label>
-             <span class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none">
-                 { empl.ThesisCount }
-             </span>
-         </div>
-          <br/>
+
+        <!-- Thesis Count Section -->
+        <div>
+            <label class="text-lg font-medium text-gray-800 block mb-2">Liczba powiązanych prac:</label>
+            <p class="text-base font-medium text-gray-tul-dark-gray">
+                { empl.ThesisCount }
+            </p>
+        </div>
+
+        <!-- Doubled Information -->
+        <div class="mt-4">
+            <label class="text-lg font-medium text-gray-800 block mb-2">Liczba powiązanych prac (ponownie):</label>
+            <p class="text-base font-medium text-gray-tul-dark-gray">
+                { empl.ThesisCount }
+            </p>
+        </div>
+
+        <br/>
         <div class="flex flex-row items-center justify-between">
             <div hx-get={ fmt.Sprintf("/settings/employees/%v", empl.Id) }
                  hx-target={ fmt.Sprintf("#details-%v", empl.Id) }

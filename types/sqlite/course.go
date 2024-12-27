@@ -29,6 +29,41 @@ func (m *Model) AllCourses() ([]types.Course, error) {
 	return courses, nil
 }
 
+func (m *Model) GetSortedCourses(sortBy string, order string, searchTerm string) ([]types.Course, error) {
+	if sortBy == "" {
+		sortBy = "name"
+	}
+	if order == "" {
+		order = "DESC"
+	}
+	if searchTerm == "" {
+		searchTerm = "%"
+	}
+
+	q := fmt.Sprintf("SELECT id, name FROM fields_of_study WHERE name LIKE '%%%s%%' ORDER BY %s %s", searchTerm, sortBy, order)
+
+	rows, err := m.DB.Query(q)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	courses := []types.Course{}
+	for rows.Next() {
+		c := types.Course{}
+		err := rows.Scan(&c.Id, &c.Name)
+		if err != nil {
+			return nil, err
+		}
+		courses = append(courses, c)
+	}
+	err = rows.Err()
+	if err != nil {
+		return nil, err
+	}
+	return courses, nil
+}
+
 func (m *Model) CourseById(id string) (types.Course, error) {
 	if id == "0" {
 		return types.Course{}, nil
