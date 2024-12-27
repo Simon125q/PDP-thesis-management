@@ -20,15 +20,6 @@ templ Details_Empl(empl types.UniversityEmployeeEntry, errs types.UniversityEmpl
                 { empl.ThesisCount }
             </p>
         </div>
-
-        <!-- Doubled Information -->
-        <div class="mt-4">
-            <label class="text-lg font-medium text-gray-800 block mb-2">Liczba powiązanych prac (ponownie):</label>
-            <p class="text-base font-medium text-gray-tul-dark-gray">
-                { empl.ThesisCount }
-            </p>
-        </div>
-
         <br/>
         <div class="flex flex-row items-center justify-between">
             <div hx-get={ fmt.Sprintf("/settings/employees/%v", empl.Id) }

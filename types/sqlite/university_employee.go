@@ -139,15 +139,21 @@ func (m *Model) EmployeeById(id string) (types.UniversityEmployeeEntry, error) {
 }
 
 func (m *Model) ThesisCountByEmpId(id string) (string, error) {
-	var thesisCount string
+	var totalThesisCount int
+
 	err := m.DB.QueryRow(`
-	    SELECT COUNT(*)
-	    FROM Completed_Thesis
-	    WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
+		SELECT 
+			(SELECT COUNT(*) FROM Completed_Thesis
+			WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?) +
+			(SELECT COUNT(*) FROM Thesis_To_Be_Completed
+			WHERE supervisor_id = ? OR assistant_supervisor_id = ?)`, id, id, id, id, id).
+		Scan(&totalThesisCount)
+
 	if err != nil {
 		return "error", err
 	}
-	return thesisCount, nil //id add the counting here, or do a similar function
+
+	return fmt.Sprintf("%d", totalThesisCount), nil
 }
 
 func (m *Model) EmployeeIdByName(name string) (int, error) {
@@ -211,16 +217,15 @@ func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployeeEntry, err
 		return types.UniversityEmployeeEntry{}, err
 	}
 
-	var thesisCount int
+	var totalThesisCount int
 	err = m.DB.QueryRow(`
-    SELECT COUNT(*)
-    FROM Completed_Thesis
-    WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?`, id, id, id).Scan(&thesisCount)
+		SELECT 
+			(SELECT COUNT(*) FROM Completed_Thesis WHERE supervisor_id = ? OR assistant_supervisor_id = ? OR reviewer_id = ?) +
+			(SELECT COUNT(*) FROM Thesis_To_Be_Completed WHERE supervisor_id = ? OR assistant_supervisor_id = ?)`,
+		id, id, id, id, id).Scan(&totalThesisCount)
 	if err != nil {
 		return types.UniversityEmployeeEntry{}, err
 	}
-
-	thesisCount = 1
 
 	return types.UniversityEmployeeEntry{
 		Id:                   empl.Id,
@@ -228,6 +233,6 @@ func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployeeEntry, err
 		LastName:             empl.LastName,
 		CurrentAcademicTitle: empl.CurrentAcademicTitle,
 		DepartmentUnit:       empl.DepartmentUnit,
-		ThesisCount:          fmt.Sprintf("%d", thesisCount),
+		ThesisCount:          fmt.Sprintf("%d", totalThesisCount),
 	}, nil
 }
