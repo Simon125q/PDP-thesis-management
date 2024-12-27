@@ -4,6 +4,9 @@ module.exports = {
   safelist: [],
   theme: {
     extend: {
+      maxHeight: {
+        '85vh': '85vh',
+      },
       width: {
         "1/24": "4.166666%",
         "2/24": "8.333333%",

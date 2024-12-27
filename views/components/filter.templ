@@ -3,9 +3,9 @@ package components
 import "fmt"
 
 templ Filter(all bool) {
-	<form id="filterForm" hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" hx-include="#page_number" class="space-y-4">
+	<form id="filterForm" hx-get="/realized/filter" hx-target="#results" hx-swap="outerHTML" hx-include="#page_number">
 		@SearchBar(all)
-		<div class="relative w-full bg-white border border-gray-200 rounded-lg p-4 shadow">
+		<div class="relative w-full bg-white shadow border-gray-200 border-t-0 rounded-bl-lg rounded-br-lg p-4">
 			<!-- Input Field: Date Range -->
 			if all {
 				<div class="mb-4">

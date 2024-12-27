@@ -6,7 +6,7 @@ import (
 )
 
 templ SearchBar(all bool) {
-	<div class="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded shadow border-gray-50">
+	<div class="w-full max-w-4xl mx-auto mt-8 p-4 bg-white rounded-tl-lg rounded-tr-lg shadow border-gray-200 border-b-0">
 		<!-- Search Bar Section -->
 		<div class="mb-4">
 			<div class="relative flex items-center w-full">
@@ -22,7 +22,7 @@ templ SearchBar(all bool) {
 			</div>
 		</div>
 		<!-- Buttons Section -->
-		<div class="flex items-center justify-between space-x-3">
+		<div class="flex flex-wrap items-center justify-between gap-y-3">
 			<div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-2">
 				<select name="SortBy" class="text-tul-dark-gray bg-rose-50">
 					<option value="thesis_id" selected>Dodane</option>
