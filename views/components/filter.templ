@@ -152,7 +152,7 @@ templ Filter(all bool) {
 					id="supervisor_id"
 					name="supervisor_name"
 					placeholder="Promotor"
-					hx-get={ fmt.Sprintf("/realized/autocompleteSupervisorSurname") }
+					hx-get={ fmt.Sprintf("/realized/autocompleteSupervisorNameAndSurname") }
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-supervisor"
@@ -201,7 +201,7 @@ templ Filter(all bool) {
 					id="reviewer_id"
 					name="reviewer_name"
 					placeholder="Recenzent"
-					hx-get={ fmt.Sprintf("/realized/autocompleteAssistantSupervisorNameAndSurname") }
+					hx-get={ fmt.Sprintf("/realized/autocompleteReviewerNameAndSurname") }
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-reviewer"
