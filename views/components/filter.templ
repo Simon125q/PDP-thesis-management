@@ -56,7 +56,7 @@ templ Filter(all bool) {
 					id="student"
 					name="student_name"
 					placeholder="Student"
-					hx-get={ fmt.Sprintf("/realized/autocompleteStudentSurname") }
+					hx-get={ fmt.Sprintf("/realized/autocompleteStudentNameAndSurname") }
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-student-surname"
