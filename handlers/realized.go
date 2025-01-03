@@ -839,6 +839,7 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 	return &types.RealizedThesisEntry{
 		ThesisNumber:         r.FormValue("thesisNumber"),
 		ExamDate:             r.FormValue("examDate"),
+		ExamTime:             r.FormValue("examTime"),
 		AverageStudyGrade:    r.FormValue("averageStudyGrade"),
 		CompetencyExamGrade:  r.FormValue("competencyExamGrade"),
 		DiplomaExamGrade:     r.FormValue("diplomaExamGrade"),

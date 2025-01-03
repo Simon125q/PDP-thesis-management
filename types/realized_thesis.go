@@ -4,6 +4,7 @@ type RealizedThesis struct {
 	Id                               int
 	ThesisNumber                     string
 	ExamDate                         string
+	ExamTime                         string
 	AverageStudyGrade                string
 	CompetencyExamGrade              string
 	DiplomaExamGrade                 string
@@ -55,6 +56,7 @@ type RealizedThesisEntry struct {
 type RealizedThesisEntryErrors struct {
 	ThesisNumber                     string
 	ExamDate                         string
+	ExamTime                         string
 	AverageStudyGrade                string
 	CompetencyExamGrade              string
 	DiplomaExamGrade                 string
