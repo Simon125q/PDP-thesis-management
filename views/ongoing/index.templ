@@ -1,27 +1,32 @@
 package ongoing
 
 import (
-"thesis-management-app/views"
-"thesis-management-app/views/components"
-"thesis-management-app/views/layouts"
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
+	"thesis-management-app/views/layouts"
 )
 
-templ Index() {
-@layouts.Base(true) {
-<div class="flex justify-center items-start">
-    <div class="w-1/5">
-        @components.Filter(false)
-    </div>
-    <div class="text-xl text-tul-dark-red font-bold">
-        { views.AuthenticatedUser(ctx).Login }, witaj na stronie z pracami będącymi w trakcie przygotowania.
-        <br />
-        if views.AuthenticatedUser(ctx).IsAdmin {
-        Jesteś zalogowany jako administrator
-        } else {
-        Jesteś zalogowany jako użytkownik
-        }
-    </div>
-    @components.PageSwitcher(1, "ongoing")
-</div>
-}
+templ Index(thes_data []types.OngoingThesisEntry) {
+	@layouts.Base(true) {
+		<div class="flex flex-col items-center min-h-screen w-full">
+			<!-- Filters and Results Section -->
+			<div class="flex w-full max-w-7xl justify-center">
+				<!-- Filters on the Left -->
+				<div class="flex-shrink-0 w-4/12 mr-2">
+					<div class="w-full sticky top-0 overflow-y-auto max-h-[85vh]">
+						@components.Filter(false)
+					</div>
+				</div>
+				<!-- Results on the Right -->
+				<div class="w-8/12 shadow border-l-3 border-tul-dark-red">
+					<div class="bg-white max-w-5xl p-4">
+						<span id="new_entry"></span>
+					</div>
+					<div class="bg-white max-w-5xl p-4">
+						@SwapResults(thes_data, 1)
+					</div>
+				</div>
+			</div>
+		</div>
+	}
 }

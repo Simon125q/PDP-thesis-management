@@ -1,0 +1,25 @@
+package ongoing
+
+import (
+	"thesis-management-app/types"
+	"thesis-management-app/views/components"
+)
+
+templ Results(thes_data []types.OngoingThesisEntry) {
+	<div id="results">
+		if len(thes_data) == 0 {
+			@components.BoxMsg("Brak Wyników")
+		}
+		for _, t := range thes_data {
+			<br/>
+			@Entry(t)
+		}
+	</div>
+}
+
+templ SwapResults(thes_data []types.OngoingThesisEntry, page_number int) {
+	@Results(thes_data)
+	<span id="pageSwitcher" hx-swap-oob="true">
+		@components.PageSwitcher(page_number, "ongoing")
+	</span>
+}

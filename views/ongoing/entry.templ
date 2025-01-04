@@ -1,0 +1,58 @@
+package ongoing
+
+import (
+	"fmt"
+	"thesis-management-app/types"
+)
+
+templ Entry(thesis types.OngoingThesisEntry) {
+	<div
+		class="w-full p-4 border-3 border-tul-dark-red rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
+		hx-get={ fmt.Sprintf("/ongoing/details/%v", thesis.Id) }
+		hx-trigger="click"
+		hx-swap="outerHTML"
+	>
+		<div class="flex justify-between items-center">
+			<span class="text-sm text-gray-600">
+				{ thesis.ThesisNumber }
+			</span>
+		</div>
+		<h3 class="font-bold text-2xl text-center text-gray-900 mt-2 mb-4">
+			"{ thesis.ThesisTitlePolish }"
+		</h3>
+		<div class="flex flex-row items-center justify-between text-sm text-gray-700">
+			<div class="flex flex-col ml-auto mr-auto">
+				<p>
+					<strong>Kierunek:</strong> { thesis.Student.FieldOfStudy }
+				</p>
+				<p>
+					<strong>Student:</strong> { thesis.Student.FirstName } { thesis.Student.LastName }
+				</p>
+				<p>
+					<strong>Numer Indeksu:</strong> ({ thesis.Student.StudentNumber })
+				</p>
+			</div>
+			<div class="flex flex-col ml-auto mr-auto">
+				<p>
+					<strong>Promotor:</strong> { thesis.Supervisor.FirstName } { thesis.Supervisor.LastName }
+				</p>
+				<p>
+					<strong>Promotor pom.:</strong> { thesis.AssistantSupervisor.FirstName } { 
+                thesis.AssistantSupervisor.LastName }
+				</p>
+			</div>
+		</div>
+	</div>
+}
+
+templ NewEntrySwap(thesis, vals types.OngoingThesisEntry, errs types.OngoingThesisEntryErrors) {
+	if errs.Correct {
+		<span>
+			<br/>
+			@Entry(thesis)
+		</span>
+	}
+	<span id="newEntryForm" hx-swap-oob="true">
+		@NewEntry(vals, errs)
+	</span>
+}
