@@ -21,9 +21,9 @@ type OngoingThesisEntry struct {
 	ThesisLanguage                   string
 	Student                          Student
 	SupervisorAcademicTitle          string
-	Supervisor                       UniversityEmployee
+	Supervisor                       UniversityEmployeeEntry
 	AssistantSupervisorAcademicTitle string
-	AssistantSupervisor              UniversityEmployee
+	AssistantSupervisor              UniversityEmployeeEntry
 }
 
 type OngoingThesisEntryErrors struct {

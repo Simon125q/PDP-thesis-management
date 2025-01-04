@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/url"
+	"strconv"
 	"thesis-management-app/types"
 )
 
@@ -63,7 +64,8 @@ func (m *Model) AllOngoingThesisEntries(sort_by string, desc_order bool, page_nu
 			&t.Student.Id, &t.Student.StudentNumber, &t.Student.FirstName, &t.Student.LastName,
 			&t.Student.FieldOfStudy, &t.Student.Degree, &t.Student.Specialization, &t.Student.ModeOfStudies,
 			&t.Supervisor.Id, &t.Supervisor.FirstName, &t.Supervisor.LastName, &t.Supervisor.CurrentAcademicTitle, &t.Supervisor.DepartmentUnit,
-			&t.AssistantSupervisor.Id, &t.AssistantSupervisor.FirstName, &t.AssistantSupervisor.LastName, &t.AssistantSupervisor.CurrentAcademicTitle, &t.AssistantSupervisor.DepartmentUnit)
+			&t.AssistantSupervisor.Id, &t.AssistantSupervisor.FirstName, &t.AssistantSupervisor.LastName,
+			&t.AssistantSupervisor.CurrentAcademicTitle, &t.AssistantSupervisor.DepartmentUnit)
 		if err != nil {
 			return nil, err
 		}
@@ -74,4 +76,64 @@ func (m *Model) AllOngoingThesisEntries(sort_by string, desc_order bool, page_nu
 		return nil, fmt.Errorf("AllOngoingThesisEntries rows error %v", err)
 	}
 	return thesis, nil
+}
+
+func (m *Model) OngoingThesisEntryByID(id string) (types.OngoingThesisEntry, error) {
+	t, err := m.OngoingThesisByID(id)
+	if err != nil {
+		return types.OngoingThesisEntry{}, fmt.Errorf("OngoingThesisEntryByID -> %v", err)
+	}
+	student, err := m.StudentById(strconv.Itoa(t.StudentId))
+	if err != nil {
+		return types.OngoingThesisEntry{}, fmt.Errorf("OngoingThesisEntryByID -> %v", err)
+	}
+	supervisor, err := m.EmployeeById(strconv.Itoa(t.SupervisorId))
+	if err != nil {
+		return types.OngoingThesisEntry{}, fmt.Errorf("OngoingThesisEntryByID -> %v", err)
+	}
+	assistant_supervisor, err := m.EmployeeById(strconv.Itoa(t.AssistantSupervisorId))
+	if err != nil {
+		return types.OngoingThesisEntry{}, fmt.Errorf("OngoingThesisEntryByID -> %v", err)
+	}
+	return types.OngoingThesisEntry{
+		Id:                               t.Id,
+		ThesisNumber:                     t.ThesisNumber,
+		ThesisTitlePolish:                t.ThesisTitlePolish,
+		ThesisTitleEnglish:               t.ThesisTitleEnglish,
+		ThesisLanguage:                   t.ThesisLanguage,
+		Student:                          student,
+		SupervisorAcademicTitle:          t.SupervisorAcademicTitle,
+		Supervisor:                       supervisor,
+		AssistantSupervisorAcademicTitle: t.AssistantSupervisorAcademicTitle,
+		AssistantSupervisor:              assistant_supervisor,
+	}, nil
+
+}
+
+func (m *Model) OngoingThesisByID(id string) (types.OngoingThesis, error) {
+	query := `SELECT id, COALESCE(thesis_number, '0'), 
+    COALESCE(topic_polish, ''), COALESCE(topic_english, ''), COALESCE(thesis_language, ''), 
+    COALESCE(supervisor_academic_title, ''), COALESCE(assistant_supervisor_academic_title, ''), 
+    student_id, COALESCE(supervisor_id, '0'), COALESCE(assistant_supervisor_id, '0') 
+    FROM Thesis_To_Be_Completed WHERE id = ?`
+	rows, err := m.DB.Query(query, id)
+	if err != nil {
+		return types.OngoingThesis{}, fmt.Errorf("OngoingThesisByID query error -> %v", err)
+	}
+	defer rows.Close()
+	t := types.OngoingThesis{}
+	rows.Next()
+	err = rows.Scan(&t.Id, &t.ThesisNumber,
+		&t.ThesisTitlePolish, &t.ThesisTitleEnglish, &t.ThesisLanguage,
+		&t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle,
+		&t.StudentId, &t.SupervisorId, &t.AssistantSupervisorId)
+	if err != nil {
+		return types.OngoingThesis{}, fmt.Errorf("OngoingThesisByID scan error -> %v", err)
+	}
+	err = rows.Err()
+	if err != nil {
+		return types.OngoingThesis{}, fmt.Errorf("OngoingThesisByID rows error -> %v", err)
+	}
+	slog.Info("OngoingThesisByID", "thesis", t)
+	return t, nil
 }

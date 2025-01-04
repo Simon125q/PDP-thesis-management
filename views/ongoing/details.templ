@@ -1,0 +1,64 @@
+package ongoing
+
+import (
+	"fmt"
+	"thesis-management-app/types"
+	"thesis-management-app/views"
+)
+
+templ Details(thesis types.OngoingThesisEntry, errs types.OngoingThesisEntryErrors) {
+	<div
+		class="flex items-center justify-center p-4 border-3 border-tul-dark-red rounded-2xl w-full"
+		id={ fmt.Sprintf("details-%v", thesis.Id) }
+	>
+		<div class="mx-auto w-full bg-white">
+			<form>
+				<div class="bg-gray-100 rounded-full justify-center px-4 py-2">
+					<h2 class="text-2xl font-semibold text-center text-tul-dark-gray">Szczegóły Pracy</h2>
+				</div>
+				@InputFields(thesis, errs)
+				<div>
+					<label for="thesis_note" class="mt-4 text-sm font-medium text-gray-900 block mb-2">
+						Notatka do
+						Pracy
+					</label>
+					<div
+						hx-get={ fmt.Sprintf("/note/%v&%v&%v", 0, thesis.Id, views.AuthenticatedUser(ctx).Id) }
+						hx-trigger="load"
+					>
+						<img
+							alt="Result loading..."
+							class="htmx-indicator"
+							width="150"
+							src="/public/imgs/browser_icon.png"
+						/>
+					</div>
+				</div>
+				<div class="flex flex-row items-center justify-between">
+					<div
+						hx-get={ fmt.Sprintf("/ongoing/%v", thesis.Id) }
+						hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
+						hx-trigger="click"
+						hx-swap="outerHTML"
+						class="p-4"
+					>
+						<div
+							class="text-white bg-tul-dark-red hover:bg-tul-medium-red focus:ring-4 focus:ring-tul-light-red font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+						>
+							Zamknij
+						</div>
+					</div>
+					<button
+						class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+						type="submit"
+						hx-put={ fmt.Sprintf("/ongoing/%v", thesis.Id) }
+						hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
+						hx-swap="outerHTML"
+					>
+						Zapisz
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+}
