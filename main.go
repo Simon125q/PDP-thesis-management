@@ -63,7 +63,6 @@ func main() {
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Use(handlers.WithAuth)
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
-		r.Get("/ongoing/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
 		r.Get("/ongoing/filter", handlers.Make(handlers.HandleOngoingFiltered))
 		r.Get("/ongoing/details/{id}", handlers.Make(handlers.HandleOngoingDetails))
 		r.Get("/ongoing/next_page", handlers.Make(handlers.HandleOngoingNext))
@@ -100,7 +99,7 @@ func main() {
 		r.Get("/realized", handlers.Make(handlers.HandleRealized))
 		r.Get("/note/{realized_id}&{ongoing_id}&{user_id}", handlers.Make(handlers.HandleNote))
 		r.Put("/realized/{id}", handlers.Make(handlers.HandleRealizedUpdate))
-		r.Put("/ongoing/{id}", handlers.Make(handlers.HandleRealizedUpdate))
+		r.Put("/ongoing/{id}", handlers.Make(handlers.HandleOngoingUpdate))
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {

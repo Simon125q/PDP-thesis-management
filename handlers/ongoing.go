@@ -108,6 +108,74 @@ func HandleOngoingFiltered(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, ongoing.SwapResults(results, page))
 }
 
+func HandleOngoingUpdate(w http.ResponseWriter, r *http.Request) error {
+	id_param := chi.URLParam(r, "id")
+	slog.Info("UPDATE", "id_param", id_param)
+	user, ok := r.Context().Value(types.UserContextKey).(types.AuthenticatedUser)
+	if !ok {
+		slog.Error("UpdateOngoing", "Failed To retrieve user", user)
+	}
+	t := *extractOngoingThesisFromForm(r)
+	var err error
+	t.Id, err = strconv.Atoi(id_param)
+	errors, ok := validators.ValidateOngoingThesis(t)
+	if user.IsAdmin {
+		if !ok {
+			errors.Correct = false
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+		if err != nil {
+			slog.Error("Update", "err", err)
+			errors.InternalError = true
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+		t.Student.Id, err = server.MyS.DB.GetStudentIdFromOngoingThesisEntry(t.Id)
+		slog.Info("UpdateOngoingThesis", "student_id", t.Student.Id)
+		if err != nil {
+			slog.Error("Update get stud id", "err", err)
+			errors.InternalError = true
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+		sId, err := server.MyS.DB.UpdateStudent(t.Student)
+		if err != nil {
+			slog.Error("Update stud", "err", err)
+			errors.InternalError = true
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+		t.Student.Id = int(sId)
+		supId, err := getEmployeeId(t.Supervisor)
+		if err != nil {
+			slog.Error("Update emp", "err", err)
+			errors.InternalError = true
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+		t.Supervisor.Id = supId
+		asId, err := getEmployeeId(t.AssistantSupervisor)
+		if err != nil {
+			slog.Error("Update emp", "err", err)
+			errors.InternalError = true
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+		t.AssistantSupervisor.Id = asId
+		err = server.MyS.DB.UpdateOngoingThesisByEntry(&t)
+		if err != nil {
+			slog.Error("Update Thesis", "err", err)
+			errors.InternalError = true
+			return Render(w, r, ongoing.Details(t, errors))
+		}
+	}
+	err = updateNoteOngoing(t.Note.Content, t.Id, user.Id)
+	if err != nil {
+		slog.Error("update note", "err", err)
+		errors.InternalError = true
+		return Render(w, r, ongoing.Details(t, errors))
+	}
+	slog.Info("update thesis", "correct", true)
+	errors.Correct = true
+	slog.Info("UpdateOngoingThesis", "t after", t)
+	return Render(w, r, ongoing.Entry(t))
+}
+
 func HandleOngoingNext(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")
@@ -238,4 +306,27 @@ func filterOngoingThesisEntries(r *http.Request) ([]types.OngoingThesisEntry, er
 	}
 	paginated_res, _ := paginate(results, page_num, PageLimit)
 	return paginated_res, nil
+}
+
+func updateNoteOngoing(newContent string, thesisId int, userId int) error {
+	note, err := server.MyS.DB.GetNote(0, thesisId, userId)
+	if err != nil {
+		slog.Error("updateNoteOngoing", "err", err)
+		return fmt.Errorf("updateNoteOngoing occured error while retrieving note: %v", err)
+	}
+	if note.Id == 0 {
+		_, err := server.MyS.DB.InsertNote(types.Note{Content: newContent, OngoingThesisID: thesisId, UniversityEmployeeID: userId})
+		if err != nil {
+			slog.Error("updateNoteOngoing", "err", err)
+			return fmt.Errorf("updateNoteOngoing occured error while inserting note: %v", err)
+		}
+		return nil
+	}
+	note.Content = newContent
+	err = server.MyS.DB.UpdateNote(note)
+	if err != nil {
+		slog.Error("updateNoteOngoing", "err", err)
+		return fmt.Errorf("updateNoteOngoing occured error while updating note: %v", err)
+	}
+	return nil
 }

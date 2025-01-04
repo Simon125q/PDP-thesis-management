@@ -640,6 +640,22 @@ func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) e
 	return nil
 }
 
+func (m *Model) GetStudentIdFromOngoingThesisEntry(thesisId int) (int, error) {
+	query := `SELECT student_id FROM Thesis_To_Be_Completed WHERE id = ?`
+	rows, err := m.DB.Query(query, thesisId)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	var studentId int
+	rows.Next()
+	err = rows.Scan(&studentId)
+	if err != nil {
+		return 0, err
+	}
+	return studentId, nil
+}
+
 func (m *Model) GetStudentIdFromThesisEntry(thesisId int) (int, error) {
 	query := `SELECT student_id FROM Completed_Thesis WHERE id = ?`
 	rows, err := m.DB.Query(query, thesisId)

@@ -157,7 +157,7 @@ func (m *Model) ThesisCountByEmpId(id string) (string, error) {
 }
 
 func (m *Model) EmployeeIdByName(name string) (int, error) {
-	query := fmt.Sprintf(`SELECT id FROM University_Employee WHERE first_name || ' ' || last_name = ?`)
+	query := `SELECT id FROM University_Employee WHERE first_name || ' ' || last_name = ?`
 	slog.Info("employeeId by Name", "q", query)
 	slog.Info("employeeId by Name", "name", name)
 	row := m.DB.QueryRow(query, name)

@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"math"
 	"net/http"
+	"thesis-management-app/pkgs/server"
 	"thesis-management-app/types"
 
 	"github.com/a-h/templ"
@@ -39,6 +40,27 @@ func getAutehenticatedUser(r *http.Request) types.AuthenticatedUser {
 		return types.AuthenticatedUser{}
 	}
 	return user
+}
+
+func getEmployeeId(emp types.UniversityEmployeeEntry) (int, error) {
+	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
+	slog.Info("getEmployeeId", "empName", emp.FirstName+" "+emp.LastName)
+	slog.Info("getEmployeeId", "empId", empId)
+	if err != nil {
+		slog.Error("getEmployeeId", "err", err)
+	}
+	if empId == 0 {
+		if emp.FirstName != "" && emp.LastName != "" {
+			var id int64
+			id, err = server.MyS.DB.InsertUniversityEmployee(emp)
+			if err != nil {
+				slog.Error("getEmployeeId", "err", err)
+			}
+			slog.Info("getEmployeeId", "inserting new emp, id", id)
+			empId = int(id)
+		}
+	}
+	return empId, err
 }
 
 func paginate[K any](data []K, page, pageSize int) ([]K, int) {

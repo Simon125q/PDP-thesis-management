@@ -879,27 +879,6 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 	}
 }
 
-func getEmployeeId(emp types.UniversityEmployeeEntry) (int, error) {
-	empId, err := server.MyS.DB.EmployeeIdByName(emp.FirstName + " " + emp.LastName)
-	slog.Info("getEmployeeId", "empName", emp.FirstName+" "+emp.LastName)
-	slog.Info("getEmployeeId", "empId", empId)
-	if err != nil {
-		slog.Error("getEmployeeId", "err", err)
-	}
-	if empId == 0 {
-		if emp.FirstName != "" && emp.LastName != "" {
-			var id int64
-			id, err = server.MyS.DB.InsertUniversityEmployee(emp)
-			if err != nil {
-				slog.Error("getEmployeeId", "err", err)
-			}
-			slog.Info("getEmployeeId", "inserting new emp, id", id)
-			empId = int(id)
-		}
-	}
-	return empId, err
-}
-
 func getHourlySettlementId(h types.HourlySettlement, thesis_id int) (int, error) {
 	hid, err := server.MyS.DB.GetHourlySettlementIdFromRealizedThesis(thesis_id)
 	if err != nil {

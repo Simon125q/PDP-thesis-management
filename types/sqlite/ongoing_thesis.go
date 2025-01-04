@@ -169,3 +169,45 @@ func (m *Model) InsertOngoingThesisByEntry(thesis *types.OngoingThesisEntry) (in
 	}
 	return result.LastInsertId()
 }
+
+func (m *Model) UpdateOngoingThesisByEntry(thesis *types.OngoingThesisEntry) error {
+	var sId interface{}
+	if thesis.Student.Id != 0 {
+		sId = thesis.Student.Id
+	}
+	var suId interface{}
+	if thesis.Supervisor.Id != 0 {
+		suId = thesis.Supervisor.Id
+	}
+	var asId interface{}
+	if thesis.AssistantSupervisor.Id != 0 {
+		asId = thesis.AssistantSupervisor.Id
+	}
+	query := `UPDATE Thesis_To_Be_Completed SET 
+		thesis_number = ?,
+		topic_polish = ?,
+		topic_english = ?,
+		thesis_language = ?,
+        supervisor_academic_title = ?,
+        assistant_supervisor_academic_title = ?,
+        student_id = ?,
+        supervisor_id = ?,
+        assistant_supervisor_id = ?
+	WHERE id = ?`
+	_, err := m.DB.Exec(query,
+		thesis.ThesisNumber,
+		thesis.ThesisTitlePolish,
+		thesis.ThesisTitleEnglish,
+		thesis.ThesisLanguage,
+		thesis.SupervisorAcademicTitle,
+		thesis.AssistantSupervisorAcademicTitle,
+		sId,
+		suId,
+		asId,
+		thesis.Id,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update Thesis_To_Be_Completed: %w", err)
+	}
+	return nil
+}
