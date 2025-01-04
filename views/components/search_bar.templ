@@ -63,17 +63,17 @@ templ SearchBar(all bool) {
 						hx-trigger="click"
 						hx-swap="outerHTML"
 					>
-						<button class="text-white font-bold">+</button>
+						<div class="text-white font-bold">+</div>
 					</div>
 				} else {
 					<div
 						class="w-10 h-10 rounded-lg bg-tul-dark-red cursor-pointer flex justify-center items-start text-3xl"
-						hx-get={ fmt.Sprintf("/realized/new") }
+						hx-get={ fmt.Sprintf("/ongoing/new") }
 						hx-target="#new_entry"
 						hx-trigger="click"
 						hx-swap="outerHTML"
 					>
-						<button class="text-white font-bold">+</button>
+						<div class="text-white font-bold">+</div>
 					</div>
 				}
 			}

@@ -137,3 +137,35 @@ func (m *Model) OngoingThesisByID(id string) (types.OngoingThesis, error) {
 	slog.Info("OngoingThesisByID", "thesis", t)
 	return t, nil
 }
+
+func (m *Model) InsertOngoingThesisByEntry(thesis *types.OngoingThesisEntry) (int64, error) {
+	query := `
+        INSERT INTO Thesis_To_Be_Completed (
+            thesis_number,
+            topic_polish, topic_english, thesis_language, 
+            supervisor_academic_title, assistant_supervisor_academic_title, 
+            student_id, supervisor_id, assistant_supervisor_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	var sId interface{}
+	if thesis.Student.Id != 0 {
+		sId = thesis.Student.Id
+	}
+	var suId interface{}
+	if thesis.Supervisor.Id != 0 {
+		suId = thesis.Supervisor.Id
+	}
+	var asId interface{}
+	if thesis.AssistantSupervisor.Id != 0 {
+		asId = thesis.AssistantSupervisor.Id
+	}
+	result, err := m.DB.Exec(query,
+		thesis.ThesisNumber,
+		thesis.ThesisTitlePolish, thesis.ThesisTitleEnglish, thesis.ThesisLanguage,
+		thesis.SupervisorAcademicTitle, thesis.AssistantSupervisorAcademicTitle,
+		sId, suId, asId)
+	if err != nil {
+		return 0, err
+	}
+	return result.LastInsertId()
+}

@@ -559,6 +559,7 @@ func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (
 	}
 	return result.LastInsertId()
 }
+
 func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) error {
 	var sId interface{}
 	if thesis.Student.Id != 0 {

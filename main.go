@@ -62,16 +62,14 @@ func main() {
 
 	server.MyS.Router.Group(func(r chi.Router) {
 		r.Use(handlers.WithAuth)
-		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
-		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
 		r.Get("/ongoing/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
-		r.Get("/ongoing/filter", handlers.Make(handlers.HandleRealizedFiltered))
-		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
+		//r.Get("/ongoing/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/ongoing/details/{id}", handlers.Make(handlers.HandleOngoingDetails))
 		r.Get("/ongoing/next_page", handlers.Make(handlers.HandleRealizedNext))
 		r.Get("/ongoing/previous_page", handlers.Make(handlers.HandleRealizedPrev))
 		r.Get("/ongoing/{id}", handlers.Make(handlers.HandleOngoingEntry))
+		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 		r.Get("/realized/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
 		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
@@ -140,8 +138,8 @@ func main() {
 		r.Get("/realized/new", handlers.Make(handlers.HandleRealizedGetNew))
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
 
-		r.Get("/ongoing/new", handlers.Make(handlers.HandleRealizedGetNew))
-		r.Post("/ongoing", handlers.Make(handlers.HandleRealizedNew))
+		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
+		r.Post("/ongoing", handlers.Make(handlers.HandleOngoingNew))
 	})
 
 	listenAddr := os.Getenv("LISTEN_ADDR")

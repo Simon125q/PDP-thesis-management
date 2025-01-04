@@ -32,6 +32,22 @@ func ValidateRealizedThesis(t types.RealizedThesisEntry) (types.RealizedThesisEn
 	return types.RealizedThesisEntryErrors{}, true
 }
 
+func ValidateOngoingThesis(t types.OngoingThesisEntry) (types.OngoingThesisEntryErrors, bool) {
+	sErr, sOk := ValidateStudent(t.Student)
+	thesisNumberErr, tnOk := ValidateThesisNumber(t.ThesisNumber)
+	supErr, supOk := ValidateEmployee(t.Supervisor)
+	asErr, asOk := ValidateEmployee(t.AssistantSupervisor)
+	if !sOk || !tnOk || !supOk || !asOk {
+		return types.OngoingThesisEntryErrors{
+			ThesisNumber:        thesisNumberErr,
+			Student:             sErr,
+			Supervisor:          supErr,
+			AssistantSupervisor: asErr,
+		}, false
+	}
+	return types.OngoingThesisEntryErrors{}, true
+}
+
 func ValidateEmployee(e types.UniversityEmployeeEntry) (types.UniversityEmployeeEntryErrors, bool) {
 	ok := true
 	fErr, fOk := ValidateName(e.FirstName)

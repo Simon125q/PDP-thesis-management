@@ -24,6 +24,7 @@ type OngoingThesisEntry struct {
 	Supervisor                       UniversityEmployeeEntry
 	AssistantSupervisorAcademicTitle string
 	AssistantSupervisor              UniversityEmployeeEntry
+	Note                             Note
 }
 
 type OngoingThesisEntryErrors struct {
@@ -34,9 +35,9 @@ type OngoingThesisEntryErrors struct {
 	ThesisLanguage                   string
 	Student                          StudentErrors
 	SupervisorAcademicTitle          string
-	Supervisor                       UniversityEmployeeErrors
+	Supervisor                       UniversityEmployeeEntryErrors
 	AssistantSupervisorAcademicTitle string
-	AssistantSupervisor              UniversityEmployeeErrors
+	AssistantSupervisor              UniversityEmployeeEntryErrors
 	Correct                          bool
 	InternalError                    bool
 }

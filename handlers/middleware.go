@@ -40,6 +40,7 @@ func WithUser(next http.Handler) http.Handler {
 			LoggedIn: true,
 		}
 		slog.Info("WithUser", "User", user)
+		slog.Info("WithUser", "URL", r.URL.Path)
 		ctx := context.WithValue(r.Context(), types.UserContextKey, user)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
@@ -54,7 +55,6 @@ func WithAuth(next http.Handler) http.Handler {
 		}
 		user := getAutehenticatedUser(r)
 		slog.Info("WithAuth", "url", r.URL.Path)
-		slog.Info("WithAuth", "User", user)
 		if !user.LoggedIn {
 			slog.Info("WithAuth", "login", false)
 			hxRedirect(w, r, "/login")
