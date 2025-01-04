@@ -108,6 +108,36 @@ func HandleOngoingFiltered(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, ongoing.SwapResults(results, page))
 }
 
+func HandleOngoingNext(w http.ResponseWriter, r *http.Request) error {
+	query := r.URL.Query()
+	num := query.Get("page_number")
+	slog.Info("HandleOngoingNext", "page", num)
+	slog.Info("HandleOngoingNext", "query", r.URL.Query())
+	page, err := strconv.Atoi(num)
+	if err != nil {
+		slog.Error("HandleOngoingNext", "err", err)
+	}
+	query.Set("page_number", strconv.Itoa(page+1))
+	query.Set("reset_page", "false")
+	r.URL.RawQuery = query.Encode()
+	return HandleOngoingFiltered(w, r)
+}
+
+func HandleOngoingPrev(w http.ResponseWriter, r *http.Request) error {
+	query := r.URL.Query()
+	num := query.Get("page_number")
+	slog.Info("HandleOngoingNext", "page", num)
+	slog.Info("HandleOngoingNext", "query", r.URL.Query())
+	page, err := strconv.Atoi(num)
+	if err != nil {
+		slog.Error("HandleOngoingNext", "err", err)
+	}
+	query.Set("page_number", strconv.Itoa(page-1))
+	query.Set("reset_page", "false")
+	r.URL.RawQuery = query.Encode()
+	return HandleOngoingFiltered(w, r)
+}
+
 func HandleOngoingGetNew(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HandleOngoingGetNew", "entered", true)
 	return Render(w, r, ongoing.NewEntry(types.OngoingThesisEntry{}, types.OngoingThesisEntryErrors{}))

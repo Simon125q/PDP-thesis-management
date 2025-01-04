@@ -734,22 +734,6 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 	return paginated_res, nil
 }
 
-// func paginate(data []types.RealizedThesisEntry, page, pageSize int) ([]types.RealizedThesisEntry, int) {
-// 	totalItems := len(data)
-// 	totalPages := int(math.Ceil(float64(totalItems) / float64(pageSize)))
-// 	if page > totalPages {
-// 		page = totalPages
-// 	}
-//
-// 	start := (page - 1) * pageSize
-// 	end := start + pageSize
-//
-// 	if end > totalItems {
-// 		end = totalItems
-// 	}
-// 	return data[start:end], totalPages
-// }
-
 func HandleRealizedNext(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")
