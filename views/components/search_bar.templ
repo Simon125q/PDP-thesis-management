@@ -27,7 +27,9 @@ templ SearchBar(all bool) {
 				<select name="SortBy" class="text-tul-dark-gray bg-rose-50">
 					<option value="thesis_id" selected>Dodane</option>
 					<option value="thesis_title_polish">Tytul pracy</option>
-					<option value="exam_date">Data egzaminu</option>
+                    if all {
+                        <option value="exam_date">Data egzaminu</option>
+                    }
 					<option value="student_last_name">Student</option>
 					<option value="supervisor_last_name">Promotor</option>
 					<option value="student_field_of_study">Kierunek</option>

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"strconv"
+	"strings"
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
@@ -85,6 +87,27 @@ func HandleOngoingNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, ongoing.NewEntrySwap(t, types.OngoingThesisEntry{}, errors))
 }
 
+func HandleOngoingFiltered(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("HandleOngoingFiltered", "query", r.URL.Query())
+	q := r.URL.Query()
+	page, err := strconv.Atoi(q.Get("page_number"))
+	if q.Get("reset_page") != "false" {
+		q.Set("page_number", strconv.Itoa(1))
+		page = 1
+	}
+	q.Del("reset_page")
+	r.URL.RawQuery = q.Encode()
+	if err != nil {
+		slog.Info("HandleOngoingFiltered", "err", err)
+		return err
+	}
+	results, err := filterOngoingThesisEntries(r)
+	if err != nil {
+		return err
+	}
+	return Render(w, r, ongoing.SwapResults(results, page))
+}
+
 func HandleOngoingGetNew(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HandleOngoingGetNew", "entered", true)
 	return Render(w, r, ongoing.NewEntry(types.OngoingThesisEntry{}, types.OngoingThesisEntryErrors{}))
@@ -126,4 +149,63 @@ func extractOngoingThesisFromForm(r *http.Request) *types.OngoingThesisEntry {
 			Content: r.FormValue("thesis_note"),
 		},
 	}
+}
+
+func filterOngoingThesisEntries(r *http.Request) ([]types.OngoingThesisEntry, error) {
+	q := r.URL.Query()
+	sortBy := "thesis_id"
+	desc := true
+	searchString := ""
+	page_num := 1
+	for key, val := range q {
+		if val[0] == "" || val[0] == "all" {
+			q.Del(key)
+		}
+		if key == "SortBy" {
+			sortBy = val[0]
+			q.Del(key)
+		} else if key == "Order" {
+			if val[0] == "ASC" {
+				desc = false
+			}
+			q.Del(key)
+		} else if key == "page_number" {
+			page_num, _ = strconv.Atoi(val[0])
+			slog.Info("filterOngoingThesisEntries", "page_number", page_num)
+			q.Del(key)
+		} else if key == "Search" {
+			searchString = val[0]
+			q.Del(key)
+		}
+	}
+	slog.Info("filterOngoingThesisEntries", "searchString", searchString)
+	r.URL.RawQuery = q.Encode()
+	if searchString == "" {
+		thes_data, err := server.MyS.DB.AllOngoingThesisEntries(sortBy, desc, page_num, PageLimit, r.URL.Query())
+		if err != nil {
+			return nil, err
+		}
+		return thes_data, nil
+	}
+	thes_data, err := server.MyS.DB.AllOngoingThesisEntries(sortBy, desc, -1, PageLimit, r.URL.Query())
+	if err != nil {
+		return nil, err
+	}
+	results := []types.OngoingThesisEntry{}
+	for _, t := range thes_data {
+		lookupString := strings.ToLower(fmt.Sprintf("%v", t))
+		slog.Info("filterOngoingThesisEntries", "lookupString", lookupString)
+		match := true
+		for _, part := range strings.Split(strings.ToLower(searchString), " ") {
+			if !strings.Contains(lookupString, part) {
+				match = false
+				break
+			}
+		}
+		if match {
+			results = append(results, t)
+		}
+	}
+	paginated_res, _ := paginate(results, page_num, PageLimit)
+	return paginated_res, nil
 }

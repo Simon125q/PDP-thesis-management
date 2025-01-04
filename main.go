@@ -64,7 +64,7 @@ func main() {
 		r.Use(handlers.WithAuth)
 		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
 		r.Get("/ongoing/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
-		//r.Get("/ongoing/filter", handlers.Make(handlers.HandleRealizedFiltered))
+		r.Get("/ongoing/filter", handlers.Make(handlers.HandleOngoingFiltered))
 		r.Get("/ongoing/details/{id}", handlers.Make(handlers.HandleOngoingDetails))
 		r.Get("/ongoing/next_page", handlers.Make(handlers.HandleRealizedNext))
 		r.Get("/ongoing/previous_page", handlers.Make(handlers.HandleRealizedPrev))

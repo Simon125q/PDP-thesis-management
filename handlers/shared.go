@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"log/slog"
+	"math"
 	"net/http"
 	"thesis-management-app/types"
 
@@ -38,4 +39,25 @@ func getAutehenticatedUser(r *http.Request) types.AuthenticatedUser {
 		return types.AuthenticatedUser{}
 	}
 	return user
+}
+
+func paginate[K any](data []K, page, pageSize int) ([]K, int) {
+	slog.Info("paginate", "page", page)
+	slog.Info("paginate", "len(data)", len(data))
+	totalItems := len(data)
+	if totalItems <= 0 {
+		return []K{}, 0
+	}
+	totalPages := int(math.Ceil(float64(totalItems) / float64(pageSize)))
+	if page > totalPages {
+		page = totalPages
+	}
+
+	start := (page - 1) * pageSize
+	end := start + pageSize
+
+	if end > totalItems {
+		end = totalItems
+	}
+	return data[start:end], totalPages
 }
