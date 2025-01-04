@@ -660,12 +660,34 @@ func (m *Model) GetNextThesisNumber(department, degree, year string) (int, error
 	param := fmt.Sprintf("%s/%s/%%/%s", department, degree, year)
 	slog.Info("GetNextThesisNumber", "param", param)
 	rows, err := m.DB.Query(query, param)
+	defer rows.Close()
 	if err != nil {
 		slog.Error("GetNextThesisNumber", "err", err)
 		return 0, err
 	}
-	defer rows.Close()
 	var maxNum int = 0
+	for rows.Next() {
+		var num string
+		err := rows.Scan(&num)
+		if err != nil {
+			return 0, err
+		}
+		int_num, err := strconv.Atoi(strings.Split(num, "/")[2])
+		if err != nil {
+			return 0, err
+		}
+		if int_num > maxNum {
+			maxNum = int_num
+		}
+	}
+	query = `SELECT thesis_number FROM Thesis_To_Be_Completed WHERE thesis_number LIKE ?`
+	param = fmt.Sprintf("%s/%s/%%/%s", department, degree, year)
+	slog.Info("GetNextThesisNumber", "param", param)
+	rows, err = m.DB.Query(query, param)
+	if err != nil {
+		slog.Error("GetNextThesisNumber", "err", err)
+		return 0, err
+	}
 	for rows.Next() {
 		var num string
 		err := rows.Scan(&num)

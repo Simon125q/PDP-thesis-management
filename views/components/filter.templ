@@ -15,20 +15,20 @@ templ Filter(all bool) {
 							type="date"
 							id="date-start"
 							name="exam_date[gte]"
-							class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+							class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 						/>
 						<input
 							type="date"
 							id="date-end"
 							name="exam_date[lte]"
-							class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+							class="w-1/2 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 						/>
 					</div>
 				</div>
 			}
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
-				<label for="thesis_title" class="block text-sm font-medium text-gray-700">Temat pracy</label>
+				<label class="block text-sm font-medium text-gray-700">Temat pracy</label>
 				<input
 					type="text"
 					id="thesis_title"
@@ -38,7 +38,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-thesis-topic-polish"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-thesis-topic-polish"
@@ -50,7 +50,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
-				<label for="Student" class="block text-sm font-medium text-gray-700">Student</label>
+				<label class="block text-sm font-medium text-gray-700">Student</label>
 				<input
 					type="text"
 					id="student"
@@ -60,7 +60,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-student-surname"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-student-surname"
@@ -72,7 +72,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
-				<label for="student_id" class="block text-sm font-medium text-gray-700">Numer indeksu</label>
+				<label class="block text-sm font-medium text-gray-700">Numer indeksu</label>
 				<input
 					type="text"
 					id="student_number"
@@ -82,7 +82,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-student-number"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-student-number"
@@ -93,7 +93,7 @@ templ Filter(all bool) {
 				</ul>
 			</div>
 			<div class="suggestion-container mb-4">
-				<label for="course" class="block text-sm font-medium text-gray-700">Kierunek</label>
+				<label class="block text-sm font-medium text-gray-700">Kierunek</label>
 				<input
 					type="text"
 					id="course"
@@ -103,7 +103,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-course"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-course"
@@ -115,7 +115,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Dropdown Field-->
 			<div class="suggestion-container mb-4">
-				<label for="label" class="block text-sm font-medium text-gray-700">
+				<label class="block text-sm font-medium text-gray-700">
 					Poziom Studiow
 				</label>
 				<select
@@ -131,7 +131,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Dropdown Field-->
 			<div class="suggestion-container mb-4">
-				<label for="label" class="block text-sm font-medium text-gray-700">
+				<label class="block text-sm font-medium text-gray-700">
 					Tryb Studiow
 				</label>
 				<select
@@ -146,7 +146,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
-				<label for="supervisor_id" class="block text-sm font-medium text-gray-700">Promotor</label>
+				<label class="block text-sm font-medium text-gray-700">Promotor</label>
 				<input
 					type="text"
 					id="supervisor_id"
@@ -156,7 +156,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-supervisor"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-supervisor"
@@ -168,7 +168,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
-				<label for="assistant_supervisor_id" class="block text-sm font-medium text-gray-700">
+				<label class="block text-sm font-medium text-gray-700">
 					Promotor
 					Pomocniczy
 				</label>
@@ -181,7 +181,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-assistant-supervisor"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-assistant-supervisor"
@@ -193,7 +193,7 @@ templ Filter(all bool) {
 			</div>
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
-				<label for="reviewer_id" class="block text-sm font-medium text-gray-700">
+				<label class="block text-sm font-medium text-gray-700">
 					Recenzent
 				</label>
 				<input
@@ -205,7 +205,7 @@ templ Filter(all bool) {
 					hx-swap="innerHTML"
 					hx-trigger="input changed"
 					hx-target="#suggestions-for-reviewer"
-					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+					class="input-form mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-tul-light-red focus:shadow-md"
 				/>
 				<ul
 					id="suggestions-for-reviewer"
@@ -220,15 +220,41 @@ templ Filter(all bool) {
 					<!-- Checkbox -->
 					<input
 						type="checkbox"
-						id="are_hours_settled"
-						name="are_hours_settled"
+						id="are_hours_settled_supervisor"
+						name="are_hours_settled_supervisor"
 						class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
 					/>
 					<!-- Label -->
-					<label for="are_hours_settled" class="text-sm font-medium text-gray-700">
-						Pokaż tylko niepełne rozliczenia
+					<label for="are_hours_settled_supervisor" class="text-sm font-medium text-gray-700">
+						Pokaż niepełne rozliczenia Promotora
 					</label>
 				</div>
+				<div class="mb-4 flex items-center space-x-2">
+                    <!-- Checkbox -->
+                    <input
+                        type="checkbox"
+                        id="are_hours_settled_assistant"
+                        name="are_hours_settled_assistant"
+                        class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <!-- Label -->
+                    <label for="are_hours_settled_assistant" class="text-sm font-medium text-gray-700">
+                        Pokaż niepełne rozliczenia Promotora Pom.
+                    </label>
+                </div>
+                <div class="mb-4 flex items-center space-x-2">
+                    <!-- Checkbox -->
+                    <input
+                        type="checkbox"
+                        id="are_hours_settled_reviewer"
+                        name="are_hours_settled_reviewer"
+                        class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <!-- Label -->
+                    <label for="are_hours_settled_reviewer" class="text-sm font-medium text-gray-700">
+                        Pokaż niepełne rozliczenia Recenzenta
+                    </label>
+                </div>
 			}
 			<!-- Apply Button -->
 			<button

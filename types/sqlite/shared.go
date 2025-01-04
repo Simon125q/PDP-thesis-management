@@ -145,6 +145,18 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 				values = append(values, "0")
 			}
 			continue
+		case "are_hours_settled_supervisor":
+			conditions = append(conditions, "(is_supervisor_settled = ?)")
+			values = append(values, "0")
+			continue
+		case "are_hours_settled_assistant":
+			conditions = append(conditions, "(is_assistant_supervisor_settled = ?)")
+			values = append(values, "0")
+			continue
+		case "are_hours_settled_reviewer":
+			conditions = append(conditions, "(is_reviewer_settled = ?)")
+			values = append(values, "0")
+			continue
 		}
 		if strings.Contains(key, "[") {
 			field := key[:strings.Index(key, "[")]
