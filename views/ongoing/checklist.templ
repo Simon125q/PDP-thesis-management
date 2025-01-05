@@ -43,7 +43,11 @@ templ Task(task types.Task) {
             class="h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
         />
         <p
-            class="px-3 text-base font-medium text-gray-tul-dark-gray"
+            if task.IsCompleted == 1 {
+                class="px-3 text-base font-medium line-through text-gray-500"
+            } else {
+                class="px-3 text-base font-medium text-gray-tul-dark-gray"
+            }
         >
             { task.Content }
         </p>
