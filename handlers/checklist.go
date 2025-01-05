@@ -32,6 +32,9 @@ func HandleInsertTask(w http.ResponseWriter, r *http.Request) error {
 		Content:         r.FormValue("new_task"),
 		OngoingThesisID: ongoingThesisID,
 	}
+	if len(task.Content) < 2 {
+		return nil
+	}
 	id, err := server.MyS.DB.InsertTask(task)
 	if err != nil {
 		slog.Error("HandleInsertTask", "err", err)
