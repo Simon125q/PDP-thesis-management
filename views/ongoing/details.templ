@@ -18,9 +18,24 @@ templ Details(thesis types.OngoingThesisEntry, errs types.OngoingThesisEntryErro
 				</div>
 				@InputFields(thesis, errs)
 				<div>
+					<label for="checklist" class="mt-4 text-sm font-medium text-gray-900 block mb-2">
+                        Checklist
+					</label>
+					<div
+						hx-get={ fmt.Sprintf("/checklist/%v", thesis.Id) }
+						hx-trigger="load"
+					>
+						<img
+							alt="Result loading..."
+							class="htmx-indicator"
+							width="150"
+							src="/public/imgs/browser_icon.png"
+						/>
+					</div>
+				</div>
+				<div>
 					<label for="thesis_note" class="mt-4 text-sm font-medium text-gray-900 block mb-2">
-						Notatka do
-						Pracy
+						Notatka do Pracy
 					</label>
 					<div
 						hx-get={ fmt.Sprintf("/note/%v&%v&%v", 0, thesis.Id, views.AuthenticatedUser(ctx).Id) }

@@ -1,0 +1,50 @@
+package ongoing
+
+import "thesis-management-app/types"
+import "fmt"
+
+templ Checklist(tasks []types.Task, thesis_id int) {
+    <span id="tasks" class="py-2">
+        for _, task := range tasks {
+            @Task(task)
+        }
+    </span>
+	<form
+        hx-post={fmt.Sprintf("/checklist/%v", thesis_id)}
+        hx-trigger="submit"
+        hx-attributes="#new_task"
+        hx-target="#tasks"
+        hx-swap="beforeend"
+    >
+		<input 
+            type="text" 
+            id="new_task" 
+            name="new_task"
+            placeholder="Dodaj nowy podpunkt"
+            class="w-2/3 rounded-md border border-gray-200 bg-white py-3 px-3 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
+        />
+		<button type="submit">
+			Dodaj
+		</button>
+	</form>
+}
+
+templ Task(task types.Task) {
+	<div class="flex items-start space-x-2 py-1 rounded-md border border-gray-100">
+        <input
+            type="checkbox" 
+            id="is_completed"
+            name="is_completed"
+            value="1"
+            if task.IsCompleted == 1 {
+                checked
+            }
+            class="h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
+        />
+        <p
+            class="px-3 text-base font-medium text-gray-tul-dark-gray"
+        >
+            { task.Content }
+        </p>
+	</div>
+}
