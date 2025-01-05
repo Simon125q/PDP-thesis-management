@@ -31,6 +31,7 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
+	slog.Info("HandleRealizedGenerateExcel", "entered", true)
 	queryParams := r.URL.Query()
 	println(queryParams.Encode())
 	println(r.URL.RawQuery)

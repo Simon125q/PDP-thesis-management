@@ -67,6 +67,9 @@ func paginate[K any](data []K, page, pageSize int) ([]K, int) {
 	slog.Info("paginate", "page", page)
 	slog.Info("paginate", "len(data)", len(data))
 	totalItems := len(data)
+	if page == -1 {
+		return data, totalItems
+	}
 	if totalItems <= 0 {
 		return []K{}, 0
 	}
