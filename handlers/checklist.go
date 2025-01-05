@@ -38,5 +38,5 @@ func HandleInsertTask(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 	task.Id = int(id)
-	return Render(w, r, ongoing.Task(task))
+	return Render(w, r, ongoing.NewTaskSwap(task))
 }

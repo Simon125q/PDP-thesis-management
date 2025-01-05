@@ -16,13 +16,11 @@ templ Checklist(tasks []types.Task, thesis_id int) {
         hx-target="#tasks"
         hx-swap="beforeend"
     >
-		<input 
-            type="text" 
-            id="new_task" 
-            name="new_task"
-            placeholder="Dodaj nowy podpunkt"
-            class="w-2/3 rounded-md border border-gray-200 bg-white py-3 px-3 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
-        />
+    <span
+        id="new_task_swap"
+    >
+        @NewTaskInput()
+    </span>
 		<button type="submit">
 			Dodaj
 		</button>
@@ -47,4 +45,24 @@ templ Task(task types.Task) {
             { task.Content }
         </p>
 	</div>
+}
+
+templ NewTaskSwap(task types.Task) {
+    @Task(task) 
+    <span
+        id="new_task_swap"
+        hx-swap-oob="true"
+    >
+        @NewTaskInput()
+    </span>
+}
+
+templ NewTaskInput() {
+    <input 
+        type="text" 
+        id="new_task" 
+        name="new_task"
+        placeholder="Dodaj nowy podpunkt"
+        class="w-2/3 rounded-md border border-gray-200 bg-white py-3 px-3 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
+    />
 }
