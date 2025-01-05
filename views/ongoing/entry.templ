@@ -7,7 +7,11 @@ import (
 
 templ Entry(thesis types.OngoingThesisEntry) {
 	<div
-		class="w-full p-4 border-3 border-tul-dark-red rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
+        if thesis.Archived == "true" {
+            class="w-full p-4 border-3 border-gray-300 rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
+        } else {
+            class="w-full p-4 border-3 border-tul-dark-red rounded-2xl shadow-md hover:bg-gray-100 cursor-pointer"
+        }
 		hx-get={ fmt.Sprintf("/ongoing/details/%v", thesis.Id) }
 		hx-trigger="click"
 		hx-swap="outerHTML"
@@ -16,6 +20,11 @@ templ Entry(thesis types.OngoingThesisEntry) {
 			<span class="text-sm text-gray-600">
 				{ thesis.ThesisNumber }
 			</span>
+            if thesis.Archived == "true" {
+                <span class="text-sm text-gray-600">
+                    Zarchiwizowane
+                </span>
+            }
 		</div>
 		<h3 class="font-bold text-2xl text-center text-gray-900 mt-2 mb-4">
 			"{ thesis.ThesisTitlePolish }"

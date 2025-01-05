@@ -176,6 +176,28 @@ func HandleOngoingUpdate(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, ongoing.Entry(t))
 }
 
+func HandleOngoingArchive(w http.ResponseWriter, r *http.Request) error {
+	thesisId, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		return err
+	}
+	//TODO: check if all tasks are completed
+	err = server.MyS.DB.ArchiveOngoingThesis(thesisId)
+	if err != nil {
+		return err
+	}
+	// add thesis to realized
+	thesis, err := server.MyS.DB.OngoingThesisEntryByID(strconv.Itoa(thesisId))
+	if err != nil {
+		return err
+	}
+	//    err = server.MyS.DB.InsertOngoingThesisToRealized(thesis)
+	// if err != nil {
+	// 	return err
+	// }
+	return Render(w, r, ongoing.Entry(thesis))
+}
+
 func HandleOngoingNext(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")

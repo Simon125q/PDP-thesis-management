@@ -18,6 +18,7 @@ func (m *Model) AllOngoingThesisEntries(sort_by string, desc_order bool, page_nu
 		COALESCE(ct.thesis_language, '') AS thesis_language,
         COALESCE(ct.supervisor_academic_title, '') AS supervisor_title,
         COALESCE(ct.assistant_supervisor_academic_title, '') AS assistant_title,
+        COALESCE(ct.topic_scan, 'false') AS archived,
 		
 		s.id AS student_id,
 		COALESCE(s.student_number, '') AS student_number,
@@ -59,8 +60,8 @@ func (m *Model) AllOngoingThesisEntries(sort_by string, desc_order bool, page_nu
 	thesis := []types.OngoingThesisEntry{}
 	for rows.Next() {
 		t := types.OngoingThesisEntry{}
-		err := rows.Scan(&t.Id, &t.ThesisNumber, &t.ThesisTitlePolish,
-			&t.ThesisTitleEnglish, &t.ThesisLanguage, &t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle,
+		err := rows.Scan(&t.Id, &t.ThesisNumber, &t.ThesisTitlePolish, &t.ThesisTitleEnglish,
+			&t.ThesisLanguage, &t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle, &t.Archived,
 			&t.Student.Id, &t.Student.StudentNumber, &t.Student.FirstName, &t.Student.LastName,
 			&t.Student.FieldOfStudy, &t.Student.Degree, &t.Student.Specialization, &t.Student.ModeOfStudies,
 			&t.Supervisor.Id, &t.Supervisor.FirstName, &t.Supervisor.LastName, &t.Supervisor.CurrentAcademicTitle, &t.Supervisor.DepartmentUnit,
@@ -106,6 +107,7 @@ func (m *Model) OngoingThesisEntryByID(id string) (types.OngoingThesisEntry, err
 		Supervisor:                       supervisor,
 		AssistantSupervisorAcademicTitle: t.AssistantSupervisorAcademicTitle,
 		AssistantSupervisor:              assistant_supervisor,
+		Archived:                         t.Archived,
 	}, nil
 
 }
@@ -114,7 +116,7 @@ func (m *Model) OngoingThesisByID(id string) (types.OngoingThesis, error) {
 	query := `SELECT id, COALESCE(thesis_number, '0'), 
     COALESCE(topic_polish, ''), COALESCE(topic_english, ''), COALESCE(thesis_language, ''), 
     COALESCE(supervisor_academic_title, ''), COALESCE(assistant_supervisor_academic_title, ''), 
-    student_id, COALESCE(supervisor_id, '0'), COALESCE(assistant_supervisor_id, '0') 
+    student_id, COALESCE(supervisor_id, '0'), COALESCE(assistant_supervisor_id, '0'), COALESCE(topic_scan, 'false') 
     FROM Thesis_To_Be_Completed WHERE id = ?`
 	rows, err := m.DB.Query(query, id)
 	if err != nil {
@@ -126,7 +128,7 @@ func (m *Model) OngoingThesisByID(id string) (types.OngoingThesis, error) {
 	err = rows.Scan(&t.Id, &t.ThesisNumber,
 		&t.ThesisTitlePolish, &t.ThesisTitleEnglish, &t.ThesisLanguage,
 		&t.SupervisorAcademicTitle, &t.AssistantSupervisorAcademicTitle,
-		&t.StudentId, &t.SupervisorId, &t.AssistantSupervisorId)
+		&t.StudentId, &t.SupervisorId, &t.AssistantSupervisorId, &t.Archived)
 	if err != nil {
 		return types.OngoingThesis{}, fmt.Errorf("OngoingThesisByID scan error -> %v", err)
 	}
@@ -208,6 +210,20 @@ func (m *Model) UpdateOngoingThesisByEntry(thesis *types.OngoingThesisEntry) err
 	)
 	if err != nil {
 		return fmt.Errorf("failed to update Thesis_To_Be_Completed: %w", err)
+	}
+	return nil
+}
+
+func (m *Model) ArchiveOngoingThesis(thesisId int) error {
+	query := `UPDATE Thesis_To_Be_Completed SET 
+		topic_scan = ?
+	WHERE id = ?`
+	_, err := m.DB.Exec(query,
+		"true",
+		thesisId,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to archive Thesis_To_Be_Completed: %w", err)
 	}
 	return nil
 }

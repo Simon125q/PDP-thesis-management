@@ -63,15 +63,28 @@ templ Details(thesis types.OngoingThesisEntry, errs types.OngoingThesisEntryErro
 							Zamknij
 						</div>
 					</div>
-					<button
-						class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-						type="submit"
-						hx-put={ fmt.Sprintf("/ongoing/%v", thesis.Id) }
-						hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
-						hx-swap="outerHTML"
-					>
-						Zapisz
-					</button>
+                    if thesis.Archived != "true" {
+                        <span class="flex flex-row items-end">
+                            <button
+                                class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                type="submit"
+                                hx-put={ fmt.Sprintf("/ongoing/archive/%v", thesis.Id) }
+                                hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
+                                hx-swap="outerHTML"
+                            >
+                                Archiwizuj
+                            </button>
+                            <button
+                                class="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:ring-cyan-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                                type="submit"
+                                hx-put={ fmt.Sprintf("/ongoing/%v", thesis.Id) }
+                                hx-target={ fmt.Sprintf("#details-%v", thesis.Id) }
+                                hx-swap="outerHTML"
+                            >
+                                Zapisz
+                            </button>
+                        </span>
+                    }
 				</div>
 			</form>
 		</div>

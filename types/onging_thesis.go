@@ -11,6 +11,7 @@ type OngoingThesis struct {
 	SupervisorId                     int
 	AssistantSupervisorAcademicTitle string
 	AssistantSupervisorId            int
+	Archived                         string
 }
 
 type OngoingThesisEntry struct {
@@ -25,6 +26,7 @@ type OngoingThesisEntry struct {
 	AssistantSupervisorAcademicTitle string
 	AssistantSupervisor              UniversityEmployeeEntry
 	Note                             Note
+	Archived                         string
 }
 
 type OngoingThesisEntryErrors struct {

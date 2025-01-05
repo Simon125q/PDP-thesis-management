@@ -21,7 +21,10 @@ templ Checklist(tasks []types.Task, thesis_id int) {
     >
         @NewTaskInput()
     </span>
-		<button type="submit">
+		<button 
+            type="submit"
+            class="text-white bg-tul-dark-red hover:bg-tul-medium-red focus:ring-4 focus:ring-tul-light-red font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"
+        >
 			Dodaj
 		</button>
 	</form>

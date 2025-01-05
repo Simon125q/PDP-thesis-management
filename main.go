@@ -141,6 +141,7 @@ func main() {
 		r.Post("/realized", handlers.Make(handlers.HandleRealizedNew))
 
 		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
+		r.Put("/ongoing/archive/{id}", handlers.Make(handlers.HandleOngoingArchive))
 		r.Post("/ongoing", handlers.Make(handlers.HandleOngoingNew))
 
 		r.Put("/checklist/{task_id}", handlers.Make(handlers.HandleUpdateTask))
