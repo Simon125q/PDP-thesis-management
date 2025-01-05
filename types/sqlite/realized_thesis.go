@@ -385,6 +385,34 @@ func (m *Model) GetAllUniversityEmployeesTitles(searchString string) ([]string, 
 
 	return values, nil
 }
+func (m *Model) GetAllUniversityEmployeesTitlesNamesAndSurnames(searchString string) ([]string, error) {
+	query := `
+	SELECT DISTINCT 
+	COALESCE(current_academic_title, '') || '  ' || COALESCE(first_name, '') || '  ' || COALESCE(last_name, '') AS result
+	FROM University_Employee
+	WHERE result LIKE '%' || ? || '%';`
+	rows, err := m.DB.Query(query, searchString)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	values := []string{}
+
+	for rows.Next() {
+		var value string
+		if err := rows.Scan(&value); err != nil {
+			return nil, err
+		}
+		values = append(values, value)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return values, nil
+}
 
 func (m *Model) GetAllCourseNames(searchString string) ([]string, error) {
 	query := `

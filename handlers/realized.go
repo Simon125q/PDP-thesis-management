@@ -333,7 +333,7 @@ func HandleAutocompleteSupervisorName(w http.ResponseWriter, r *http.Request) er
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -360,7 +360,7 @@ func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request)
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -387,7 +387,7 @@ func HandleAutocompleteSupervisorTitle(w http.ResponseWriter, r *http.Request) e
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -413,7 +413,7 @@ func HandleAutocompleteAssistantSupervisorName(w http.ResponseWriter, r *http.Re
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -440,7 +440,7 @@ func HandleAutocompleteAssistantSupervisorSurname(w http.ResponseWriter, r *http
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -467,7 +467,7 @@ func HandleAutocompleteAssistantSupervisorTitle(w http.ResponseWriter, r *http.R
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -494,7 +494,7 @@ func HandleAutocompleteReviewerName(w http.ResponseWriter, r *http.Request) erro
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -521,7 +521,7 @@ func HandleAutocompleteReviewerSurname(w http.ResponseWriter, r *http.Request) e
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -548,7 +548,7 @@ func HandleAutocompleteReviewerTitle(w http.ResponseWriter, r *http.Request) err
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -575,7 +575,7 @@ func HandleAutocompleteChairName(w http.ResponseWriter, r *http.Request) error {
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesNames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -602,7 +602,7 @@ func HandleAutocompleteChairSurname(w http.ResponseWriter, r *http.Request) erro
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesSurnames(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}
@@ -629,7 +629,7 @@ func HandleAutocompleteChairTitle(w http.ResponseWriter, r *http.Request) error 
 		return nil
 	}
 
-	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitles(userInput)
+	filteredThesisTitlesPolish, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
 	if err != nil {
 		return err
 	}

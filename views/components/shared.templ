@@ -134,6 +134,26 @@ templ InputDropdownStudyDegree(inputType, id, label, val string, req bool) {
     </select>
 }
 
+templ InputDropdownEmployeeTitle(inputType, id, label, val string, req bool, inputClassVal string) {
+    <label class="block text-base font-medium text-tul-dark-gray mb-1">
+        { label }
+    </label>
+    <select
+        id={ id }
+        name={ id }
+        value={ val }
+        class={ inputClassVal + " w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"}>
+        <option value="" if val == "" { selected }></option>
+        <option value="inż." if val == "inż." || val == "Inż." { selected }>inż.</option>
+        <option value="mgr" if val == "mgr" || val == "Mgr." { selected }>mgr</option>
+        <option value="mgr inż." if val == "mgr inż." || val == "Mgr. inż." || val == "mgr. inż."{ selected }>mgr inż.</option>
+        <option value="dr inż." if val == "Dr." || val == "dr inż. + mgr inż." || val == "dr inż." || val == "Dr inż." || val == "dr" { selected }>dr inż.</option>
+        <option value="dr hab. inż." if val == "dr hab. inż." || val == "dr hab." || val == "Dr. hab." { selected }>dr hab. inż.</option>
+        <option value="prof. dr hab. inż." if val == "prof. dr inż." || val == "prof. dr hab. inż." || val == "prof. dr hab." || val == "Prof. dr hab." || val == "prof. dr hab. inż. + mgr" || val == "prof. dr hab. inż. + mgr inż." || val == "Prof. Dr hab. inż." || val == "prof." { selected }>prof. dr hab. inż.</option>
+    </select>
+}
+
+
 templ InputDropdownLibrary(id, label, val string) {
     <label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
         { label }

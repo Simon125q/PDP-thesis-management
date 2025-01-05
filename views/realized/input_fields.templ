@@ -135,12 +135,11 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Promotor</h3>
     </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
+    <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div class="mb-4">
-                @components.InputFieldWithAutosuggestions("text", "supervisorAcademicTitle", "Tytuł",
-                vals.SupervisorAcademicTitle, true, fmt.Sprintf("/realized/autocompleteSupervisorTitle"),
-                "suggestions-for-supervisor-title", "input-form")
+                @components.InputDropdownEmployeeTitle("text", "supervisorAcademicTitle", "Tytuł",
+                vals.SupervisorAcademicTitle, true, "input-form input-form-title")
                 @components.ErrorMsg(errs.SupervisorAcademicTitle)
             </div>
         </div>
@@ -148,7 +147,7 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             <div>
                 @components.InputFieldWithAutosuggestions("text", "firstNameSupervisor", "Imię",
                 vals.Supervisor.FirstName, true, fmt.Sprintf("/realized/autocompleteSupervisorName"),
-                "suggestions-for-supervisor-name", "input-form")
+                "suggestions-for-supervisor-name", "input-form input-form-name")
                 @components.ErrorMsg(errs.Supervisor.FirstName)
             </div>
         </div>
@@ -156,7 +155,7 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             <div>
                 @components.InputFieldWithAutosuggestions("text", "lastNameSupervisor", "Nazwisko",
                 vals.Supervisor.LastName, true, fmt.Sprintf("/realized/autocompleteSupervisorSurname"),
-                "suggestions-for-supervisor-surname", "input-form")
+                "suggestions-for-supervisor-surname", "input-form input-form-surname")
                 @components.ErrorMsg(errs.Supervisor.LastName)
             </div>
         </div>
@@ -166,13 +165,11 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Promotor Pomocniczy</h3>
     </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
+    <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputFieldWithAutosuggestions("text", "assistantSupervisorAcademicTitle", "Tytuł",
-                vals.AssistantSupervisorAcademicTitle, false,
-                fmt.Sprintf("/realized/autocompleteAssistantSupervisorTitle"),
-                "suggestions-for-assistant-supervisor-title", "input-form")
+                @components.InputDropdownEmployeeTitle("text", "assistantSupervisorAcademicTitle", "Tytuł",
+                vals.AssistantSupervisorAcademicTitle, false, "input-form input-form-title")
                 @components.ErrorMsg(errs.AssistantSupervisorAcademicTitle)
             </div>
         </div>
@@ -180,7 +177,7 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             <div>
                 @components.InputFieldWithAutosuggestions("text", "firstNameAssistantSupervisor", "Imię",
                 vals.AssistantSupervisor.FirstName, false, fmt.Sprintf("/realized/autocompleteAssistantSupervisorName"),
-                "suggestions-for-assistant-supervisor-name", "input-form")
+                "suggestions-for-assistant-supervisor-name", "input-form input-form-name")
                 @components.ErrorMsg(errs.AssistantSupervisor.FirstName)
             </div>
         </div>
@@ -189,7 +186,7 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
                 @components.InputFieldWithAutosuggestions("text", "lastNameAssistantSupervisor", "Nazwisko",
                 vals.AssistantSupervisor.LastName, false,
                 fmt.Sprintf("/realized/autocompleteAssistantSupervisorSurname"),
-                "suggestions-for-assistant-supervisor-surname", "input-form")
+                "suggestions-for-assistant-supervisor-surname", "input-form input-form-surname")
                 @components.ErrorMsg(errs.AssistantSupervisor.LastName)
             </div>
         </div>
@@ -199,19 +196,18 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Recenzent</h3>
     </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
+    <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputFieldWithAutosuggestions("text", "reviewerAcademicTitle", "Tytuł",
-                vals.ReviewerAcademicTitle, false, fmt.Sprintf("/realized/autocompleteReviewerTitle"),
-                "suggestions-for-reviewer-title", "input-form")
+                @components.InputDropdownEmployeeTitle("text", "reviewerAcademicTitle", "Tytuł",
+                vals.ReviewerAcademicTitle, false, "input-form input-form-title")
                 @components.ErrorMsg(errs.ReviewerAcademicTitle)
             </div>
         </div>
         <div class="w-9/24 px-2">
             <div>
                 @components.InputFieldWithAutosuggestions("text", "firstNameReviewer", "Imię", vals.Reviewer.FirstName,
-                false, fmt.Sprintf("/realized/autocompleteReviewerName"), "suggestions-for-reviewer-name", "input-form")
+                false, fmt.Sprintf("/realized/autocompleteReviewerName"), "suggestions-for-reviewer-name", "input-form input-form-name")
                 @components.ErrorMsg(errs.Reviewer.FirstName)
             </div>
         </div>
@@ -219,7 +215,7 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
             <div>
                 @components.InputFieldWithAutosuggestions("text", "lastNameReviewer", "Nazwisko",
                 vals.Reviewer.LastName, false, fmt.Sprintf("/realized/autocompleteReviewerSurname"),
-                "suggestions-for-reviewer-surname", "input-form")
+                "suggestions-for-reviewer-surname", "input-form input-form-surname")
                 @components.ErrorMsg(errs.Reviewer.LastName)
             </div>
         </div>
@@ -229,26 +225,25 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="bg-gray-100 rounded-full justify-center px-4 py-2">
         <h3 class="text-xl font-semibold text-center">Przewodniczący Komisji</h3>
     </div>
-    <div class="mt-5 -mx-3 flex flex-wrap">
+    <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputFieldWithAutosuggestions("text", "chairAcademicTitle", "Tytuł",
-                vals.ChairAcademicTitle, false, fmt.Sprintf("/realized/autocompleteChairTitle"),
-                "suggestions-for-chair-title", "input-form")
+                @components.InputDropdownEmployeeTitle("text", "chairAcademicTitle", "Tytuł",
+                vals.ChairAcademicTitle, false, "input-form input-form-title")
                 @components.ErrorMsg(errs.Chair.FirstName)
             </div>
         </div>
         <div class="w-9/24 px-2">
             <div>
-                @components.InputFieldWithAutosuggestions("text", "firstNameChair", "Imię", vals.Chair.FirstName, false,
-                fmt.Sprintf("/realized/autocompleteChairName"), "suggestions-for-chair-name", "input-form")
+                 @components.InputFieldWithAutosuggestions("text", "firstNameChair", "Imię", vals.Chair.FirstName, false,
+                fmt.Sprintf("/realized/autocompleteChairName"), "suggestions-for-chair-name", "input-form input-form-name")
                 @components.ErrorMsg(errs.Chair.FirstName)
             </div>
         </div>
         <div class="w-9/24 px-2">
             <div>
                 @components.InputFieldWithAutosuggestions("text", "lastNameChair", "Nazwisko", vals.Chair.LastName,
-                false, fmt.Sprintf("/realized/autocompleteChairSurname"), "suggestions-for-chair-surname", "input-form")
+                false, fmt.Sprintf("/realized/autocompleteChairSurname"), "suggestions-for-chair-surname", "input-form input-form-surname")
                 @components.ErrorMsg(errs.Chair.LastName)
             </div>
         </div>
