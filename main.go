@@ -143,7 +143,7 @@ func main() {
 		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
 		r.Post("/ongoing", handlers.Make(handlers.HandleOngoingNew))
 
-		// r.Put("/checklist/{task_id}", handlers.Make(handlers.HandleInsertTask))
+		r.Put("/checklist/{task_id}", handlers.Make(handlers.HandleUpdateTask))
 		r.Post("/checklist/{thesis_id}", handlers.Make(handlers.HandleInsertTask))
 	})
 

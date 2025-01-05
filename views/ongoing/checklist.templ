@@ -31,12 +31,15 @@ templ Task(task types.Task) {
 	<div class="flex items-start space-x-2 py-1 rounded-md border border-gray-100">
         <input
             type="checkbox" 
-            id="is_completed"
-            name="is_completed"
+            id={ fmt.Sprintf("is_completed_%v", task.Id)}
+            name={ fmt.Sprintf("is_completed_%v", task.Id)}
             value="1"
             if task.IsCompleted == 1 {
                 checked
             }
+            hx-put={fmt.Sprintf("/checklist/%v", task.Id)}
+            hx-trigger="change"
+            hx-attributes={fmt.Sprintf("#is_completed_%v", task.Id)}
             class="h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-red-500"
         />
         <p

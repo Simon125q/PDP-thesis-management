@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -42,4 +43,24 @@ func HandleInsertTask(w http.ResponseWriter, r *http.Request) error {
 	}
 	task.Id = int(id)
 	return Render(w, r, ongoing.NewTaskSwap(task))
+}
+
+func HandleUpdateTask(w http.ResponseWriter, r *http.Request) error {
+	taskId, err := strconv.Atoi(chi.URLParam(r, "task_id"))
+	if err != nil {
+		return err
+	}
+	var isChecked int
+	if r.FormValue(fmt.Sprintf("is_completed_%v", taskId)) == "1" {
+		isChecked = 1
+	} else {
+		isChecked = 0
+	}
+	slog.Info("HandleUpdateTask", "form", r.Form)
+	slog.Info("HandleUpdateTask", "isChecked", isChecked)
+	err = server.MyS.DB.UpdateTaskCompletnes(taskId, isChecked)
+	if err != nil {
+		return err
+	}
+	return nil
 }

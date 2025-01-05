@@ -43,6 +43,25 @@ func (m *Model) InsertTask(task types.Task) (int64, error) {
 	return result.LastInsertId()
 }
 
+func (m *Model) UpdateTaskCompletnes(taskId, isChecked int) error {
+	query := `
+        UPDATE Task
+        SET 
+            is_completed = ?
+        WHERE id = ?
+    `
+	slog.Info("UpdateTask", "TaskId", taskId)
+
+	_, err := m.DB.Exec(query,
+		isChecked,
+		taskId,
+	)
+	if err != nil {
+		return fmt.Errorf("UpdateTask -> %w", err)
+	}
+	return nil
+}
+
 func (m *Model) UpdateTask(task types.Task) error {
 	query := `
         UPDATE Task
