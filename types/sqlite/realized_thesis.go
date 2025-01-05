@@ -560,6 +560,38 @@ func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (
 	return result.LastInsertId()
 }
 
+func (m *Model) InsertOngoingThesisToRealized(thesis types.OngoingThesisEntry) error {
+	query := `
+        INSERT INTO Completed_Thesis (
+            thesis_number, 
+            thesis_title_polish, thesis_title_english, thesis_language,
+            supervisor_academic_title, assistant_supervisor_academic_title, 
+            student_id, supervisor_id, assistant_supervisor_id
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+	var sId interface{}
+	if thesis.Student.Id != 0 {
+		sId = thesis.Student.Id
+	}
+	var suId interface{}
+	if thesis.Supervisor.Id != 0 {
+		suId = thesis.Supervisor.Id
+	}
+	var asId interface{}
+	if thesis.AssistantSupervisor.Id != 0 {
+		asId = thesis.AssistantSupervisor.Id
+	}
+	_, err := m.DB.Exec(query,
+		thesis.ThesisNumber,
+		thesis.ThesisTitlePolish, thesis.ThesisTitleEnglish, thesis.ThesisLanguage,
+		thesis.SupervisorAcademicTitle, thesis.AssistantSupervisorAcademicTitle,
+		sId, suId, asId)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) error {
 	var sId interface{}
 	if thesis.Student.Id != 0 {

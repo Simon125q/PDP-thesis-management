@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"thesis-management-app/types"
 	"thesis-management-app/views"
+	"thesis-management-app/views/components"
 )
 
 templ Details(thesis types.OngoingThesisEntry, errs types.OngoingThesisEntryErrors) {
@@ -32,6 +33,7 @@ templ Details(thesis types.OngoingThesisEntry, errs types.OngoingThesisEntryErro
 							src="/public/imgs/browser_icon.png"
 						/>
 					</div>
+                    @components.ErrorMsg(errs.Checklist)
 				</div>
 				<div>
 					<label for="thesis_note" class="mt-4 text-sm font-medium text-gray-900 block mb-2">

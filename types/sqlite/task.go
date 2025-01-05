@@ -82,3 +82,8 @@ func (m *Model) UpdateTask(task types.Task) error {
 	}
 	return nil
 }
+
+func (m *Model) CheckIfAllTaskAreCompleted(thesisId int) bool {
+	//TODO: Check if all tasks conected with thesisId are completed
+	return true
+}

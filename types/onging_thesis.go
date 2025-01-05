@@ -40,6 +40,7 @@ type OngoingThesisEntryErrors struct {
 	Supervisor                       UniversityEmployeeEntryErrors
 	AssistantSupervisorAcademicTitle string
 	AssistantSupervisor              UniversityEmployeeEntryErrors
+	Checklist                        string
 	Correct                          bool
 	InternalError                    bool
 }

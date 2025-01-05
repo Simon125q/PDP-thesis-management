@@ -181,20 +181,23 @@ func HandleOngoingArchive(w http.ResponseWriter, r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	thesis, err := server.MyS.DB.OngoingThesisEntryByID(strconv.Itoa(thesisId))
+	if err != nil {
+		return err
+	}
 	//TODO: check if all tasks are completed
+	if !server.MyS.DB.CheckIfAllTaskAreCompleted(thesisId) {
+		return Render(w, r, ongoing.Details(thesis, types.OngoingThesisEntryErrors{Checklist: "Wszystkie podpunkty muszą być zaznaczone aby zarchiwizować"}))
+	}
 	err = server.MyS.DB.ArchiveOngoingThesis(thesisId)
 	if err != nil {
 		return err
 	}
 	// add thesis to realized
-	thesis, err := server.MyS.DB.OngoingThesisEntryByID(strconv.Itoa(thesisId))
+	err = server.MyS.DB.InsertOngoingThesisToRealized(thesis)
 	if err != nil {
 		return err
 	}
-	//    err = server.MyS.DB.InsertOngoingThesisToRealized(thesis)
-	// if err != nil {
-	// 	return err
-	// }
 	return Render(w, r, ongoing.Entry(thesis))
 }
 
