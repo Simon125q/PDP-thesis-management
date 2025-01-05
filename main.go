@@ -73,10 +73,8 @@ func main() {
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
 
 		r.Get("/ongoing", handlers.Make(handlers.HandleOngoing))
-		r.Get("/ongoing/new", handlers.Make(handlers.HandleOngoingGetNew))
-		r.Get("/ongoing/clear-new", handlers.Make(handlers.HandleOngoingClearNew))
 		r.Get("/realized/generate_excel", handlers.Make(handlers.HandleRealizedGenerateExcel))
-		r.Get("realized/clear-excel_field", handlers.Make(handlers.HandleRealizedClearExcelField))
+		r.Get("/realized/clear-excel_field", handlers.Make(handlers.HandleRealizedClearExcelField))
 		r.Get("/realized/excel_field", handlers.Make(handlers.HandleRealizedExcelField))
 		r.Get("/realized/filter", handlers.Make(handlers.HandleRealizedFiltered))
 		r.Get("/realized/clear-new", handlers.Make(handlers.HandleRealizedClearNew))
