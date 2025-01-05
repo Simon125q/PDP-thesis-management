@@ -70,7 +70,10 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	f := excelize.NewFile()
 
 	sheetName := "Prace"
-	sheetIndex, _ := f.NewSheet(sheetName)
+	if err := f.SetSheetName("Sheet1", sheetName); err != nil {
+		slog.Error("Error changing sheet name: %v", err)
+	}
+	sheetIndex, _ := f.GetSheetIndex(sheetName)
 
 	headers := []string{
 		"Numer Pracy", "Data Egzaminu", "Średnia Ocen ze Studiów", "Ocena z Egzaminu Kompetecyjnego",
