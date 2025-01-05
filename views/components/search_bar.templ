@@ -24,7 +24,7 @@ templ SearchBar(all bool) {
 		<!-- Buttons Section -->
 		<div class="flex flex-wrap items-center justify-between gap-y-3">
 			<div class="relative flex items-center justify-center w-3/7 rounded-full bg-rose-50 py-2 px-2">
-				<select name="SortBy" class="text-tul-dark-gray bg-rose-50">
+				<select name="SortBy" class="text-tul-dark-gray bg-rose-50 cursor-pointer">
 					<option value="thesis_id" selected>Dodane</option>
 					<option value="thesis_title_polish">Tytul pracy</option>
                     if all {
@@ -35,9 +35,9 @@ templ SearchBar(all bool) {
 					<option value="student_field_of_study">Kierunek</option>
 					<option value="student_degree">Poziom studiów</option>
 				</select>
-				<select name="Order" class="text-tul-dark-gray bg-rose-50">
+				<select name="Order" class="text-tul-dark-gray bg-rose-50 cursor-pointer">
 					<option value="ASC">
-						▲
+					    ▲
 					</option>
 					<option value="DESC" selected>
 						▼
@@ -46,18 +46,18 @@ templ SearchBar(all bool) {
 			</div>
 			if views.AuthenticatedUser(ctx).IsAdmin {
 				if all {
-					<div class="min-w-[140px] relative flex items-center justify-center rounded-full bg-rose-50 py-2 px-2">
-						<a
-							type="button"
-							hx-get={ fmt.Sprintf("realized/generate_excel") }
-							hx-swap="none"
-							hx-include="#filterForm"
-							class="text-tul-dark-gray cursor-pointer"
-						>Eksportuj</a>
-						<span class="absolute right-3 text-gray-500">
-							<i class="fa fa-download" aria-hidden="true"></i>
-						</span>
-					</div>
+					<div
+                        class="min-w-[140px] relative flex items-center justify-center rounded-full bg-rose-50 cursor-pointer py-2 px-2"
+                        hx-get={ fmt.Sprintf("/realized/excel_field") }
+                        hx-target="#excel_field"
+                        hx-trigger="click"
+                        hx-swap="outerHTML"
+                    >
+                        <button class="text-tul-dark-gray flex items-center gap-2">
+                            Eksportuj
+                            <i class="fa fa-download absolute right-3 text-gray-500">G</i>
+                        </button>
+                    </div>
 					<div
 						class="w-10 h-10 rounded-lg bg-tul-dark-red cursor-pointer flex justify-center items-start text-3xl"
 						hx-get={ fmt.Sprintf("/realized/new") }

@@ -1,0 +1,52 @@
+package components
+
+templ ExcelField() {
+<span id="excelField">
+    <div class="w-full p-4 border-3 border-rose-50 bg-white">
+        <form id="excelForm" hx-get="/realized/generate_excel" hx-disabled-elt="confirm-btn" hx-target="#excelForm" hx-swap="delete" hx-include="#filterForm"
+            class="text-black font-normal flex flex-col space-y-4">
+            <div class="text-center">
+                <h2 class="text-2xl font-semibold text-tul-dark-gray">Podaj nazwę pliku</h2>
+            </div>
+
+            <div>
+                <input
+                    type="text"
+                    id="fileName"
+                    name="fileName"
+                    class="w-full p-2 mt-1 border rounded-lg focus:ring-tul-dark-red focus:border-tul-dark-red"
+                    placeholder="Wpisz nazwę pliku..."
+                    required
+                />
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-between">
+                <!-- Abort -->
+                <button
+                    type="button"
+                    hx-get="/realized/clear-excel_field"
+                    hx-target="#excelField"
+                    hx-trigger="click"
+                    hx-swap="outerHTML"
+                    class="text-white bg-tul-dark-red hover:bg-tul-medium-red font-medium rounded-lg px-4 py-2"
+                >
+                    Zamknij
+                </button>
+
+                <!-- Confirm -->
+                <button
+                    class="text-white bg-cyan-600 hover:bg-cyan-700 font-medium rounded-lg px-4 py-2"
+                    id="confirm-btn"
+                >
+                    Zatwierdź
+                </button>
+            </div>
+        </form>
+    </div>
+</span>
+}
+
+templ EmptySpace() {
+<span id="excel_field"></span>
+}

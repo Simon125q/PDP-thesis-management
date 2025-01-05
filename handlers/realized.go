@@ -9,6 +9,7 @@ import (
 	"thesis-management-app/pkgs/server"
 	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
+	"thesis-management-app/views/components"
 	"thesis-management-app/views/realized"
 	"time"
 
@@ -31,13 +32,27 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	queryParams := r.URL.Query()
+	println(queryParams.Encode())
+	println(r.URL.RawQuery)
+	fileName := r.URL.Query().Get("fileName")
+	println(fileName)
+	if fileName == "" {
+		println("weszlo")
+		fileName = "Wybrane_Prace"
+	}
+
 	queryParams.Set("page_number", "-1")
 	r.URL.RawQuery = queryParams.Encode()
 	filePath := "/realized/generate_excel"
 	redirectURL := filePath + "?" + queryParams.Encode()
+	queryParams.Del("fileName")
+	r.URL.RawQuery = queryParams.Encode()
+	if err := r.ParseForm(); err != nil {
+		return err
+	}
 
 	currentTime := time.Now()
-	fileName := "Wybrane Prace " + currentTime.Format("2-01-2006 15h04m05s") + ".xlsx"
+	fileName = fileName + "_" + currentTime.Format("2-01-2006_15h04m05s") + ".xlsx"
 
 	println(fileName)
 
@@ -50,7 +65,7 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 		slog.Error("HandleRealizedGenerateExcel", "err", err)
 		return err
 	}
-
+	queryParams.Set("fileName", fileName)
 	f := excelize.NewFile()
 
 	sheetName := "Prace"
@@ -127,7 +142,7 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	f.SetActiveSheet(sheetIndex)
-
+	println("koniec")
 	if err := f.Write(w); err != nil {
 		slog.Error("RealizedThesisGenerateExcel", "err", err)
 	}
@@ -1095,4 +1110,12 @@ func HandleRealizedGetNew(w http.ResponseWriter, r *http.Request) error {
 
 func HandleRealizedClearNew(w http.ResponseWriter, r *http.Request) error {
 	return Render(w, r, realized.EmptySpace())
+}
+
+func HandleRealizedExcelField(w http.ResponseWriter, r *http.Request) error {
+	return Render(w, r, components.ExcelField())
+}
+
+func HandleRealizedClearExcelField(w http.ResponseWriter, r *http.Request) error {
+	return Render(w, r, components.EmptySpace())
 }
