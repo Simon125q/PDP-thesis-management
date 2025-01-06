@@ -37,7 +37,7 @@ func main() {
 	}
 	defer db.Close()
 	//Uncoment this to populate database with example data
-	// populateDatabase(db)
+	//populateDatabase(db)
 	server.MyS.DB = &sqlite.Model{DB: db}
 
 	server.MyS.DB.DB.SetConnMaxLifetime(time.Minute)
