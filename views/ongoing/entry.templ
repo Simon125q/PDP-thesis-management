@@ -27,7 +27,11 @@ templ Entry(thesis types.OngoingThesisEntry) {
             }
 		</div>
 		<h3 class="font-bold text-2xl text-center text-gray-900 mt-2 mb-4">
-			"{ thesis.ThesisTitlePolish }"
+            if thesis.ThesisTitlePolish != "" {
+                "{ thesis.ThesisTitlePolish }"
+            } else {
+                "{ thesis.ThesisTitleEnglish}"
+            }
 		</h3>
 		<div class="flex flex-row items-center justify-between text-sm text-gray-700">
 			<div class="flex flex-col ml-auto mr-auto">
