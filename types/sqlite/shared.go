@@ -168,6 +168,12 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 				values = append(values, value[0])
 			}
 			continue
+		case "ongoing_user_id":
+			conditions = append(conditions, "(supervisor_id = ? OR assistant_supervisor_id = ?)")
+			for i := 0; i < 2; i++ {
+				values = append(values, value[0])
+			}
+			continue
 		case "mean-grade-min":
 			conditionStr := fmt.Sprintf("average_study_grade >= %v", value[0])
 			conditions = append(conditions, conditionStr)

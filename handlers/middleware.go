@@ -31,7 +31,7 @@ func WithUser(next http.Handler) http.Handler {
 		if currentSession.Username == "tesla" {
 			uId = 2
 		} else {
-			uId = 3
+			uId = 8678
 		}
 		user := types.AuthenticatedUser{
 			Id:       uId, //TODO: add id from db
