@@ -15,7 +15,7 @@ templ InputFields_Empl(vals types.UniversityEmployeeEntry, errs types.University
 		@components.ErrorMsg(errs.LastName)
 	</div>
 	<div>
-		@components.InputField("text", "current_academic_title", "Tytuł Naukowy", vals.CurrentAcademicTitle, true)
+		@components.InputDropdownEmployeeTitle("text", "current_academic_title", "Tytuł Naukowy", vals.CurrentAcademicTitle, true, "input-form")
 		@components.ErrorMsg(errs.CurrentAcademicTitle)
 	</div>
 	<div>

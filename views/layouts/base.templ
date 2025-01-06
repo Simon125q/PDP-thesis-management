@@ -61,25 +61,21 @@ templ Base(nav bool) {
                         }
                     }
                     if (mappedValue) {
-                        inputElementTitle.value = mappedValue;
-                        console.log('Mapped title: ', mappedValue);
+                        inputElementTitle.value = mappedValue;            
                     } else {
                         // If no mapping is found, set the original title as a fallback
                         inputElementTitle.value = title;
-                        console.log('Fallback title: ', title);
                     }
                 }
 
                 const inputElementName = event.target.closest('.employee-suggestion-container').querySelector('.input-form-name');
                 if (inputElementName) {
                     inputElementName.value = name;
-                    console.log('name: ', name)
                 }
 
                 const inputElementSurname = event.target.closest('.employee-suggestion-container').querySelector('.input-form-surname');
                 if (inputElementSurname) {
                     inputElementSurname.value = surname;
-                    console.log('surname: ', surname)
                 }
 
 
@@ -97,7 +93,6 @@ templ Base(nav bool) {
                 document.querySelectorAll('.employee-suggestion-container').forEach(function(container) {
                     container.addEventListener('click', function(event) {
                         if (event.target.classList.contains('suggestion')) {
-                            console.log('Suggestion clicked for emplyee!')
                             handleSuggestionClickedForEmployee(event);
                         }
                     });
