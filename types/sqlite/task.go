@@ -84,6 +84,14 @@ func (m *Model) UpdateTask(task types.Task) error {
 }
 
 func (m *Model) CheckIfAllTaskAreCompleted(thesisId int) bool {
-	//TODO: Check if all tasks conected with thesisId are completed
+	tasks, err := m.GetTasksByThesisId(thesisId)
+	if err != nil {
+		_ = fmt.Errorf("CheckIfAllTaskAreCompleted -> %v", err)
+	}
+	for _, task := range tasks {
+		if task.IsCompleted != 1 {
+			return false
+		}
+	}
 	return true
 }

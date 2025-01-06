@@ -7,6 +7,73 @@ import (
 	"strings"
 )
 
+func (m *Model) GetConditionValuesForTasks(conditions []string, values []interface{}) ([]string, []interface{}) {
+	queryString := fmt.Sprintf("SELECT id FROM Thesis_To_Be_Completed")
+	slog.Info(queryString)
+	ids, err := m.DB.Query(queryString)
+	defer ids.Close()
+	if err != nil {
+		slog.Error(err.Error())
+	}
+	var maxID int
+	for ids.Next() {
+		if ids != nil {
+			var id int
+			ids.Scan(&id)
+			if id > maxID {
+				maxID = id
+			}
+		}
+	}
+	var ongoingIDTable []bool
+	for range maxID + 1 {
+		ongoingIDTable = append(ongoingIDTable, false)
+	}
+	for i := range maxID + 1 {
+		if i == 0 {
+			continue
+		}
+		queryStr := fmt.Sprintf("SELECT is_completed FROM Task WHERE thesis_to_be_completed_id = %v", i)
+		slog.Info(queryStr)
+		val, qErr := m.DB.Query(queryStr)
+		defer val.Close()
+		if qErr != nil {
+			slog.Error(qErr.Error())
+		}
+		allTicked := true
+		hasTasks := false
+		for val.Next() {
+			hasTasks = true
+			var completed int
+			val.Scan(&completed)
+			if completed != 1 {
+				allTicked = false
+			}
+		}
+		if !hasTasks {
+			allTicked = false
+		}
+		if !allTicked {
+			ongoingIDTable[i] = true
+		}
+	}
+	str := ""
+	for i := range ongoingIDTable {
+		if ongoingIDTable[i] {
+			str = str + " thesis_id = ? OR"
+			values = append(values, i)
+		}
+	}
+	if len(str) > 0 {
+		str = str[0 : len(str)-3]
+		str = "(" + str + ")"
+	}
+	conditions = append(conditions, str)
+	slog.Info("TASK CONDS AND VALUES", "conds", conditions)
+	slog.Info("TASK CONDS AND VALUES", "vals", values)
+	return conditions, values
+}
+
 func (m *Model) GetStudentID(value string, column string) ([]string, error) {
 	value = "%" + value + "%"
 	queryString := fmt.Sprintf("SELECT id FROM 'Student' WHERE %v LIKE '%v'", column, value)
@@ -139,7 +206,7 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 		case "degree":
 			conditions, values = m.GetConditionValuesFromStudent(value[0], "degree", "student_id", conditions, values)
 			continue
-		case "are_hours_settled":
+		case "are_hours_settled": // retired
 			conditions = append(conditions, "(is_supervisor_settled = ? OR is_assistant_supervisor_settled = ? OR is_reviewer_settled = ?)")
 			for i := 0; i < 3; i++ {
 				values = append(values, "0")
@@ -156,6 +223,9 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 		case "are_hours_settled_reviewer":
 			conditions = append(conditions, "(is_reviewer_settled = ?)")
 			values = append(values, "0")
+			continue
+		case "are_tasks_settled":
+			conditions, values = m.GetConditionValuesForTasks(conditions, values)
 			continue
 		}
 		if strings.Contains(key, "[") {

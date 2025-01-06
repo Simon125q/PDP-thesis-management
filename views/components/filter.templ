@@ -2,10 +2,10 @@ package components
 
 import "fmt"
 
-templ Filter(all bool) {
+templ Filter(realized bool) {
 	<form 
         id="filterForm" 
-        if all {
+        if realized {
             hx-get="/realized/filter" 
         } else {
             hx-get="/ongoing/filter"
@@ -14,11 +14,11 @@ templ Filter(all bool) {
         hx-swap="outerHTML" 
         hx-include="#page_number"
     >
-		@SearchBar(all)
+		@SearchBar(realized)
 		<span id="excel_field"></span>
 		<div class="relative w-full bg-white shadow border-gray-200 border-t-0 rounded-bl-lg rounded-br-lg p-4">
 			<!-- Input Field: Date Range -->
-			if all {
+			if realized {
 				<div class="mb-4">
 					<label for="date-start" class="block text-sm font-medium text-gray-700">Data egzaminu</label>
 					<div class="flex space-x-2">
@@ -203,7 +203,7 @@ templ Filter(all bool) {
 				</ul>
 			</div>
 			<!-- Input Field-->
-			if all {
+			if realized {
                 <div class="suggestion-container mb-4">
                     <label class="block text-sm font-medium text-gray-700">
                         Recenzent
@@ -267,6 +267,21 @@ templ Filter(all bool) {
                     </label>
                 </div>
 			}
+			if !realized {
+                <div class="mb-4 flex items-center space-x-2">
+                    <!-- Checkbox -->
+                    <input
+                        type="checkbox"
+                        id="are_tasks_settled"
+                        name="are_tasks_settled"
+                        class="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                    />
+                    <!-- Label -->
+                    <label for="are_tasks_settled" class="text-sm font-medium text-gray-700">
+                        Pokaż prace bez dostarczonych dokumentów
+                    </label>
+                </div>
+            }
 			<!-- Apply Button -->
 			<button
 				type="submit"
