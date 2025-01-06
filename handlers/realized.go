@@ -71,7 +71,7 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 
 	sheetName := "Prace"
 	if err := f.SetSheetName("Sheet1", sheetName); err != nil {
-		slog.Error("Error changing sheet name: %v", err)
+		slog.Error("Error changing sheet name", "err", err)
 	}
 	sheetIndex, _ := f.GetSheetIndex(sheetName)
 
@@ -722,8 +722,6 @@ func HandleAutocompleteSpecialization(w http.ResponseWriter, r *http.Request) er
 	return nil
 }
 
-
-
 func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, error) {
 	q := r.URL.Query()
 	sortBy := "thesis_id"
@@ -869,50 +867,50 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 	slog.Info("extractRealizedThesisFromForm", "asSettled", assSettled)
 	slog.Info("extractRealizedThesisFromForm", "revSettled", revSettled)
 	return &types.RealizedThesisEntry{
-		ThesisNumber:         r.FormValue("thesisNumber"),
-		ExamDate:             r.FormValue("examDate"),
-		ExamTime:             r.FormValue("examTime"),
-		AverageStudyGrade:    r.FormValue("averageStudyGrade"),
-		CompetencyExamGrade:  r.FormValue("competencyExamGrade"),
-		DiplomaExamGrade:     r.FormValue("diplomaExamGrade"),
-		FinalStudyResult:     r.FormValue("finalStudyResult"),
-		FinalStudyResultText: r.FormValue("finalStudyResultText"),
-		ThesisTitlePolish:    r.FormValue("thesisTitlePolish"),
-		ThesisTitleEnglish:   r.FormValue("thesisTitleEnglish"),
-		ThesisLanguage:       r.FormValue("thesisLanguage"),
-		Library:              r.FormValue("library"),
+		ThesisNumber:         strings.TrimSpace(r.FormValue("thesisNumber")),
+		ExamDate:             strings.TrimSpace(r.FormValue("examDate")),
+		ExamTime:             strings.TrimSpace(r.FormValue("examTime")),
+		AverageStudyGrade:    strings.TrimSpace(r.FormValue("averageStudyGrade")),
+		CompetencyExamGrade:  strings.TrimSpace(r.FormValue("competencyExamGrade")),
+		DiplomaExamGrade:     strings.TrimSpace(r.FormValue("diplomaExamGrade")),
+		FinalStudyResult:     strings.TrimSpace(r.FormValue("finalStudyResult")),
+		FinalStudyResultText: strings.TrimSpace(r.FormValue("finalStudyResultText")),
+		ThesisTitlePolish:    strings.TrimSpace(r.FormValue("thesisTitlePolish")),
+		ThesisTitleEnglish:   strings.TrimSpace(r.FormValue("thesisTitleEnglish")),
+		ThesisLanguage:       strings.TrimSpace(r.FormValue("thesisLanguage")),
+		Library:              strings.TrimSpace(r.FormValue("library")),
 		Student: types.Student{
-			StudentNumber:  r.FormValue("studentNumber"),
-			FirstName:      r.FormValue("firstNameStudent"),
-			LastName:       r.FormValue("lastNameStudent"),
-			FieldOfStudy:   r.FormValue("course"),
-			Specialization: r.FormValue("specialization"),
-			ModeOfStudies:  r.FormValue("modeOfStudies"),
-			Degree:         r.FormValue("degree"),
+			StudentNumber:  strings.TrimSpace(r.FormValue("studentNumber")),
+			FirstName:      strings.TrimSpace(r.FormValue("firstNameStudent")),
+			LastName:       strings.TrimSpace(r.FormValue("lastNameStudent")),
+			FieldOfStudy:   strings.TrimSpace(r.FormValue("course")),
+			Specialization: strings.TrimSpace(r.FormValue("specialization")),
+			ModeOfStudies:  strings.TrimSpace(r.FormValue("modeOfStudies")),
+			Degree:         strings.TrimSpace(r.FormValue("degree")),
 		},
-		ChairAcademicTitle: r.FormValue("chairAcademicTitle"),
+		ChairAcademicTitle: strings.TrimSpace(r.FormValue("chairAcademicTitle")),
 		Chair: types.UniversityEmployeeEntry{
-			FirstName:            r.FormValue("firstNameChair"),
-			LastName:             r.FormValue("lastNameChair"),
-			CurrentAcademicTitle: r.FormValue("chairAcademicTitle"),
+			FirstName:            strings.TrimSpace(r.FormValue("firstNameChair")),
+			LastName:             strings.TrimSpace(r.FormValue("lastNameChair")),
+			CurrentAcademicTitle: strings.TrimSpace(r.FormValue("chairAcademicTitle")),
 		},
-		SupervisorAcademicTitle: r.FormValue("supervisorAcademicTitle"),
+		SupervisorAcademicTitle: strings.TrimSpace(r.FormValue("supervisorAcademicTitle")),
 		Supervisor: types.UniversityEmployeeEntry{
-			FirstName:            r.FormValue("firstNameSupervisor"),
-			LastName:             r.FormValue("lastNameSupervisor"),
-			CurrentAcademicTitle: r.FormValue("supervisorAcademicTitle"),
+			FirstName:            strings.TrimSpace(r.FormValue("firstNameSupervisor")),
+			LastName:             strings.TrimSpace(r.FormValue("lastNameSupervisor")),
+			CurrentAcademicTitle: strings.TrimSpace(r.FormValue("supervisorAcademicTitle")),
 		},
-		AssistantSupervisorAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
+		AssistantSupervisorAcademicTitle: strings.TrimSpace(r.FormValue("assistantSupervisorAcademicTitle")),
 		AssistantSupervisor: types.UniversityEmployeeEntry{
-			FirstName:            r.FormValue("firstNameAssistantSupervisor"),
-			LastName:             r.FormValue("lastNameAssistantSupervisor"),
-			CurrentAcademicTitle: r.FormValue("assistantSupervisorAcademicTitle"),
+			FirstName:            strings.TrimSpace(r.FormValue("firstNameAssistantSupervisor")),
+			LastName:             strings.TrimSpace(r.FormValue("lastNameAssistantSupervisor")),
+			CurrentAcademicTitle: strings.TrimSpace(r.FormValue("assistantSupervisorAcademicTitle")),
 		},
-		ReviewerAcademicTitle: r.FormValue("reviewerAcademicTitle"),
+		ReviewerAcademicTitle: strings.TrimSpace(r.FormValue("reviewerAcademicTitle")),
 		Reviewer: types.UniversityEmployeeEntry{
-			FirstName:            r.FormValue("firstNameReviewer"),
-			LastName:             r.FormValue("lastNameReviewer"),
-			CurrentAcademicTitle: r.FormValue("reviewerAcademicTitle"),
+			FirstName:            strings.TrimSpace(r.FormValue("firstNameReviewer")),
+			LastName:             strings.TrimSpace(r.FormValue("lastNameReviewer")),
+			CurrentAcademicTitle: strings.TrimSpace(r.FormValue("reviewerAcademicTitle")),
 		},
 		HourlySettlement: types.HourlySettlement{
 			SupervisorHours:                 supHours,
