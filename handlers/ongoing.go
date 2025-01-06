@@ -195,7 +195,14 @@ func HandleOngoingArchive(w http.ResponseWriter, r *http.Request) error {
 	}
 	thesis.Archived = "true"
 	// add thesis to realized
-	err = server.MyS.DB.InsertOngoingThesisToRealized(thesis)
+	newId, err := server.MyS.DB.InsertOngoingThesisToRealized(thesis)
+	if err != nil {
+		return err
+	}
+	thesis.Note.RealizedThesisID = int(newId)
+	thesis.Note.OngoingThesisID = thesisId
+	slog.Info("ArchiveOngoingThesis", "note", thesis.Note)
+	err = server.MyS.DB.UpdateNoteRelatedOngoingThesis(thesis.Note)
 	if err != nil {
 		return err
 	}

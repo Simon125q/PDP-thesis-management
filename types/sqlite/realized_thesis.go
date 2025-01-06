@@ -617,7 +617,7 @@ func (m *Model) InsertRealizedThesisByEntry(thesis *types.RealizedThesisEntry) (
 	return result.LastInsertId()
 }
 
-func (m *Model) InsertOngoingThesisToRealized(thesis types.OngoingThesisEntry) error {
+func (m *Model) InsertOngoingThesisToRealized(thesis types.OngoingThesisEntry) (int64, error) {
 	query := `
         INSERT INTO Completed_Thesis (
             thesis_number, 
@@ -638,15 +638,15 @@ func (m *Model) InsertOngoingThesisToRealized(thesis types.OngoingThesisEntry) e
 	if thesis.AssistantSupervisor.Id != 0 {
 		asId = thesis.AssistantSupervisor.Id
 	}
-	_, err := m.DB.Exec(query,
+	result, err := m.DB.Exec(query,
 		thesis.ThesisNumber,
 		thesis.ThesisTitlePolish, thesis.ThesisTitleEnglish, thesis.ThesisLanguage,
 		thesis.SupervisorAcademicTitle, thesis.AssistantSupervisorAcademicTitle,
 		sId, suId, asId)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	return nil
+	return result.LastInsertId()
 }
 
 func (m *Model) UpdateRealizedThesisByEntry(thesis *types.RealizedThesisEntry) error {

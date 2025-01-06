@@ -87,3 +87,22 @@ func (m *Model) UpdateNote(note types.Note) error {
 	}
 	return nil
 }
+
+func (m *Model) UpdateNoteRelatedOngoingThesis(note types.Note) error {
+	query := `
+        UPDATE Note
+        SET 
+            completed_thesis_id = ?
+        WHERE thesis_to_be_completed_id = ?
+    `
+	slog.Info("UpdateNote", "note", note)
+
+	_, err := m.DB.Exec(query,
+		note.RealizedThesisID,
+		note.OngoingThesisID,
+	)
+	if err != nil {
+		return fmt.Errorf("failed to update note: %w", err)
+	}
+	return nil
+}
