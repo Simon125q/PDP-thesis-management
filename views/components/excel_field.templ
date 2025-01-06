@@ -1,6 +1,6 @@
 package components
 
-templ ExcelField() {
+templ ExcelField(defaultName string) {
 <span id="excelField">
     <div class="w-full p-4 border-3 border-rose-50 bg-white">
         <form id="excelForm" hx-get="/realized/generate_excel" hx-disabled-elt="confirm-btn" hx-target="#excelForm" hx-swap="delete" hx-include="#filterForm"
@@ -16,6 +16,7 @@ templ ExcelField() {
                     name="fileName"
                     class="w-full p-2 mt-1 border rounded-lg focus:ring-tul-dark-red focus:border-tul-dark-red"
                     placeholder="Wpisz nazwę pliku..."
+                    value={ defaultName }
                     required
                 />
             </div>

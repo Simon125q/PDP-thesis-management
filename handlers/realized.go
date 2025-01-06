@@ -33,12 +33,8 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HandleRealizedGenerateExcel", "entered", true)
 	queryParams := r.URL.Query()
-	println(queryParams.Encode())
-	println(r.URL.RawQuery)
 	fileName := r.URL.Query().Get("fileName")
-	println(fileName)
 	if fileName == "" {
-		println("weszlo")
 		fileName = "Wybrane_Prace"
 	}
 
@@ -54,8 +50,6 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 
 	currentTime := time.Now()
 	fileName = fileName + "_" + currentTime.Format("2-01-2006_15h04m05s") + ".xlsx"
-
-	println(fileName)
 
 	w.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 	w.Header().Set("Content-Disposition", "attachment; filename="+fileName)
@@ -146,7 +140,6 @@ func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	f.SetActiveSheet(sheetIndex)
-	println("koniec")
 	if err := f.Write(w); err != nil {
 		slog.Error("RealizedThesisGenerateExcel", "err", err)
 	}
@@ -1145,7 +1138,8 @@ func HandleRealizedClearNew(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedExcelField(w http.ResponseWriter, r *http.Request) error {
-	return Render(w, r, components.ExcelField())
+	defaultName := "Wybrane_Prace"
+	return Render(w, r, components.ExcelField(defaultName))
 }
 
 func HandleRealizedClearExcelField(w http.ResponseWriter, r *http.Request) error {
