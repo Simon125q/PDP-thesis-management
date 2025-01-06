@@ -416,9 +416,38 @@ func (m *Model) GetAllUniversityEmployeesTitlesNamesAndSurnames(searchString str
 
 func (m *Model) GetAllCourseNames(searchString string) ([]string, error) {
 	query := `
-        SELECT DISTINCT COALESCE(field_of_study, '')
-        FROM Student
-        WHERE field_of_study LIKE '%' || ? || '%'
+        SELECT DISTINCT COALESCE(name, '')
+        FROM fields_of_study
+        WHERE name LIKE '%' || ? || '%'
+    `
+	rows, err := m.DB.Query(query, searchString)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	values := []string{}
+
+	for rows.Next() {
+		var value string
+		if err := rows.Scan(&value); err != nil {
+			return nil, err
+		}
+		values = append(values, value)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return values, nil
+}
+
+func (m *Model) GetAllSpecializationsNames(searchString string) ([]string, error) {
+	query := `
+        SELECT DISTINCT COALESCE(name, '')
+        FROM Specializations
+        WHERE name LIKE '%' || ? || '%'
     `
 	rows, err := m.DB.Query(query, searchString)
 	if err != nil {

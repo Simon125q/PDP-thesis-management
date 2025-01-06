@@ -125,7 +125,9 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
         </div>
         <div class="px-3 w-1/2">
             <div>
-                @components.InputField("text", "specialization", "Specjalizacja", vals.Student.Specialization, false)
+                @components.InputFieldWithAutosuggestions("text", "specialization", "Specjalizacja", 
+                vals.Student.Specialization, false, fmt.Sprintf("/realized/autocompleteSpecialization"),
+                "suggestions-for-the-specialization", "input-form")
                 @components.ErrorMsg(errs.Student.Specialization)
             </div>
         </div>
