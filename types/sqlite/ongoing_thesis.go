@@ -47,9 +47,13 @@ func (m *Model) AllOngoingThesisEntries(sort_by string, desc_order bool, page_nu
 	LEFT JOIN University_Employee sp ON ct.supervisor_id = sp.id
 	LEFT JOIN University_Employee asup ON ct.assistant_supervisor_id = asup.id
     `
-	slog.Info("GetAllOngoingThesis", "queryParams", queryParams)
-	queryParams.Set("ongoing_user_id", queryParams.Get("user_id"))
+	slog.Info("GetAllOngoingThesisBefore", "queryParams", queryParams)
+	usrId := queryParams.Get("user_id")
+	if usrId != "" {
+		queryParams.Set("ongoing_user_id", usrId)
+	}
 	queryParams.Del("user_id")
+	slog.Info("GetAllOngoingThesisAfter", "queryParams", queryParams)
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
 	query = AddSQLPagination(query, page_num, page_limit)
