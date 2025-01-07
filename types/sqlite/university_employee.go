@@ -13,7 +13,7 @@ type Model struct {
 }
 
 func (m *Model) AllUniversityEmployee() ([]types.UniversityEmployee, error) {
-	q := `SELECT id, first_name, last_name, COALESCE(current_academic_title, ''), COALESCE(department_unit, '') FROM University_Employee ORDER BY id DESC`
+	q := `SELECT id, first_name, last_name, COALESCE(current_academic_title, ''), COALESCE(department_unit, '') FROM University_Employee ORDER BY UPPER(last_name) ASC`
 	rows, err := m.DB.Query(q)
 	if err != nil {
 		return nil, err
@@ -46,7 +46,7 @@ func (m *Model) GetSortedEmps(sortBy string, order string, searchTerm string) ([
 		searchTerm = "%"
 	}
 
-	q := fmt.Sprintf("SELECT id, first_name, last_name, COALESCE(current_academic_title, '') as current_academic_title, COALESCE(department_unit, '') AS department_unit FROM University_Employee WHERE last_name LIKE '%%%s%%' ORDER BY %s %s", searchTerm, sortBy, order)
+	q := fmt.Sprintf("SELECT id, first_name, last_name, COALESCE(current_academic_title, '') as current_academic_title, COALESCE(department_unit, '') AS department_unit FROM University_Employee WHERE last_name LIKE '%%%s%%' ORDER BY UPPER(%s) %s", searchTerm, sortBy, order)
 
 	rows, err := m.DB.Query(q)
 	if err != nil {

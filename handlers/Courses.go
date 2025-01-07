@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"github.com/go-chi/chi/v5"
-	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -80,8 +79,6 @@ func extractSortsCoursesFromForm(r *http.Request) *CourseFilter {
 }
 
 func HandleSortingCourses(w http.ResponseWriter, r *http.Request) error {
-	log.Printf("All query parameters: %v", r.URL.Query()) //log do wywalenia
-
 	err := r.ParseForm()
 	if err != nil {
 		http.Error(w, "Failed to parse form", http.StatusBadRequest)

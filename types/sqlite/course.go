@@ -6,7 +6,7 @@ import (
 )
 
 func (m *Model) AllCourses() ([]types.Course, error) {
-	q := `SELECT id, name FROM fields_of_study ORDER BY id DESC`
+	q := `SELECT id, name FROM fields_of_study ORDER BY UPPER(name) ASC`
 	rows, err := m.DB.Query(q)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (m *Model) GetSortedCourses(sortBy string, order string, searchTerm string)
 		searchTerm = "%"
 	}
 
-	q := fmt.Sprintf("SELECT id, name FROM fields_of_study WHERE name LIKE '%%%s%%' ORDER BY %s %s", searchTerm, sortBy, order)
+	q := fmt.Sprintf("SELECT id, name FROM fields_of_study WHERE name LIKE '%%%s%%' ORDER BY UPPER(%s) %s", searchTerm, sortBy, order)
 
 	rows, err := m.DB.Query(q)
 	if err != nil {
