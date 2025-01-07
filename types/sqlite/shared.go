@@ -51,7 +51,7 @@ func (m *Model) GetConditionValuesForTasks(conditions []string, values []interfa
 			}
 		}
 		if !hasTasks {
-			allTicked = false
+			allTicked = true
 		}
 		if !allTicked {
 			ongoingIDTable[i] = true

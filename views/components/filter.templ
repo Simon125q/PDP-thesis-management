@@ -155,6 +155,23 @@ templ Filter(realized bool) {
 					<option value="niestacjonarne">Niestacjonarne</option>
 				</select>
 			</div>
+			<!-- Dropdown Field-->
+			if !realized {
+                <div class="suggestion-container mb-4">
+                    <label class="block text-sm font-medium text-gray-700">
+                        Archiwizacja
+                    </label>
+                    <select
+                        id="archived_ongoing"
+                        name="archived_ongoing"
+                        class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
+                    >
+                        <option value="all">Wszystkie</option>
+                        <option value="archived">Zarchiwizowane</option>
+                        <option value="notarchived">Niezarchiwizowane</option>
+                    </select>
+                </div>
+            }
 			<!-- Input Field-->
 			<div class="suggestion-container mb-4">
 				<label class="block text-sm font-medium text-gray-700">Promotor</label>
