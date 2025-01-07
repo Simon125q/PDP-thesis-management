@@ -69,8 +69,8 @@ func (m *Model) GetConditionValuesForTasks(conditions []string, values []interfa
 		str = "(" + str + ")"
 	}
 	conditions = append(conditions, str)
-	slog.Info("TASK CONDS AND VALUES", "conds", conditions)
-	slog.Info("TASK CONDS AND VALUES", "vals", values)
+	//slog.Info("TASK CONDS AND VALUES", "conds", conditions)
+	//slog.Info("TASK CONDS AND VALUES", "vals", values)
 	return conditions, values
 }
 
@@ -211,6 +211,16 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 			continue
 		case "degree":
 			conditions, values = m.GetConditionValuesFromStudent(value[0], "degree", "student_id", conditions, values)
+			continue
+		case "archived_ongoing":
+			switch value[0] {
+			case "archived":
+				conditions = append(conditions, "(topic_scan = 'true')")
+				continue
+			case "notarchived":
+				conditions = append(conditions, "(topic_scan = 'false' OR topic_scan IS NULL)")
+				continue
+			}
 			continue
 		case "are_hours_settled": // retired
 			conditions = append(conditions, "(is_supervisor_settled = ? OR is_assistant_supervisor_settled = ? OR is_reviewer_settled = ?)")
