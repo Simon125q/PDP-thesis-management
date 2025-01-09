@@ -84,6 +84,16 @@ func HandleOngoingNew(w http.ResponseWriter, r *http.Request) error {
 	t.Id = int(tId)
 	slog.Info("ongoing thesis to db", "new_id", tId)
 	errors.Correct = true
+	_, err = server.MyS.DB.InsertTask(types.Task{Content: "Podanie o egzamin dyplomowy", OngoingThesisID: t.Id})
+	_, err = server.MyS.DB.InsertTask(types.Task{Content: "Oświadczenie o badaniach losów zawodowych absolwenta", OngoingThesisID: t.Id})
+	_, err = server.MyS.DB.InsertTask(types.Task{Content: "Obiegówka", OngoingThesisID: t.Id})
+	_, err = server.MyS.DB.InsertTask(types.Task{Content: "Wydruk prac dyplomowych", OngoingThesisID: t.Id})
+	if t.Student.Degree == "II stopień" {
+		_, err = server.MyS.DB.InsertTask(types.Task{Content: "Oświadczenie o nieużywaniu legitymacji", OngoingThesisID: t.Id})
+	}
+	if t.Student.ModeOfStudies == "niestacjonarne" {
+		_, err = server.MyS.DB.InsertTask(types.Task{Content: "Podanie do prodziekana o wyznaczenie egzaminu w dzień roboczy", OngoingThesisID: t.Id})
+	}
 	return Render(w, r, ongoing.NewEntrySwap(t, types.OngoingThesisEntry{}, errors))
 }
 
