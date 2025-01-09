@@ -92,7 +92,7 @@ func ValidateIndex(index string) (string, bool) {
 func ValidateName(name string) (string, bool) {
 	for _, char := range name {
 		if unicode.IsDigit(char) {
-			return "Imię nie może zawierać liczb", false
+			return "Imię i Nazwisko nie może zawierać liczb", false
 		}
 	}
 	return "", true
@@ -119,7 +119,7 @@ func ValidateThesisNumber(num string) (string, bool) {
 	if re.MatchString(num) {
 		return "", true
 	}
-	return "Numer pracy musi miec odpowiedni format: Number jednostki/stopien/numer pracy/rok", false
+	return "Numer pracy musi miec odpowiedni format: Numer jednostki/stopien/numer pracy/rok", false
 }
 
 func CheckThesisNumber(thesNumber, degree string) string {
