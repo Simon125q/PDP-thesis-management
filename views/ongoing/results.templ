@@ -17,9 +17,9 @@ templ Results(thes_data []types.OngoingThesisEntry) {
 	</div>
 }
 
-templ SwapResults(thes_data []types.OngoingThesisEntry, page_number int) {
+templ SwapResults(thes_data []types.OngoingThesisEntry, page_number, page_size int) {
 	@Results(thes_data)
 	<span id="pageSwitcher" hx-swap-oob="true">
-		@components.PageSwitcher(page_number, "ongoing")
+		@components.PageSwitcher(page_number, page_size, "ongoing")
 	</span>
 }

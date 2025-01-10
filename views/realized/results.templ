@@ -17,9 +17,9 @@ templ Results(thes_data []types.RealizedThesisEntry) {
 	</div>
 }
 
-templ SwapResults(thes_data []types.RealizedThesisEntry, page_number int) {
+templ SwapResults(thes_data []types.RealizedThesisEntry, page_number, page_size int) {
 	@Results(thes_data)
 	<span id="pageSwitcher" hx-swap-oob="true">
-		@components.PageSwitcher(page_number, "realized")
+		@components.PageSwitcher(page_number, page_size, "realized")
 	</span>
 }

@@ -101,21 +101,26 @@ func HandleOngoingFiltered(w http.ResponseWriter, r *http.Request) error {
 	slog.Info("HandleOngoingFiltered", "query", r.URL.Query())
 	q := r.URL.Query()
 	page, err := strconv.Atoi(q.Get("page_number"))
+	if err != nil {
+		slog.Info("HandleOngoingFiltered", "err", err)
+		return err
+	}
+	pageSize, err := strconv.Atoi(q.Get("page_size"))
+	if err != nil {
+		slog.Info("HandleOngoingFiltered", "err", err)
+		return err
+	}
 	if q.Get("reset_page") != "false" {
 		q.Set("page_number", strconv.Itoa(1))
 		page = 1
 	}
 	q.Del("reset_page")
 	r.URL.RawQuery = q.Encode()
-	if err != nil {
-		slog.Info("HandleOngoingFiltered", "err", err)
-		return err
-	}
 	results, err := filterOngoingThesisEntries(r)
 	if err != nil {
 		return err
 	}
-	return Render(w, r, ongoing.SwapResults(results, page))
+	return Render(w, r, ongoing.SwapResults(results, page, pageSize))
 }
 
 func HandleOngoingUpdate(w http.ResponseWriter, r *http.Request) error {
@@ -298,6 +303,7 @@ func filterOngoingThesisEntries(r *http.Request) ([]types.OngoingThesisEntry, er
 	desc := true
 	searchString := ""
 	page_num := 1
+	page_size := 20
 	for key, val := range q {
 		if val[0] == "" || val[0] == "all" {
 			q.Del(key)
@@ -314,6 +320,10 @@ func filterOngoingThesisEntries(r *http.Request) ([]types.OngoingThesisEntry, er
 			page_num, _ = strconv.Atoi(val[0])
 			slog.Info("filterOngoingThesisEntries", "page_number", page_num)
 			q.Del(key)
+		} else if key == "page_size" {
+			page_size, _ = strconv.Atoi(val[0])
+			slog.Info("filterOngoingThesisEntries", "page_size", page_size)
+			q.Del(key)
 		} else if key == "Search" {
 			searchString = val[0]
 			q.Del(key)
@@ -322,13 +332,13 @@ func filterOngoingThesisEntries(r *http.Request) ([]types.OngoingThesisEntry, er
 	slog.Info("filterOngoingThesisEntries", "searchString", searchString)
 	r.URL.RawQuery = q.Encode()
 	if searchString == "" {
-		thes_data, err := server.MyS.DB.AllOngoingThesisEntries(sortBy, desc, page_num, PageLimit, r.URL.Query())
+		thes_data, err := server.MyS.DB.AllOngoingThesisEntries(sortBy, desc, page_num, page_size, r.URL.Query())
 		if err != nil {
 			return nil, err
 		}
 		return thes_data, nil
 	}
-	thes_data, err := server.MyS.DB.AllOngoingThesisEntries(sortBy, desc, -1, PageLimit, r.URL.Query())
+	thes_data, err := server.MyS.DB.AllOngoingThesisEntries(sortBy, desc, -1, page_size, r.URL.Query())
 	if err != nil {
 		return nil, err
 	}
@@ -347,7 +357,7 @@ func filterOngoingThesisEntries(r *http.Request) ([]types.OngoingThesisEntry, er
 			results = append(results, t)
 		}
 	}
-	paginated_res, _ := paginate(results, page_num, PageLimit)
+	paginated_res, _ := paginate(results, page_num, page_size)
 	return paginated_res, nil
 }
 

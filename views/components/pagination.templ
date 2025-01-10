@@ -3,13 +3,32 @@ package components
 import "strconv"
 import "fmt"
 
-templ PageSwitcher(pageNum int, tab string) {
+templ PageSwitcher(pageNum, pageSize int, tab string) {
     <div class="flex items-center justify-center space-x-2 mt-4">
+        <label>Rozmiar strony</label>
+        <select 
+            id="page_size"
+            name="page_size"
+            if tab == "realized"{
+                hx-get="/realized/filter" 
+            } else {
+                hx-get="/ongoing/filter"
+            }
+            hx-target="#results" 
+            hx-swap="outerHTML" 
+            hx-trigger="change"
+            hx-include="#filterForm, #page_number, #page_size"
+            >
+            <option value="10" if pageSize == 10 { selected }>10</option>
+            <option value="20" if pageSize == 20 { selected }>20</option>
+            <option value="50" if pageSize == 50 { selected }>50</option>
+            <option value="100" if pageSize == 100 { selected }>100</option>
+        </select>
         <!-- Left Arrow Button -->
         <button
             hx-get={fmt.Sprintf("%v/previous_page", tab)}
             hx-target="#results"
-            hx-include="#filterForm, #page_number"
+            hx-include="#filterForm, #page_number, #page_size"
             class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
             if pageNum == 1 {
                 disabled
@@ -26,7 +45,7 @@ templ PageSwitcher(pageNum int, tab string) {
         <button
             hx-get={fmt.Sprintf("%v/next_page", tab)}
             hx-target="#results"
-            hx-include="#filterForm, #page_number"
+            hx-include="#filterForm, #page_number, #page_size"
             class="px-4 py-2 text-gray-700 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">
             <i class="fa-solid fa-arrow-right"></i>
         </button>

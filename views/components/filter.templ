@@ -12,7 +12,7 @@ templ Filter(realized bool) {
         }
         hx-target="#results" 
         hx-swap="outerHTML" 
-        hx-include="#page_number"
+        hx-include="#page_number, #page_size"
     >
 		@SearchBar(realized)
 		<span id="excel_field"></span>
