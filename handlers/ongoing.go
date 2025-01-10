@@ -10,6 +10,7 @@ import (
 	"thesis-management-app/pkgs/validators"
 	"thesis-management-app/types"
 	"thesis-management-app/views/ongoing"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -48,7 +49,7 @@ func HandleOngoingEntry(w http.ResponseWriter, r *http.Request) error {
 
 func HandleOngoingNew(w http.ResponseWriter, r *http.Request) error {
 	t := *extractOngoingThesisFromForm(r)
-	t.ThesisNumber = validators.CheckThesisNumber(t.ThesisNumber, t.Student.Degree)
+	//t.ThesisNumber = validators.CheckThesisNumber(t.ThesisNumber, t.Student.Degree)
 	errors, ok := validators.ValidateOngoingThesis(t)
 	if !ok {
 		errors.Correct = false
@@ -210,6 +211,7 @@ func HandleOngoingArchive(w http.ResponseWriter, r *http.Request) error {
 	}
 	thesis.Archived = "true"
 	// add thesis to realized
+	thesis.ThesisNumber = validators.CheckThesisNumber(fmt.Sprintf("k22/stopien/num/%v", time.Now().Year()), thesis.Student.Degree)
 	newId, err := server.MyS.DB.InsertOngoingThesisToRealized(thesis)
 	if err != nil {
 		return err
