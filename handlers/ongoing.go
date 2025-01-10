@@ -268,7 +268,7 @@ func HandleOngoingClearNew(w http.ResponseWriter, r *http.Request) error {
 
 func extractOngoingThesisFromForm(r *http.Request) *types.OngoingThesisEntry {
 	return &types.OngoingThesisEntry{
-		ThesisNumber:       strings.TrimSpace(r.FormValue("thesisNumber")),
+		//ThesisNumber:       strings.TrimSpace(r.FormValue("thesisNumber")),
 		ThesisTitlePolish:  strings.TrimSpace(r.FormValue("thesisTitlePolish")),
 		ThesisTitleEnglish: strings.TrimSpace(r.FormValue("thesisTitleEnglish")),
 		ThesisLanguage:     strings.TrimSpace(r.FormValue("thesisLanguage")),

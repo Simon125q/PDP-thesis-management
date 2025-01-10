@@ -34,12 +34,12 @@ func ValidateRealizedThesis(t types.RealizedThesisEntry) (types.RealizedThesisEn
 
 func ValidateOngoingThesis(t types.OngoingThesisEntry) (types.OngoingThesisEntryErrors, bool) {
 	sErr, sOk := ValidateStudent(t.Student)
-	thesisNumberErr, tnOk := ValidateThesisNumber(t.ThesisNumber)
+	//thesisNumberErr, tnOk := ValidateThesisNumber(t.ThesisNumber)
 	supErr, supOk := ValidateEmployee(t.Supervisor)
 	asErr, asOk := ValidateEmployee(t.AssistantSupervisor)
-	if !sOk || !tnOk || !supOk || !asOk {
+	if !sOk || !supOk || !asOk {
 		return types.OngoingThesisEntryErrors{
-			ThesisNumber:        thesisNumberErr,
+			//		ThesisNumber:        thesisNumberErr,
 			Student:             sErr,
 			Supervisor:          supErr,
 			AssistantSupervisor: asErr,
