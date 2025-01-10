@@ -17,12 +17,12 @@ templ InputFields(vals types.OngoingThesisEntry, errs types.OngoingThesisEntryEr
         @components.ErrorMsg(errs.ThesisTitleEnglish)
     </div>
     <div class="mt-5 -mx-3 flex flex-wrap">
-        <div class="w-full px-3 sm:w-1/2">
-            <div>
-                @components.InputField("text", "thesisNumber", "Numer Pracy", vals.ThesisNumber, true)
-                @components.ErrorMsg(errs.ThesisNumber)
-            </div>
-        </div>
+        //<div class="w-full px-3 sm:w-1/2">
+        //    <div>
+        //        @components.InputField("text", "thesisNumber", "Numer Pracy", vals.ThesisNumber, true)
+        //        @components.ErrorMsg(errs.ThesisNumber)
+        //    </div>
+        //</div>
         <div class="w-full px-3 sm:w-1/2">
             <div>
                 @components.InputDropdownLanguage("thesisLanguage", "Język Pracy", vals.ThesisLanguage)
