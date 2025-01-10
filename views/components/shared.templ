@@ -16,6 +16,32 @@ templ BoxMsg(msg string) {
 </div>
 }
 
+templ InputFieldWithValidation(inputType, id, label, val, validation_path, errs string, req bool) {
+	<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
+		{ label }
+	</label>
+	<input
+		type={ inputType }
+		id={ id }
+        hx-get={ validation_path }
+        hx-target={ fmt.Sprintf("#%v-error", id)}
+        hx-trigger="keyup changed delay:300ms"
+        hx-swap="innerHTML"
+		name={ id }
+        value={ val }
+		placeholder={ label }
+		if req {
+			required
+		}
+	class="w-full rounded-md border border-gray-200 bg-white py-3 px-5 text-base font-medium text-gray-tul-dark-gray outline-none focus:border-tul-light-red focus:shadow-md"
+    />
+    <span id={fmt.Sprintf("%v-error", id)}>
+        @ErrorMsg(errs)
+    </span>
+}
+templ ErrorMsgId(id, msg string) {
+    <span id={ id } class="w-full text-tul-medium-red">{ msg }</span>
+}
 templ InputField(inputType, id, label, val string, req bool) {
 	<label for={ id } class="block text-base font-medium text-tul-dark-gray mb-1">
 		{ label }

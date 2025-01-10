@@ -38,19 +38,22 @@ templ InputFields(vals types.OngoingThesisEntry, errs types.OngoingThesisEntryEr
     <div class="-mx-3 mt-5 flex flex-wrap">
         <div class="px-2 w-5/12">
             <div>
-                @components.InputField("text", "firstNameStudent", "Imię", vals.Student.FirstName, true)
-                @components.ErrorMsg(errs.Student.FirstName)
+                @components.InputFieldWithValidation("text", "firstNameStudent", "Imię", vals.Student.FirstName, "/student_name-validate", errs.Student.FirstName, true)
+                //@components.InputField("text", "firstNameStudent", "Imię", vals.Student.FirstName, true)
+                //@components.ErrorMsg(errs.Student.FirstName)
             </div>
         </div>
         <div class="px-2 w-5/12">
             <div>
-                @components.InputField("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, true)
-                @components.ErrorMsg(errs.Student.LastName)
+                @components.InputFieldWithValidation("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, "/student_surname-validate", errs.Student.LastName, true)
+                //@components.InputField("text", "lastNameStudent", "Nazwisko", vals.Student.LastName, true)
+                //@components.ErrorMsg(errs.Student.LastName)
             </div>
         </div>
         <div class="px-2 w-2/12">
-            @components.InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
-            @components.ErrorMsg(errs.Student.StudentNumber)
+            @components.InputFieldWithValidation("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, "/student_number-validate", errs.Student.StudentNumber, true)
+            //@components.InputField("text", "studentNumber", "Numer Indeksu", vals.Student.StudentNumber, true)
+            //@components.ErrorMsg(errs.Student.StudentNumber)
         </div>
     </div>
     <div class="mt-5 -mx-3 flex flex-wrap">

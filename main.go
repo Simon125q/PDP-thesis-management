@@ -107,6 +107,10 @@ func main() {
 		r.Get("/note/{realized_id}&{ongoing_id}&{user_id}", handlers.Make(handlers.HandleNote))
 		r.Put("/realized/{id}", handlers.Make(handlers.HandleRealizedUpdate))
 		r.Put("/ongoing/{id}", handlers.Make(handlers.HandleOngoingUpdate))
+
+		r.Get("/student_number-validate", handlers.Make(handlers.HandleStudentNumberValidate))
+		r.Get("/student_name-validate", handlers.Make(handlers.HandleStudentNameValidate))
+		r.Get("/student_surname-validate", handlers.Make(handlers.HandleStudentSurnameValidate))
 	})
 
 	server.MyS.Router.Group(func(r chi.Router) {
