@@ -3,6 +3,7 @@ package settings
 import (
 	"thesis-management-app/types"
 	"thesis-management-app/views/components"
+	"fmt"
 )
 
 templ InputFields_Empl(vals types.UniversityEmployeeEntry, errs types.UniversityEmployeeEntryErrors) {
@@ -15,7 +16,9 @@ templ InputFields_Empl(vals types.UniversityEmployeeEntry, errs types.University
 		@components.ErrorMsg(errs.LastName)
 	</div>
 	<div>
-		@components.InputDropdownEmployeeTitle("text", "current_academic_title", "Tytuł Naukowy", vals.CurrentAcademicTitle, true, "input-form")
+		@components.InputFieldWithAutosuggestions("text", "current_academic_title", "Tytuł Naukowy",
+                vals.CurrentAcademicTitle, true, fmt.Sprintf("/realized/autocompleteTitle"),
+                "suggestions-for-the-title", "input-form")
 		@components.ErrorMsg(errs.CurrentAcademicTitle)
 	</div>
 	<div>

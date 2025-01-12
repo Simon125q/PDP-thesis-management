@@ -687,6 +687,37 @@ func HandleAutocompleteCourse(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func HandleAutocompleteTitle(w http.ResponseWriter, r *http.Request) error {
+
+	userInput := r.URL.Query().Get("current_academic_title")
+
+	if userInput == "" {
+		return nil
+	}
+
+	filteredResults, err := server.MyS.DB.GetAllTitlesNames(userInput)
+	if err != nil {
+		slog.Error("HandleAutocompleteCourse", "err", err)
+		return err
+	}
+
+	maxResults := 6
+	if len(filteredResults) > maxResults {
+		filteredResults = filteredResults[:maxResults]
+	}
+
+	w.Header().Set("Content-Type", "text/html")
+	w.WriteHeader(http.StatusOK)
+	for _, title := range filteredResults {
+		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+	}
+
+	return nil
+}
+
+
+
+
 func HandleAutocompleteSpecialization(w http.ResponseWriter, r *http.Request) error {
 
 	userInput := r.URL.Query().Get("specialization")
