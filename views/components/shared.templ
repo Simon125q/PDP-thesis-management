@@ -176,7 +176,7 @@ templ InputDropdownEmployeeTitle(inputType, id, label, val string, req bool, inp
         <option value="dr inż." if val == "Dr." || val == "dr inż. + mgr inż." || val == "dr inż." || val == "Dr inż." || val == "dr" { selected }>dr inż.</option>
         <option value="dr hab. inż." if val == "dr hab. inż." || val == "dr hab." || val == "Dr. hab." { selected }>dr hab. inż.</option>
         <option value="prof. dr hab. inż." if val == "prof. dr inż." || val == "prof. dr hab. inż." || val == "prof. dr hab." || val == "Prof. dr hab." || val == "prof. dr hab. inż. + mgr" || val == "prof. dr hab. inż. + mgr inż." || val == "Prof. Dr hab. inż." || val == "prof." { selected }>prof. dr hab. inż.</option>
-        <option value="prof. PŁ" if val == "Prof. Pł" || val == "Profesor PŁ" || val == "Prof PŁ" || val == "prof PŁ">prof. PŁ</option>
+        <option value="prof. PŁ" if val == "Prof. Pł" || val == "Profesor PŁ" || val == "Prof PŁ" || val == "prof PŁ" { selected }>prof. PŁ</option>
     </select>
 }
 
