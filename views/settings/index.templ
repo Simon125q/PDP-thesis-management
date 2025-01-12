@@ -8,7 +8,7 @@ templ Index() {
 	@layouts.Base(true) {
 		<div class="flex flex-row w-full min-h-[70vh]">
 			<!-- Left Sidebar -->
-			<div class="w-1/4 bg-gray-100 p-4 flex flex-col items-start border-r border-gray-300 space-y-8"> <!-- Added space-y-4 for spacing -->
+			<div class="w-1/4 p-4 flex flex-col items-start border-r border-gray-300 space-y-8"> <!-- Added space-y-4 for spacing -->
 				<!-- Employees Button -->
 				<button class="text-white bg-blue-600 w-full py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out"
 					hx-get="/settings/employees" hx-trigger="click" hx-target="#rightPane" hx-swap="innerHTML">
