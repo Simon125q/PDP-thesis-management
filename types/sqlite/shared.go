@@ -75,7 +75,6 @@ func (m *Model) GetConditionValuesForTasks(conditions []string, values []interfa
 }
 
 func (m *Model) GetStudentID(value string, column string) ([]string, error) {
-	value = "%" + value + "%"
 	queryString := fmt.Sprintf("SELECT id FROM 'Student' WHERE %v LIKE '%v'", column, value)
 	slog.Info(queryString)
 	rows, err := m.DB.Query(queryString)
@@ -123,7 +122,7 @@ func (m *Model) GetConditionValuesFromName(name string, personRank string, colum
 	slog.Info("GetConditionValuesFromName", "ids", ids)
 	str := "("
 	for _, id := range ids {
-		str = str + " " + column + " = ? OR"
+		str = str + " " + column + " = ? OR" //
 		values = append(values, id)
 	}
 	if len(str) > 1 {
@@ -195,7 +194,7 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 			conditions, values = m.GetConditionValuesFromName(value[0], "Student", "student_id", conditions, values)
 			continue
 		case "student_number":
-			conditions, values = m.GetConditionValuesFromStudent(value[0], "student_number", "student_id", conditions, values)
+			conditions, values = m.GetConditionValuesFromStudent(value[0]+"%", "student_number", "student_id", conditions, values)
 			continue
 		case "supervisor_name":
 			conditions, values = m.GetConditionValuesFromName(value[0], "University_Employee", "supervisor_id", conditions, values)
