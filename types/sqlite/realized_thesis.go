@@ -472,6 +472,34 @@ func (m *Model) GetAllTitlesNames(searchString string) ([]string, error) {
 	return values, nil
 }
 
+func (m *Model) GetTheListOfAllTitlesNames() ([]string, error) {
+	query := `
+        SELECT DISTINCT COALESCE(current_academic_title, '')
+        FROM University_Employee
+    `
+	rows, err := m.DB.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	values := []string{}
+
+	for rows.Next() {
+		var value string
+		if err := rows.Scan(&value); err != nil {
+			return nil, err
+		}
+		values = append(values, value)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return values, nil
+}
+
 func (m *Model) GetAllSpecializationsNames(searchString string) ([]string, error) {
 	query := `
         SELECT DISTINCT COALESCE(name, '')

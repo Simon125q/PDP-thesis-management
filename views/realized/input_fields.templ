@@ -143,8 +143,9 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div class="mb-4">
-                @components.InputDropdownEmployeeTitle("text", "supervisorAcademicTitle", "Tytuł",
-                vals.SupervisorAcademicTitle, true, "input-form input-form-title")
+                @components.InputFieldWithAutosuggestionsForTitle("text", "supervisorAcademicTitle", "Tytuł",
+                vals.SupervisorAcademicTitle, true, fmt.Sprintf("/realized/autocompleteAllTitles"),
+                "suggestions-for-supervisor-title", "input-form input-form-title")
                 @components.ErrorMsg(errs.SupervisorAcademicTitle)
             </div>
         </div>
@@ -173,8 +174,9 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputDropdownEmployeeTitle("text", "assistantSupervisorAcademicTitle", "Tytuł",
-                vals.AssistantSupervisorAcademicTitle, false, "input-form input-form-title")
+                @components.InputFieldWithAutosuggestionsForTitle("text", "assistantSupervisorAcademicTitle", "Tytuł",
+                vals.AssistantSupervisorAcademicTitle, false, fmt.Sprintf("/realized/autocompleteAllTitles"),
+                "suggestions-for-assistant-supervisor-title", "input-form input-form-title")
                 @components.ErrorMsg(errs.AssistantSupervisorAcademicTitle)
             </div>
         </div>
@@ -204,8 +206,9 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputDropdownEmployeeTitle("text", "reviewerAcademicTitle", "Tytuł",
-                vals.ReviewerAcademicTitle, false, "input-form input-form-title")
+                @components.InputFieldWithAutosuggestionsForTitle("text", "reviewerAcademicTitle", "Tytuł",
+                vals.ReviewerAcademicTitle, false,  fmt.Sprintf("/realized/autocompleteAllTitles"),
+                "suggestions-for-reviewer-title", "input-form input-form-title")
                 @components.ErrorMsg(errs.ReviewerAcademicTitle)
             </div>
         </div>
@@ -233,8 +236,9 @@ templ InputFields(vals types.RealizedThesisEntry, errs types.RealizedThesisEntry
     <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputDropdownEmployeeTitle("text", "chairAcademicTitle", "Tytuł",
-                vals.ChairAcademicTitle, false, "input-form input-form-title")
+                @components.InputFieldWithAutosuggestionsForTitle("text", "chairAcademicTitle", "Tytuł",
+                vals.ChairAcademicTitle, false, fmt.Sprintf("/realized/autocompleteAllTitles"),
+                "suggestions-for-chair-title", "input-form input-form-title")
                 @components.ErrorMsg(errs.Chair.FirstName)
             </div>
         </div>

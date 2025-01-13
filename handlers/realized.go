@@ -391,20 +391,15 @@ func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request)
 	return nil
 }
 
-func HandleAutocompleteSupervisorTitle(w http.ResponseWriter, r *http.Request) error {
+func HandleAutocompleteAllTitles(w http.ResponseWriter, r *http.Request) error {
 
-	userInput := r.URL.Query().Get("supervisorAcademicTitle")
 
-	if userInput == "" {
-		return nil
-	}
-
-	filteredResults, err := server.MyS.DB.GetAllUniversityEmployeesTitlesNamesAndSurnames(userInput)
+	filteredResults, err := server.MyS.DB.GetTheListOfAllTitlesNames()
 	if err != nil {
 		return err
 	}
 
-	maxResults := 6
+	maxResults := 100
 	if len(filteredResults) > maxResults {
 		filteredResults = filteredResults[:maxResults]
 	}
@@ -412,7 +407,7 @@ func HandleAutocompleteSupervisorTitle(w http.ResponseWriter, r *http.Request) e
 	w.Header().Set("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
 	for _, title := range filteredResults {
-		fmt.Fprintf(w, "<li class=\"suggestion px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
+		fmt.Fprintf(w, "<li class=\"suggestion-for-title px-3 py-2 hover:bg-gray-100 cursor-pointer w-full\" >%s</li>", title)
 	}
 
 	return nil

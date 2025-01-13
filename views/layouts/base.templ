@@ -37,35 +37,8 @@ templ Base(nav bool) {
 
                 const inputElementTitle = event.target.closest('.employee-suggestion-container').querySelector('.input-form-title');
                 if (inputElementTitle) {
-                    const normalizedTitle = title.trim().toLowerCase();
-                    const titleMapping = {
-                        "inż.": ["inż.", "inż"],
-                        "mgr": ["mgr.", "mgr"],
-                        "mgr inż.": ["mgr inż.", "mgr. inż.", "Mgr inż."],
-                        "dr inż.": [
-                            "dr.", "dr inż. + mgr inż.",
-                            "dr inż.", "dr", "dr inż", "Dr inż.", "Dr."
-                        ],
-                        "dr hab. inż.": ["dr hab. inż.", "dr hab.", "dr. hab."],
-                        "prof. dr hab. inż.": [
-                            "prof. dr inż.", "prof. dr hab. inż.", "prof. dr hab.", "prof.",
-                            "Prof. dr hab.", "prof. dr hab. inż. + mgr", "prof. dr hab. inż. + mgr inż.",
-                            "Prof. Dr hab. inż."
-                        ]
-                    };
-                    let mappedValue = null;
-                    for (const [key, variations] of Object.entries(titleMapping)) {
-                        if (variations.some(variation => normalizedTitle === variation.toLowerCase())) {
-                            mappedValue = key;
-                            break;
-                        }
-                    }
-                    if (mappedValue) {
-                        inputElementTitle.value = mappedValue;            
-                    } else {
-                        // If no mapping is found, set the original title as a fallback
-                        inputElementTitle.value = title;
-                    }
+                    inputElementTitle.value = title;
+                    
                 }
 
                 const inputElementName = event.target.closest('.employee-suggestion-container').querySelector('.input-form-name');
@@ -78,6 +51,20 @@ templ Base(nav bool) {
                     inputElementSurname.value = surname;
                 }
 
+
+                const suggestionList = event.target.closest('.suggestion-container').querySelector('.suggestions');
+                suggestionList.style.display = 'none';
+            }
+
+            function handleSuggestionClickedForEmployeeTitle(event) {
+                const suggestionText = event.target.textContent;
+                const title = suggestionText;
+
+                const inputElementTitle = event.target.closest('.employee-suggestion-container').querySelector('.input-form-title');
+                if (inputElementTitle) {
+                    inputElementTitle.value = title;
+                    
+                }
 
                 const suggestionList = event.target.closest('.suggestion-container').querySelector('.suggestions');
                 suggestionList.style.display = 'none';
@@ -95,6 +82,10 @@ templ Base(nav bool) {
                         if (event.target.classList.contains('suggestion')) {
                             handleSuggestionClickedForEmployee(event);
                         }
+                        else if (event.target.classList.contains('suggestion-for-title')) {
+                            handleSuggestionClickedForEmployeeTitle(event);
+                        }
+    
                     });
                 });
             }
