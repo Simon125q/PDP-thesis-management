@@ -142,6 +142,9 @@ func (m *Model) GetConditionValuesFromStudent(value string, valueType string, co
 		slog.Error(err.Error())
 	}
 	str := "("
+	if len(ids) <= 0 {
+		str = str + " " + column + " = 'BLANK' OR"
+	}
 	for _, id := range ids {
 		str = str + " " + column + " = ? OR"
 		values = append(values, id)
