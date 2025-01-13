@@ -97,8 +97,9 @@ templ InputFields(vals types.OngoingThesisEntry, errs types.OngoingThesisEntryEr
     <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div class="mb-4">
-                @components.InputDropdownEmployeeTitle("text", "supervisorAcademicTitle", "Tytuł",
-                vals.SupervisorAcademicTitle, true, "input-form input-form-title")
+                @components.InputFieldWithAutosuggestionsForTitle("text", "supervisorAcademicTitle", "Tytuł",
+                vals.SupervisorAcademicTitle, true, fmt.Sprintf("/realized/autocompleteAllTitles"),
+                "suggestions-for-supervisor-title", "input-form input-form-title")
                 @components.ErrorMsg(errs.SupervisorAcademicTitle)
             </div>
         </div>
@@ -127,8 +128,9 @@ templ InputFields(vals types.OngoingThesisEntry, errs types.OngoingThesisEntryEr
     <div class="mt-5 -mx-3 flex flex-wrap employee-suggestion-container">
         <div class="w-6/24 px-2">
             <div>
-                @components.InputDropdownEmployeeTitle("text", "assistantSupervisorAcademicTitle", "Tytuł",
-                vals.AssistantSupervisorAcademicTitle, false, "input-form input-form-title")
+                @components.InputFieldWithAutosuggestionsForTitle("text", "assistantSupervisorAcademicTitle", "Tytuł",
+                vals.AssistantSupervisorAcademicTitle, false, fmt.Sprintf("/realized/autocompleteAllTitles"),
+                "suggestions-for-assistant-supervisor-title", "input-form input-form-title")
                 @components.ErrorMsg(errs.AssistantSupervisorAcademicTitle)
             </div>
         </div>
