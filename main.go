@@ -37,7 +37,7 @@ func main() {
 	}
 	defer db.Close()
 	//Uncoment this to populate database with example data
-	//populateDatabase(db)
+	// populateDatabase(db)
 	server.MyS.DB = &sqlite.Model{DB: db}
 
 	server.MyS.DB.DB.SetConnMaxLifetime(time.Minute)
@@ -168,22 +168,22 @@ func populateDatabase(db *sql.DB) error {
 	queries := []string{
 		// Insert University Employees
 		`INSERT INTO University_Employee (first_name, last_name, current_academic_title, department_unit) VALUES
-		('Anna', 'Kowalska', 'Dr.', 'Department of Mathematics'),
-		('Piotr', 'Nowak', 'Mgr. inż.', 'Department of Computer Science'),
-		('Olgierd', 'Kwiatkowski', 'Mgr. inż.', 'Department of Computer Science'),
-		('Jan', 'Paweł II', 'Dr. hab.', 'Department of Computer Science'),
-		('Antoni', 'Ramos', 'Mgr. inż.', 'Department of Computer Science and Microelectronics'),
-		('Witold', 'Chmielewski', 'Mgr. inż.', 'Department of Computer Science'),
-		('Kamil', 'Olech', 'Dr. hab.', 'DMCS'),
+		('Anna', 'Kowalska', 'dr', 'Department of Mathematics'),
+		('Piotr', 'Nowak', 'mgr. inż.', 'Department of Computer Science'),
+		('Olgierd', 'Kwiatkowski', 'mgr. inż.', 'Department of Computer Science'),
+		('Jan', 'Paweł II', 'dr hab.', 'Department of Computer Science'),
+		('Antoni', 'Ramos', 'mgr. inż.', 'Department of Computer Science and Microelectronics'),
+		('Witold', 'Chmielewski', 'mgr. inż.', 'Department of Computer Science'),
+		('Kamil', 'Olech', 'dr hab.', 'DMCS'),
 		('Janusz', 'Wiśniewski', 'Prof. dr hab.', 'Department of Physics'),
-		('Katarzyna', 'Zielińska', 'Inż.', 'Department of Chemistry'),
-		('Tomasz', 'Wójcik', 'Dr. hab.', 'Department of Mechanical Engineering'),
-		('Aleksandra', 'Lewandowska', 'Mgr.', 'Department of Biology'),
+		('Katarzyna', 'Zielińska', 'inż.', 'Department of Chemistry'),
+		('Tomasz', 'Wójcik', 'dr hab.', 'Department of Mechanical Engineering'),
+		('Aleksandra', 'Lewandowska', 'mgr.', 'Department of Biology'),
 		('Małgorzata', 'Kaczmarek', 'Prof. dr hab.', 'Department of Environmental Science'),
-		('Michał', 'Szymański', 'Dr.', 'Department of Economics'),
-		('Paweł', 'Jabłoński', 'Mgr. inż.', 'Department of Electrical Engineering'),
-		('Dorota', 'Kamińska', 'Inż.', 'Department of Civil Engineering'),
-		('Agnieszka', 'Zawadzka', 'Dr. hab.', 'Department of Management'),
+		('Michał', 'Szymański', 'dr', 'Department of Economics'),
+		('Paweł', 'Jabłoński', 'mgr. inż.', 'Department of Electrical Engineering'),
+		('Dorota', 'Kamińska', 'inż.', 'Department of Civil Engineering'),
+		('Agnieszka', 'Zawadzka', 'dr hab.', 'Department of Management'),
 		('Krzysztof', 'Majewski', 'Prof. dr hab.', 'Department of Humanities');`,
 
 		// Insert Students
