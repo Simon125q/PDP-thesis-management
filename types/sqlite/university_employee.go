@@ -236,3 +236,20 @@ func (m *Model) EmployeeEntryByID(id string) (types.UniversityEmployeeEntry, err
 		ThesisCount:          fmt.Sprintf("%d", totalThesisCount),
 	}, nil
 }
+
+func (m *Model) GetPersonIDByFullName(name string) ([]string, error) {
+	queryString := "SELECT id FROM University_Employee WHERE CONCAT(first_name, ' ', last_name) LIKE ?"
+	slog.Info(queryString)
+	rows, err := m.DB.Query(queryString, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var ids []string
+	for rows.Next() {
+		var str string
+		rows.Scan(&str)
+		ids = append(ids, str)
+	}
+	return ids, nil
+}

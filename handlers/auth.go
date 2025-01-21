@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	goAuth "github.com/shaj13/go-guardian/auth"
 )
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) error {
@@ -33,12 +34,12 @@ func HandleLoginPost(w http.ResponseWriter, r *http.Request) error {
 		}
 		return Render(w, r, auth.LoginForm(credentials, loginErrs))
 	}
-	slog.Info("Authenticated", "user", user)
+	//slog.Info("Authenticated", "user", user)
 
 	sessionToken := uuid.NewString()
 	newSession := sessions.Session{
 		Username: credentials.Login,
-		IsAdmin:  isAdmin(credentials.Login),
+		IsAdmin:  isAdmin(user),
 		Expiry:   time.Now().Add(480 * time.Second),
 	}
 	sessions.Sessions.Add(sessionToken, newSession)
@@ -68,24 +69,15 @@ func setAuthCookie(w http.ResponseWriter, sessionToken string) {
 	})
 }
 
-func isAdmin(username string) bool {
-	if username == "tesla" {
+func isAdmin(user goAuth.Info) bool {
+	// groups := user.Groups()
+	// for _, group := range groups {
+	//    if group == "admin"{
+	//         return true
+	//    }
+	// }
+	if user.UserName() == "tesla" {
 		return true
 	}
 	return false
 }
-
-// if !validators.IsValidEmail(credentials.Login) {
-// 	loginErrs := auth.LoginErrors{
-// 		Email: "invalid email",
-// 	}
-// 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
-// }
-// resp, err := ldap.MockLDAPAuthenticate(credentials)
-// if err != nil {
-// 	slog.Error("coudnt authenticate", "err", err)
-// 	loginErrs := auth.LoginErrors{
-// 		InvalidCredentials: fmt.Sprintf("coudnt authenticate user, error occurred: %v", err),
-// 	}
-// 	return Render(w, r, auth.LoginForm(credentials, loginErrs))
-// }

@@ -6,10 +6,26 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"thesis-management-app/pkgs/server"
 	"thesis-management-app/pkgs/sessions"
 	"thesis-management-app/types"
 	"time"
 )
+
+func getUserIdFromUsername(name string) int {
+	ids, err := server.MyS.DB.GetPersonIDByFullName(name)
+	if err != nil {
+		slog.Error("getUserIdFromUsername", "err", err)
+		return 0
+	}
+	if len(ids) == 0 {
+		slog.Error("getUserIdFromUsername - Coudnt find any employee with name: " + name)
+		return 0
+	}
+	id, _ := strconv.Atoi(ids[0])
+	slog.Info("getUserIdFromUsername", "Logged in as user with id", id)
+	return id
+}
 
 func WithUser(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
@@ -28,13 +44,13 @@ func WithUser(next http.Handler) http.Handler {
 			return
 		}
 		var uId int
-		if currentSession.Username == "tesla" {
-			uId = 2
+		if currentSession.IsAdmin {
+			uId = 1
 		} else {
-			uId = 8678
+			uId = getUserIdFromUsername(currentSession.Username)
 		}
 		user := types.AuthenticatedUser{
-			Id:       uId, //TODO: add id from db
+			Id:       uId,
 			Login:    currentSession.Username,
 			IsAdmin:  currentSession.IsAdmin,
 			LoggedIn: true,
