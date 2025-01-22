@@ -1,6 +1,8 @@
 import sqlite3
 
-conn = sqlite3.connect('*/diploma_database.db')
+PATH_TO_DATABASE = 'Path/To/diploma_database.db'
+
+conn = sqlite3.connect(PATH_TO_DATABASE)
 cursor = conn.cursor()
 
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")

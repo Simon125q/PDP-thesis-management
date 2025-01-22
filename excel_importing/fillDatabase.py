@@ -2,6 +2,12 @@ import pandas as pd
 import sqlite3
 import re
 
+PATH_TO_EXCEL = 'Path/To/baza mock egzaminow dypl.xlsx'
+PATH_TO_DATABASE = 'Path/To/diploma_database.db'
+
+specializations = []
+fields_of_study = []
+
 
 def parse_names(df, name, index):
     full_name = df[name].iloc[index]
@@ -51,27 +57,27 @@ def standardize_title(title_str):
             'dr hab inż': 'dr hab. inż.',
             'dr inż': 'dr inż.',
             'dr hab inz - prof pł': 'dr hab. inż.',
-            'prof dr hab inż': 'prof. dr hab. inż.',
+            'prof dr hab inż': 'Prof. dr hab. inż.',
             'dr hab inż - prof pł': 'dr hab. inż.',
             'mgr inż': 'mgr inż.',
             'dr inż + mgr inż': 'dr inż. + mgr inż.',  # ?
-            'prof dr hab inż + mgr': 'prof. dr hab. inż. + mgr',  # ?
+            'prof dr hab inż + mgr': 'Prof. dr hab. inż. + mgr',  # ?
             'dr inz': 'dr inż.',
             'x': None,
-            'prof dr hab inż i mgr inż': 'prof. dr hab. inż. + mgr inż.',  # ?
+            'prof dr hab inż i mgr inż': 'Prof. dr hab. inż. + mgr inż.',  # ?
             'dr hab inz': 'dr hab. inż.',
             'bez udz dypl': None,
             'dr inż szczepaniak jakub': 'dr inż.',
             'dr': 'dr',
             'dr hab': 'dr hab.',
             'mg inż': 'mgr inż.',
-            'prof': 'prof.',
+            'prof': 'Prof.',
             '-': None,
             'dr hab - prof pł': 'dr hab.',
             'd inż': 'dr inż.',
             'mgr': 'mgr',
             '- - -': None,
-            'prof dr hab': 'prof. dr hab.'
+            'prof dr hab': 'Prof. dr hab.'
         }
         title_str = title_str.lower().replace(' -', ' - ') \
             .replace('-', ' - ') \
@@ -122,11 +128,11 @@ def parse_exam_date(date_str):
 def create_comment(place_of_birth, date_of_birth, son_daughter, immatriculation_year):
     comment = ''
     if pd.notna(place_of_birth):
-        comment += 'Miejsce urodzenia: ' + place_of_birth + '; '
+        comment += 'Miejsce urodzenia: ' + str(place_of_birth) + '; '
     if pd.notna(date_of_birth):
-        comment += 'Data urodzenia: ' + date_of_birth + '; '
+        comment += 'Data urodzenia: ' + str(date_of_birth) + '; '
     if pd.notna(son_daughter):
-        comment += 'Syn/córka: ' + son_daughter + '; '
+        comment += 'Syn/córka: ' + str(son_daughter) + '; '
     if pd.notna(immatriculation_year):
         comment += 'Rok immatrykulacji: ' + str(int(immatriculation_year))
     if pd.isna(place_of_birth) and pd.isna(date_of_birth) and pd.isna(son_daughter) and pd.isna(immatriculation_year):
@@ -150,9 +156,9 @@ def standardize_study_mode(mode_of_study_str):
 
 
 def get_or_create_student(df, index, cursor):
-    # print(df[['nazwisko', 'syn_córka', 'ur_dnia', 'miejsce', 'nr_albumu', 'kierunek', 'specjalnosc', 'Tryb stud.',
-    #           'stopień', 'rok_immatrykulacji']].iloc[index])
-    # print()
+    print(df[['nazwisko', 'syn_córka', 'ur_dnia', 'miejsce', 'nr_albumu', 'kierunek', 'specjalnosc', 'Tryb stud.',
+              'MgrInż', 'rok_immatrykulacji']].iloc[index])
+    print()
 
     first_name, last_name = parse_names(df, 'nazwisko', index)
 
@@ -174,7 +180,7 @@ def get_or_create_student(df, index, cursor):
 
         mode_of_study = standardize_study_mode(df['Tryb stud.'].iloc[index])
 
-        degree = standardise_degree(df['stopień'].iloc[index])
+        degree = standardise_degree(df['MgrInż'].iloc[index])
 
         if pd.notna(df['nr_albumu'].iloc[index]):
             student_number = str(df['nr_albumu'].iloc[index]).strip()
@@ -182,12 +188,17 @@ def get_or_create_student(df, index, cursor):
             student_number = None
 
         if pd.notna(df['kierunek'].iloc[index]):
+
             field_of_study = str(df['kierunek'].iloc[index]).strip()
+            if field_of_study not in fields_of_study:
+                fields_of_study.append(field_of_study)
         else:
             field_of_study = None
 
         if pd.notna(df['specjalnosc'].iloc[index]):
             specialization = str(df['specjalnosc'].iloc[index]).strip()
+            if specialization not in specializations:
+                specializations.append(specialization)
         else:
             specialization = None
 
@@ -211,8 +222,8 @@ def get_or_create_student(df, index, cursor):
 
 
 def get_or_create_employee(df, index, name, title, cursor):
-    # print(df[[title, name]].iloc[index])
-    # print()
+    print(df[[title, name]].iloc[index])
+    print()
 
     first_name, last_name = parse_names(df, name, index)
 
@@ -245,33 +256,66 @@ def get_or_create_employee(df, index, name, title, cursor):
     return employee_id
 
 
-def main():
-    df = pd.read_excel('*/baza mock egzaminow dypl.xlsx', engine='openpyxl')
+def fill_specializations_and_fields_of_study(cursor):
+    for specialization in specializations:
+        cursor.execute('''
+                INSERT INTO Specializations (name)
+                VALUES (?)
+            ''', (
+            specialization,
+        ))
 
-    conn = sqlite3.connect('*/diploma_database.db')
+    for field_of_study in fields_of_study:
+        cursor.execute('''
+                INSERT INTO fields_of_study (name)
+                VALUES (?)
+            ''', (
+            field_of_study,
+        ))
+
+
+def main():
+    df = pd.read_excel(PATH_TO_EXCEL, engine='openpyxl')
+
+    conn = sqlite3.connect(PATH_TO_DATABASE)
     cursor = conn.cursor()
 
     print("Kolumny dostępne w Excelu:", df.columns)
 
-    for index in range(len(df)):
+    for index, row in df.iterrows():
+        if row.isnull().all():
+            print("Skipped row:")
+            print(row)
+            continue
+
+        if any(str(cell).strip().isdigit() and len(str(cell).strip()) == 4 for cell in row):
+            print("Skipped row:")
+            print(row)
+            continue
+
+        if row['średnia ze studiów'] == 'średnia z ocen':
+            print("Skipped row:")
+            print(row)
+            continue
+
         # print('student')
         student_id = get_or_create_student(df, index, cursor)
 
         # print('chair')
-        chair_id = get_or_create_employee(df, index, 'przewodniczący', 'tytuł przewodniczącego', cursor)
+        chair_id = get_or_create_employee(df, index, 'przewodniczący', 'tytuł', cursor)
 
         # print('supervisor')
-        supervisor_id = get_or_create_employee(df, index, 'promotor', 'tytuł promotora', cursor)
+        supervisor_id = get_or_create_employee(df, index, 'Promotor', 'tytuł.1', cursor)
 
         # print('assistant supervisor')
-        assistant_supervisor_id = get_or_create_employee(df, index, 'opiekun', 'tytuł opiekuna', cursor)
+        assistant_supervisor_id = get_or_create_employee(df, index, 'opiekun', 'Unnamed: 18', cursor)
 
         # print('reviewer')
-        reviewer_id = get_or_create_employee(df, index, 'recenzent', 'tytuł recenzenta', cursor)
+        reviewer_id = get_or_create_employee(df, index, 'Recenzent', 'tytuł.2', cursor)
 
-        # print('praca')
-        # print(df[['Nr pracy', 'data egz.', 'średnia ze studiów',
-        # 'Ocena pracydypl.', 'Temat pl', 'Temat en']].iloc[index])
+        print('praca')
+        print(df[['Nr pracy', 'data egz.', 'średnia ze studiów', 'Ocena pracydypl.',
+                  'Temat pracy dyplomowej', 'Temat pracy dyplomowej w języku angielskim']].iloc[index])
 
         if pd.notna(df['Nr pracy'].iloc[index]):
             thesis_number = str(df['Nr pracy'].iloc[index]).strip()
@@ -288,20 +332,20 @@ def main():
         else:
             thesis_grade = None
 
-        if pd.notna(df['Temat pl'].iloc[index]):
-            topic_pl = str(df['Temat pl'].iloc[index]).strip()
+        if pd.notna(df['Temat pracy dyplomowej'].iloc[index]):
+            topic_pl = str(df['Temat pracy dyplomowej'].iloc[index]).strip()
         else:
             topic_pl = None
 
-        if pd.notna(df['Temat en'].iloc[index]):
-            topic_en = str(df['Temat en'].iloc[index]).strip()
+        if pd.notna(df['Temat pracy dyplomowej w języku angielskim'].iloc[index]):
+            topic_en = str(df['Temat pracy dyplomowej w języku angielskim'].iloc[index]).strip()
         else:
             topic_en = None
 
-        chair_academic_title = standardize_title(df['tytuł przewodniczącego'].iloc[index])
-        supervisor_academic_title = standardize_title(df['tytuł promotora'].iloc[index])
-        assistant_supervisor_academic_title = standardize_title(df['tytuł opiekuna'].iloc[index])
-        reviewer_academic_title = standardize_title(df['tytuł recenzenta'].iloc[index])
+        chair_academic_title = standardize_title(df['tytuł'].iloc[index])
+        supervisor_academic_title = standardize_title(df['tytuł.1'].iloc[index])
+        assistant_supervisor_academic_title = standardize_title(df['Unnamed: 18'].iloc[index])
+        reviewer_academic_title = standardize_title(df['tytuł.2'].iloc[index])
 
         cursor.execute('''
                 INSERT INTO Completed_Thesis (thesis_number, exam_date, average_study_grade,
@@ -326,6 +370,8 @@ def main():
             assistant_supervisor_academic_title,
             reviewer_academic_title
         ))
+
+    fill_specializations_and_fields_of_study(cursor)
 
     conn.commit()
     conn.close()
