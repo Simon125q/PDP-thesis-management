@@ -1,3 +1,5 @@
+For more detailed documentation regarding installation and usage navigate to documentation folder.
+
 **Environment setup**
 
 1. install go
@@ -16,7 +18,7 @@
 
 - [https://github.com/air-verse/air]
 
-5. Create .env file and add LISTEN_ADDR=":3000" to it.
+5. Create .env file and add LISTEN_ADDR=":3000", DB_PATH="/path/to/your/database.db" and variables related to ldap to it.
 
 **Running the app for developement**
 
@@ -59,7 +61,7 @@ go templ
 
 [https://templ.guide/]
 
-htmx 
+htmx
 
 [https://htmx.org/docs/#introduction]
 
