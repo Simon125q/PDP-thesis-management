@@ -1,25 +1,33 @@
 package logging
 
 import (
-	"github.com/natefinch/lumberjack"
-	slogmulti "github.com/samber/slog-multi"
+	"log"
 	"log/slog"
 	"os"
+
+	"github.com/natefinch/lumberjack"
+	slogmulti "github.com/samber/slog-multi"
 )
 
 // SetupLogger configure global logger for application
 func SetupLogger() {
+	// Ensure logs directory exists
+	if err := os.MkdirAll("logs", os.ModePerm); err != nil {
+		log.Fatalf("Failed to create logs directory: %v", err)
+	}
 	rotatingLogger := &lumberjack.Logger{
-		Filename:   "application.log",
-		MaxSize:    1,  // Max size of log file in MB
-		MaxBackups: 3,  // Max number of copies
+		Filename:   "logs/application.log",
+		MaxSize:    6,  // Max size of log file in MB
+		MaxBackups: 40, // Max number of copies
 		MaxAge:     30, // Max number of days to store copies
 	}
 
 	fileHandler := slog.NewTextHandler(rotatingLogger, nil)
-	terminalHandler := slog.NewTextHandler(os.Stdout, nil)
+	// unncomment to enable loggoing in termianl
+	// terminalHandler := slog.NewTextHandler(os.Stdout, nil)
 
-	multiHandler := slogmulti.Fanout(terminalHandler, fileHandler)
+	// unncomment to enable loggoing in termianl
+	multiHandler := slogmulti.Fanout( /*terminalHandler,*/ fileHandler)
 
 	logger := slog.New(multiHandler)
 	slog.SetDefault(logger)

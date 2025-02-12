@@ -85,8 +85,8 @@ func (m *Model) AllUniversityEmployeeEntries(sort_by string, desc_order bool, qu
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
 
-	slog.Info("AllUniversityEmployeeEntries", "query", query)
-	slog.Info("AllUniversityEmployeeEntries", "params", params)
+	// slog.Info("AllUniversityEmployeeEntries", "query", query)
+	// slog.Info("AllUniversityEmployeeEntries", "params", params)
 
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
@@ -158,8 +158,8 @@ func (m *Model) ThesisCountByEmpId(id string) (string, error) {
 
 func (m *Model) EmployeeIdByName(name string) (int, error) {
 	query := `SELECT id FROM University_Employee WHERE first_name || ' ' || last_name = ?`
-	slog.Info("employeeId by Name", "q", query)
-	slog.Info("employeeId by Name", "name", name)
+	// slog.Info("employeeId by Name", "q", query)
+	// slog.Info("employeeId by Name", "name", name)
 	row := m.DB.QueryRow(query, name)
 	id := 0
 	err := row.Scan(&id)
@@ -193,10 +193,10 @@ func (m *Model) UpdateEmployee(empl *types.UniversityEmployeeEntry) error {
             department_unit = ?
         WHERE id = ?
     `
-	slog.Info("Executing UpdateEmployee Query",
-		"query", query,
-		"params", empl,
-	)
+	// slog.Info("Executing UpdateEmployee Query",
+	// 	"query", query,
+	// 	"params", empl,
+	// )
 
 	_, err := m.DB.Exec(query,
 		empl.FirstName,

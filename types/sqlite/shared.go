@@ -276,8 +276,6 @@ func (m *Model) AddSQLQueryParameters(baseQuery string, params url.Values) (stri
 	}
 	if len(conditions) > 0 {
 		slog.Info("adding conds to query", "conds", conditions)
-		slog.Info("adding conds to query", "len(conds)", len(conditions))
-		slog.Info("adding conds to query", "conds[0]", conditions[0])
 		baseQuery += " WHERE " + strings.Join(conditions, " AND ")
 	}
 	return baseQuery, values

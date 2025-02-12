@@ -27,9 +27,9 @@ func HandleOngoing(w http.ResponseWriter, r *http.Request) error {
 
 func HandleOngoingDetails(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
-	slog.Info("HandleOngoingDetails", "id_param", id_param)
+	// slog.Info("HandleOngoingDetails", "id_param", id_param)
 	thes_data, err := server.MyS.DB.OngoingThesisEntryByID(id_param)
-	slog.Info("HandleOngoingDetails", "q", r.URL.Query())
+	// slog.Info("HandleOngoingDetails", "q", r.URL.Query())
 	if err != nil {
 		slog.Error("HandleOngoingDetails", "err", err)
 		return fmt.Errorf("HandleOngoingDetails -> %v", err)
@@ -99,7 +99,7 @@ func HandleOngoingNew(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleOngoingFiltered(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("HandleOngoingFiltered", "query", r.URL.Query())
+	// slog.Info("HandleOngoingFiltered", "query", r.URL.Query())
 	q := r.URL.Query()
 	page, err := strconv.Atoi(q.Get("page_number"))
 	if err != nil {
@@ -146,7 +146,7 @@ func HandleOngoingUpdate(w http.ResponseWriter, r *http.Request) error {
 			return Render(w, r, ongoing.Details(t, errors))
 		}
 		t.Student.Id, err = server.MyS.DB.GetStudentIdFromOngoingThesisEntry(t.Id)
-		slog.Info("UpdateOngoingThesis", "student_id", t.Student.Id)
+		// slog.Info("UpdateOngoingThesis", "student_id", t.Student.Id)
 		if err != nil {
 			slog.Error("Update get stud id", "err", err)
 			errors.InternalError = true
@@ -186,9 +186,7 @@ func HandleOngoingUpdate(w http.ResponseWriter, r *http.Request) error {
 		errors.InternalError = true
 		return Render(w, r, ongoing.Details(t, errors))
 	}
-	slog.Info("update thesis", "correct", true)
 	errors.Correct = true
-	slog.Info("UpdateOngoingThesis", "t after", t)
 	return Render(w, r, ongoing.Entry(t))
 }
 
@@ -218,7 +216,7 @@ func HandleOngoingArchive(w http.ResponseWriter, r *http.Request) error {
 	}
 	thesis.Note.RealizedThesisID = int(newId)
 	thesis.Note.OngoingThesisID = thesisId
-	slog.Info("ArchiveOngoingThesis", "note", thesis.Note)
+	// slog.Info("ArchiveOngoingThesis", "note", thesis.Note)
 	err = server.MyS.DB.UpdateNoteRelatedOngoingThesis(thesis.Note)
 	if err != nil {
 		return err
@@ -229,8 +227,8 @@ func HandleOngoingArchive(w http.ResponseWriter, r *http.Request) error {
 func HandleOngoingNext(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")
-	slog.Info("HandleOngoingNext", "page", num)
-	slog.Info("HandleOngoingNext", "query", r.URL.Query())
+	// slog.Info("HandleOngoingNext", "page", num)
+	// slog.Info("HandleOngoingNext", "query", r.URL.Query())
 	page, err := strconv.Atoi(num)
 	if err != nil {
 		slog.Error("HandleOngoingNext", "err", err)
@@ -244,8 +242,8 @@ func HandleOngoingNext(w http.ResponseWriter, r *http.Request) error {
 func HandleOngoingPrev(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")
-	slog.Info("HandleOngoingNext", "page", num)
-	slog.Info("HandleOngoingNext", "query", r.URL.Query())
+	// slog.Info("HandleOngoingNext", "page", num)
+	// slog.Info("HandleOngoingNext", "query", r.URL.Query())
 	page, err := strconv.Atoi(num)
 	if err != nil {
 		slog.Error("HandleOngoingNext", "err", err)
@@ -257,12 +255,10 @@ func HandleOngoingPrev(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleOngoingGetNew(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("HandleOngoingGetNew", "entered", true)
 	return Render(w, r, ongoing.NewEntry(types.OngoingThesisEntry{}, types.OngoingThesisEntryErrors{}))
 }
 
 func HandleOngoingClearNew(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("HandleOngoingClearNew", "entered", true)
 	return Render(w, r, ongoing.EmptySpace())
 }
 

@@ -3,6 +3,7 @@ bin
 *.log
 *.db
 *.db*
+!examples/*.db
 tmp/*
 !tmp/.gitignore
 public/*
@@ -38,6 +39,7 @@ go.work.sum
 
 # env file
 .env
+!examples/.env
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 

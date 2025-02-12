@@ -31,7 +31,7 @@ func HandleRealized(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedGenerateExcel(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("HandleRealizedGenerateExcel", "entered", true)
+	// slog.Info("HandleRealizedGenerateExcel", "entered", true)
 	queryParams := r.URL.Query()
 	fileName := r.URL.Query().Get("fileName")
 	if fileName == "" {
@@ -393,7 +393,6 @@ func HandleAutocompleteSupervisorSurname(w http.ResponseWriter, r *http.Request)
 
 func HandleAutocompleteAllTitles(w http.ResponseWriter, r *http.Request) error {
 
-
 	filteredResults, err := server.MyS.DB.GetTheListOfAllTitlesNames()
 	if err != nil {
 		return err
@@ -710,9 +709,6 @@ func HandleAutocompleteTitle(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-
-
-
 func HandleAutocompleteSpecialization(w http.ResponseWriter, r *http.Request) error {
 
 	userInput := r.URL.Query().Get("specialization")
@@ -808,8 +804,8 @@ func filterRealizedThesisEntries(r *http.Request) ([]types.RealizedThesisEntry, 
 func HandleRealizedNext(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")
-	slog.Info("HandleRealizedNext", "page", num)
-	slog.Info("HandleRealizedNext", "query", r.URL.Query())
+	// slog.Info("HandleRealizedNext", "page", num)
+	// slog.Info("HandleRealizedNext", "query", r.URL.Query())
 	page, err := strconv.Atoi(num)
 	if err != nil {
 		slog.Error("HandleRealizedNext", "err", err)
@@ -823,8 +819,8 @@ func HandleRealizedNext(w http.ResponseWriter, r *http.Request) error {
 func HandleRealizedPrev(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query()
 	num := query.Get("page_number")
-	slog.Info("HandleRealizedNext", "page", num)
-	slog.Info("HandleRealizedNext", "query", r.URL.Query())
+	// slog.Info("HandleRealizedNext", "page", num)
+	// slog.Info("HandleRealizedNext", "query", r.URL.Query())
 	page, err := strconv.Atoi(num)
 	if err != nil {
 		slog.Error("HandleRealizedNext", "err", err)
@@ -836,7 +832,7 @@ func HandleRealizedPrev(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedFiltered(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("HandleRealizedFiltered", "query", r.URL.Query())
+	// slog.Info("HandleRealizedFiltered", "query", r.URL.Query())
 	q := r.URL.Query()
 	page, err := strconv.Atoi(q.Get("page_number"))
 	if err != nil {
@@ -865,8 +861,8 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HRDetails", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
-	slog.Info("HRDetails", "q", r.URL.Query())
-	slog.Info("HRDetails", "thes", thes_data)
+	// slog.Info("HRDetails", "q", r.URL.Query())
+	// slog.Info("HRDetails", "thes", thes_data)
 	if err != nil {
 		slog.Error("HRDetails", "err", err)
 		return err
@@ -875,7 +871,7 @@ func HandleRealizedDetails(w http.ResponseWriter, r *http.Request) error {
 }
 
 func HandleRealizedEntry(w http.ResponseWriter, r *http.Request) error {
-	slog.Info("HandleRealizedEntry", "entered", true)
+	// slog.Info("HandleRealizedEntry", "entered", true)
 	id_param := chi.URLParam(r, "id")
 	slog.Info("HREntry", "id_param", id_param)
 	thes_data, err := server.MyS.DB.RealizedThesisEntryByID(id_param)
@@ -892,9 +888,9 @@ func extractRealizedThesisFromForm(r *http.Request) *types.RealizedThesisEntry {
 	supSettled, _ := strconv.Atoi(r.FormValue("supervisorSettled"))
 	assSettled, _ := strconv.Atoi(r.FormValue("assistantSupervisorSettled"))
 	revSettled, _ := strconv.Atoi(r.FormValue("reviewerSettled"))
-	slog.Info("extractRealizedThesisFromForm", "supSettled", supSettled)
-	slog.Info("extractRealizedThesisFromForm", "asSettled", assSettled)
-	slog.Info("extractRealizedThesisFromForm", "revSettled", revSettled)
+	// slog.Info("extractRealizedThesisFromForm", "supSettled", supSettled)
+	// slog.Info("extractRealizedThesisFromForm", "asSettled", assSettled)
+	// slog.Info("extractRealizedThesisFromForm", "revSettled", revSettled)
 	return &types.RealizedThesisEntry{
 		ThesisNumber:         strings.TrimSpace(r.FormValue("thesisNumber")),
 		ExamDate:             strings.TrimSpace(r.FormValue("examDate")),
@@ -1053,7 +1049,7 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 	t := *extractRealizedThesisFromForm(r)
 	var err error
 	t.Id, err = strconv.Atoi(id_param)
-	slog.Info("UpdateRealizedThesis", "t before", t)
+	// slog.Info("UpdateRealizedThesis", "t before", t)
 	errors, ok := validators.ValidateRealizedThesis(t)
 	if user.IsAdmin {
 		if !ok {
@@ -1080,8 +1076,8 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 		}
 		t.Student.Id = int(sId)
 		supId, err := getEmployeeId(t.Supervisor)
-		slog.Info("UpdateRealizedThesis", "supervisor", t.Supervisor)
-		slog.Info("UpdateRealizedThesis", "supervisor_id", supId)
+		// slog.Info("UpdateRealizedThesis", "supervisor", t.Supervisor)
+		// slog.Info("UpdateRealizedThesis", "supervisor_id", supId)
 		if err != nil {
 			slog.Error("Update emp", "err", err)
 			errors.InternalError = true
@@ -1089,8 +1085,8 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 		}
 		t.Supervisor.Id = supId
 		asId, err := getEmployeeId(t.AssistantSupervisor)
-		slog.Info("UpdateRealizedThesis", "assistant_supervisor", t.AssistantSupervisor)
-		slog.Info("UpdateRealizedThesis", "assistant_supervisor_id", asId)
+		// slog.Info("UpdateRealizedThesis", "assistant_supervisor", t.AssistantSupervisor)
+		// slog.Info("UpdateRealizedThesis", "assistant_supervisor_id", asId)
 		if err != nil {
 			slog.Error("Update emp", "err", err)
 			errors.InternalError = true
@@ -1098,7 +1094,7 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 		}
 		t.AssistantSupervisor.Id = asId
 		reId, err := getEmployeeId(t.Reviewer)
-		slog.Info("UpdateRealizedThesis", "Reviewer_id", reId)
+		// slog.Info("UpdateRealizedThesis", "Reviewer_id", reId)
 		if err != nil {
 			slog.Error("update emp", "err", err)
 			errors.InternalError = true
@@ -1132,9 +1128,9 @@ func HandleRealizedUpdate(w http.ResponseWriter, r *http.Request) error {
 		errors.InternalError = true
 		return Render(w, r, realized.Details(t, errors))
 	}
-	slog.Info("update thesis", "correct", true)
+	// slog.Info("update thesis", "correct", true)
 	errors.Correct = true
-	slog.Info("UpdateRealizedThesis", "t after", t)
+	// slog.Info("UpdateRealizedThesis", "t after", t)
 	return Render(w, r, realized.Entry(t))
 }
 

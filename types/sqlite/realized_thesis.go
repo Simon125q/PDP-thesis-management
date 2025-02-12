@@ -118,8 +118,6 @@ func (m *Model) AllRealizedThesisEntries(sort_by string, desc_order bool, page_n
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
 	query = AddSQLPagination(query, page_num, page_limit)
-	slog.Info("AllRealizedThesisEntries", "query", query)
-	slog.Info("AllRealizedThesisEntries", "params", params)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
 		slog.Error("AllRealizedThesisEntries", "err", err)
@@ -554,7 +552,6 @@ func (m *Model) RealizedThesisByID(id string) (types.RealizedThesis, error) {
 	if err != nil {
 		return types.RealizedThesis{}, err
 	}
-	slog.Info("RealizedThesisEntryByID", "thesis", t)
 	return t, nil
 }
 

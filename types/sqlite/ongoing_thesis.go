@@ -2,7 +2,6 @@ package sqlite
 
 import (
 	"fmt"
-	"log/slog"
 	"net/url"
 	"strconv"
 	"thesis-management-app/types"
@@ -47,18 +46,14 @@ func (m *Model) AllOngoingThesisEntries(sort_by string, desc_order bool, page_nu
 	LEFT JOIN University_Employee sp ON ct.supervisor_id = sp.id
 	LEFT JOIN University_Employee asup ON ct.assistant_supervisor_id = asup.id
     `
-	slog.Info("GetAllOngoingThesisBefore", "queryParams", queryParams)
 	usrId := queryParams.Get("user_id")
 	if usrId != "" {
 		queryParams.Set("ongoing_user_id", usrId)
 	}
 	queryParams.Del("user_id")
-	slog.Info("GetAllOngoingThesisAfter", "queryParams", queryParams)
 	query, params := m.AddSQLQueryParameters(query, queryParams)
 	query = AddSQLOrder(query, sort_by, desc_order)
 	query = AddSQLPagination(query, page_num, page_limit)
-	slog.Info("AllOngoingThesisEntries", "query", query)
-	slog.Info("AllOngoingThesisEntries", "params", params)
 	rows, err := m.DB.Query(query, params...)
 	if err != nil {
 		return nil, fmt.Errorf("AllOngoingThesisEntries query error %v", err)
@@ -143,7 +138,6 @@ func (m *Model) OngoingThesisByID(id string) (types.OngoingThesis, error) {
 	if err != nil {
 		return types.OngoingThesis{}, fmt.Errorf("OngoingThesisByID rows error -> %v", err)
 	}
-	slog.Info("OngoingThesisByID", "thesis", t)
 	return t, nil
 }
 
